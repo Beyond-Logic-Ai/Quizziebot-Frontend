@@ -14,7 +14,7 @@ const SignInFirst = ({ navigation }) => {
 
           <Text style={styles.signInText}>
             <Text style={styles.signInTextBlack}>Sign in to </Text>
-            <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
+            <Text style={styles.signInTextBlue}>Quizzie tyx Bot</Text>
           </Text>
 
           <TextInput 

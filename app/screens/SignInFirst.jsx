@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CustomButton3 from '../components/CustomButton';
+import CustomButton3 from '../components/CustomButton3'; // Ensure correct import
 import { images } from '../../constants/images'; // Ensure the path is correct
-import CustomButton2 from '../components/CustomButton2';
+
+const { width, height } = Dimensions.get('window');
 
 const SignInFirst = ({ navigation }) => {
   return (
@@ -14,7 +15,7 @@ const SignInFirst = ({ navigation }) => {
 
           <Text style={styles.signInText}>
             <Text style={styles.signInTextBlack}>Sign in to </Text>
-            <Text style={styles.signInTextBlue}>Quizzie tyx Bot</Text>
+            <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
           </Text>
 
           <TextInput 
@@ -39,7 +40,8 @@ const SignInFirst = ({ navigation }) => {
           </View>
 
           <CustomButton3
-           title="SIGN IN"
+            title="SIGN IN"
+            screenName="Home" // Update this to the correct screen name
           />
 
         </View>
@@ -54,15 +56,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 16,
   },
   innerContainer: {
-    width: '100%',
+    width: '90%',
     alignItems: 'center',
   },
   image: {
-    width: '100%',
-    height: 180,
+    width: '80%',
+    height: height * 0.2,
     marginVertical: 20,
   },
   signInText: {
@@ -72,11 +77,11 @@ const styles = StyleSheet.create({
   },
   signInTextBlack: {
     color: 'black',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   signInTextBlue: {
     color: '#1C58F2',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   input: {
     width: '100%',
@@ -91,7 +96,7 @@ const styles = StyleSheet.create({
     color: '#1C58F2',
     alignSelf: 'flex-end',
     marginVertical: 10,
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   orText: {
     marginVertical: 10,
@@ -99,14 +104,17 @@ const styles = StyleSheet.create({
   },
   socialLogosContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    justifyContent: 'center',
+    width: '90%',
     marginVertical: 10,
   },
   socialLogo: {
-    width: 258,
-    height: 48,
+    width: '35%', // Adjusted to make the logos bigger
+    height: undefined,
+    aspectRatio: 258 / 48, // Maintain aspect ratio
   },
 });
 
 export default SignInFirst;
+
+

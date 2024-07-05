@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, ScrollView, Text, View, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
-import { images } from '../../constants/images'; // Ensure the path is correct
+import { images } from '../../constants/images'; // Ensure th    e path is correct
 
 const { width, height } = Dimensions.get('window');
 

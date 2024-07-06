@@ -37,7 +37,7 @@ const SecondScreen = () => {
       <View style={styles.buttonContainer}>
         <CustomButton2 
           title="GET STARTED"
-          screenName="Home" // Update this to the correct screen name
+          screenName="CreateAnAccountScreen1" // Update this to the correct screen name
         />
         <CustomButton
           title="I ALREADY HAVE AN ACCOUNT"

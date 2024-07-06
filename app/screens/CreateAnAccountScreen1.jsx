@@ -1,16 +1,19 @@
 // import React, { useState } from 'react';
-// import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+// import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
-// import { Ionicons } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
-// import CustomButton3 from '../components/CustomButton3'; // Ensure correct import
-// import { images } from '../../constants/images'; // Ensure the path is correct
-// import BouncyCheckbox from "react-native-bouncy-checkbox"; // Use react-native-bouncy-checkbox
+// import { Ionicons } from '@expo/vector-icons';
+// import CustomButton3 from '../components/CustomButton3';
+// import { images } from '../../constants/images';
+// import BouncyCheckbox from "react-native-bouncy-checkbox";
+// import axios from 'axios';
 
 // const { width, height } = Dimensions.get('window');
 
-// const SignInFirst = ({ navigation }) => {
+// const CreateAnAccountScreen1 = ({ navigation }) => {
 //   const [isPasswordVisible, setPasswordVisible] = useState(false);
 //   const [rememberMe, setRememberMe] = useState(false);
+//   const [firstName, setFirstName] = useState('');
+//   const [lastName, setLastName] = useState('');
 //   const [email, setEmail] = useState('');
 //   const [password, setPassword] = useState('');
 //   const [emailError, setEmailError] = useState('');
@@ -25,7 +28,7 @@
 //     return password.length >= 6;
 //   };
 
-//   const handleSignIn = () => {
+//   const handleSignUp = async () => {
 //     let valid = true;
 //     if (!validateEmail(email)) {
 //       setEmailError('Please enter a valid email address');
@@ -42,7 +45,22 @@
 //     }
 
 //     if (valid) {
-//       navigation.navigate('Home'); // Update this to the correct screen name
+//       try {
+//         const response = await axios.post('http://<YOUR_BACKEND_URL>/api/users/register', {
+//           firstName,
+//           lastName,
+//           email,
+//           password
+//         });
+//         if (response.status === 201) {
+//           Alert.alert('Success', 'User registered successfully');
+//           navigation.navigate('Home'); // Navigate to the home screen or next screen
+//         } else {
+//           Alert.alert('Error', 'Something went wrong. Please try again.');
+//         }
+//       } catch (error) {
+//         Alert.alert('Error', 'Failed to register user');
+//       }
 //     }
 //   };
 
@@ -50,16 +68,47 @@
 //     <SafeAreaView style={styles.container}>
 //       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
 //         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-//           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-//             <Ionicons name="arrow-back" size={24} color="black" />
-//           </TouchableOpacity>
+//           <View style={styles.headerContainer}>
+//             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+//               <Ionicons name="arrow-back" size={24} color="black" />
+//             </TouchableOpacity>
+//             <View style={styles.progressBarContainer}>
+//               <View style={styles.progressBar}></View>
+//             </View>
+//           </View>
+          
 //           <View style={styles.innerContainer}>
-//             <Image source={images.logo3} style={styles.image} resizeMode="contain" />
-
-//             <Text style={styles.signInText}>
-//               <Text style={styles.signInTextBlack}>Sign in to </Text>
-//               <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
+//             <Text style={styles.title}>
+//               <Text style={styles.titleBlack}>Create an </Text>
+//               <Text style={styles.titleBlue}>account</Text>
 //             </Text>
+            
+//             <Text style={styles.infoText}>
+//               Please Complete your profile. {'\n'}Don't worry, your data will remain private and {'\n'}only you can see it.
+//             </Text>
+
+//             <View style={styles.row}>
+//               <View style={styles.inputContainer}>
+//                 <Text style={styles.label}>First Name</Text>
+//                 <TextInput 
+//                   style={styles.inputLine}
+//                   placeholder="First Name"
+//                   placeholderTextColor="#999"
+//                   value={firstName}
+//                   onChangeText={setFirstName}
+//                 />
+//               </View>
+//               <View style={styles.inputContainer}>
+//                 <Text style={styles.label}>Last Name</Text>
+//                 <TextInput 
+//                   style={styles.inputLine}
+//                   placeholder="Last Name"
+//                   placeholderTextColor="#999"
+//                   value={lastName}
+//                   onChangeText={setLastName}
+//                 />
+//               </View>
+//             </View>
 
 //             <Text style={styles.label}>Email</Text>
 //             <TextInput 
@@ -105,20 +154,26 @@
 //               />
 //             </View>
 
-//             <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-//               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-//             </TouchableOpacity>
-
 //             <Text style={styles.orText}>or</Text>
 
 //             <View style={styles.socialLogosContainer}>
-//               <Image source={images.logo4} style={styles.socialLogo} />
+//               <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
+//                 <Image source={images.google} style={styles.socialLogo} />
+//               </TouchableOpacity>
+//               <TouchableOpacity onPress={() => { /* handle Apple sign-up */ }}>
+//                 <Image source={images.apple} style={styles.socialLogo} />
+//               </TouchableOpacity>
+//               <TouchableOpacity onPress={() => { /* handle Facebook sign-up */ }}>
+//                 <Image source={images.facebook} style={styles.socialLogo} />
+//               </TouchableOpacity>
 //             </View>
 
-//             <CustomButton3
-//               title="SIGN IN"
-//               onPress={handleSignIn}
-//             />
+//             <View style={styles.buttonContainer}>
+//               <CustomButton3
+//                 title="CONTINUE"
+//                 screenName="CreateAnAccountScreen2"
+//               />
+//             </View>
 //           </View>
 //         </ScrollView>
 //       </KeyboardAvoidingView>
@@ -137,32 +192,61 @@
 //     alignItems: 'center',
 //     paddingHorizontal: 16,
 //   },
+//   headerContainer: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     width: '100%',
+//     paddingHorizontal: 16,
+//     marginTop: 16,
+//   },
 //   backButton: {
-//     alignSelf: 'flex-start',
-//     margin: 16,
+//     marginRight: 16,
+//   },
+//   progressBarContainer: {
+//     flex: 1,
+//     height: 10,
+//     backgroundColor: '#D3D3D3',
+//     borderRadius: 5,
+//   },
+//   progressBar: {
+//     width: '33%', // Adjust this value based on progress
+//     height: '100%',
+//     backgroundColor: '#1C58F2',
+//     borderRadius: 5,
 //   },
 //   innerContainer: {
 //     width: '90%',
 //     alignItems: 'center',
 //     justifyContent: 'center',
+//     flex: 1,
 //   },
-//   image: {
-//     width: '80%',
-//     height: height * 0.15,
-//     marginVertical: 20,
-//   },
-//   signInText: {
+//   title: {
 //     flexDirection: 'row',
 //     fontSize: 24,
-//     marginVertical: 10,
+//     marginTop: 20,
+//     marginBottom: 10,
 //   },
-//   signInTextBlack: {
+//   titleBlack: {
 //     color: 'black',
 //     fontWeight: 'bold',
 //   },
-//   signInTextBlue: {
+//   titleBlue: {
 //     color: '#1C58F2',
 //     fontWeight: 'bold',
+//   },
+//   infoText: {
+//     textAlign: 'center',
+//     marginVertical: 10,
+//     color: '#666',
+//     lineHeight: 22,
+//   },
+//   row: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     width: '100%',
+//   },
+//   inputContainer: {
+//     width: '48%',
 //   },
 //   label: {
 //     alignSelf: 'flex-start',
@@ -199,26 +283,21 @@
 //     fontSize: 16,
 //     color: '#000',
 //   },
-//   forgotPasswordText: {
-//     color: '#1C58F2',
-//     alignSelf: 'flex-end',
-//     marginVertical: 10,
-//     fontWeight: 'bold',
-//   },
 //   orText: {
 //     marginVertical: 10,
 //     color: '#999999',
 //   },
 //   socialLogosContainer: {
 //     flexDirection: 'row',
-//     justifyContent: 'center',
-//     width: '90%',
+//     justifyContent: 'space-between',
+//     width: '80%', // Adjusted width to reduce space between logos
 //     marginVertical: 10,
 //   },
 //   socialLogo: {
-//     width: '35%', // Adjusted to make the logos bigger
+//     width: width * 0.2, // Adjusted to make the logos bigger
 //     height: undefined,
 //     aspectRatio: 258 / 48, // Maintain aspect ratio
+//     resizeMode:'contain',
 //   },
 //   errorText: {
 //     color: 'red',
@@ -226,27 +305,36 @@
 //     marginTop: -10,
 //     marginBottom: 10,
 //   },
+//   buttonContainer: {
+//     width: '100%',
+//     alignItems: 'center',
+//     marginVertical: 20,
+//   },
 // });
 
-// export default SignInFirst;
-
+// export default CreateAnAccountScreen1;
 
 
 import React, { useState } from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
-import CustomButton3 from '../components/CustomButton3'; // Ensure correct import
-import { images } from '../../constants/images'; // Ensure the path is correct
-import BouncyCheckbox from "react-native-bouncy-checkbox"; // Use react-native-bouncy-checkbox
+import { Ionicons } from '@expo/vector-icons';
+import CustomButton3 from '../components/CustomButton3';
+import { images } from '../../constants/images';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
-const SignInFirst = ({ navigation }) => {
+const CreateAnAccountScreen1 = ({ navigation }) => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -259,8 +347,23 @@ const SignInFirst = ({ navigation }) => {
     return password.length >= 6;
   };
 
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     let valid = true;
+
+    if (!firstName) {
+      setFirstNameError('Please enter your first name');
+      valid = false;
+    } else {
+      setFirstNameError('');
+    }
+
+    if (!lastName) {
+      setLastNameError('Please enter your last name');
+      valid = false;
+    } else {
+      setLastNameError('');
+    }
+
     if (!validateEmail(email)) {
       setEmailError('Please enter a valid email address');
       valid = false;
@@ -276,7 +379,13 @@ const SignInFirst = ({ navigation }) => {
     }
 
     if (valid) {
-      navigation.navigate('Home'); // Update this to the correct screen name
+      navigation.navigate('CreateAnAccountScreen2', {
+        firstName,
+        lastName,
+        email,
+        password,
+        rememberMe
+      });
     }
   };
 
@@ -284,16 +393,49 @@ const SignInFirst = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
+            <View style={styles.progressBarContainer}>
+              <View style={styles.progressBar}></View>
+            </View>
+          </View>
+          
           <View style={styles.innerContainer}>
-            <Image source={images.logo3} style={styles.image} resizeMode="contain" />
-
-            <Text style={styles.signInText}>
-              <Text style={styles.signInTextBlack}>Sign in to </Text>
-              <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
+            <Text style={styles.title}>
+              <Text style={styles.titleBlack}>Create an </Text>
+              <Text style={styles.titleBlue}>account</Text>
             </Text>
+            
+            <Text style={styles.infoText}>
+              Please Complete your profile. {'\n'}Don't worry, your data will remain private and {'\n'}only you can see it.
+            </Text>
+
+            <View style={styles.row}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>First Name</Text>
+                <TextInput 
+                  style={styles.inputLine}
+                  placeholder="First Name"
+                  placeholderTextColor="#999"
+                  value={firstName}
+                  onChangeText={setFirstName}
+                />
+                {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Last Name</Text>
+                <TextInput 
+                  style={styles.inputLine}
+                  placeholder="Last Name"
+                  placeholderTextColor="#999"
+                  value={lastName}
+                  onChangeText={setLastName}
+                />
+                {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
+              </View>
+            </View>
 
             <Text style={styles.label}>Email</Text>
             <TextInput 
@@ -339,20 +481,24 @@ const SignInFirst = ({ navigation }) => {
               />
             </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
-
             <Text style={styles.orText}>or</Text>
 
             <View style={styles.socialLogosContainer}>
-              <Image source={images.logo4} style={styles.socialLogo} />
+              <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
+                <Image source={images.google} style={styles.socialLogo} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { /* handle Apple sign-up */ }}>
+                <Image source={images.apple} style={styles.socialLogo} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { /* handle Facebook sign-up */ }}>
+                <Image source={images.facebook} style={styles.socialLogo} />
+              </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
               <CustomButton3
-                title="SIGN IN"
-                onPress={handleSignIn}
+                title="CONTINUE"
+                onPress={handleSignUp}
               />
             </View>
           </View>
@@ -366,10 +512,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    // flexGrow: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // paddingHorizontal: 16,
   },
   scrollViewContainer: {
     flexGrow: 1,
@@ -377,9 +519,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    marginTop: 16,
+  },
   backButton: {
-    alignSelf: 'flex-start',
-    margin: 16,
+    marginRight: 16,
+  },
+  progressBarContainer: {
+    flex: 1,
+    height: 10,
+    backgroundColor: '#D3D3D3',
+    borderRadius: 5,
+  },
+  progressBar: {
+    width: '20%', // Adjust this value based on progress
+    height: '100%',
+    backgroundColor: '#1C58F2',
+    borderRadius: 5,
   },
   innerContainer: {
     width: '90%',
@@ -387,23 +547,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
   },
-  image: {
-    width: '80%',
-    height: height * 0.15,
-    marginVertical: 10,
-  },
-  signInText: {
+  title: {
     flexDirection: 'row',
     fontSize: 24,
-    marginVertical: 10,
+    marginTop: 20,
+    marginBottom: 10,
   },
-  signInTextBlack: {
+  titleBlack: {
     color: 'black',
     fontWeight: 'bold',
   },
-  signInTextBlue: {
+  titleBlue: {
     color: '#1C58F2',
     fontWeight: 'bold',
+  },
+  infoText: {
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#666',
+    lineHeight: 22,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  inputContainer: {
+    width: '48%',
   },
   label: {
     alignSelf: 'flex-start',
@@ -440,26 +610,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
   },
-  forgotPasswordText: {
-    color: '#1C58F2',
-    alignSelf: 'flex-end',
-    marginVertical: 10,
-    fontWeight: 'bold',
-  },
   orText: {
     marginVertical: 10,
     color: '#999999',
   },
   socialLogosContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    width: '90%',
+    justifyContent: 'space-between',
+    width: '80%', // Adjusted width to reduce space between logos
     marginVertical: 10,
   },
   socialLogo: {
-    width: '35%', // Adjusted to make the logos bigger
+    width: width * 0.2, // Adjusted to make the logos bigger
     height: undefined,
     aspectRatio: 258 / 48, // Maintain aspect ratio
+    resizeMode:'contain',
   },
   errorText: {
     color: 'red',
@@ -474,5 +639,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInFirst;
+export default CreateAnAccountScreen1;
 

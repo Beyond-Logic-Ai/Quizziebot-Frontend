@@ -9,7 +9,7 @@ const { width, height } = Dimensions.get('window');
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      {/* <ScrollView contentContainerStyle={styles.scrollViewContainer}> */}
         <View style={styles.innerContainer}>
           <Image source={images.title} style={styles.titleImage} resizeMode="contain" />
           <Image source={images.logo1} style={styles.botImage} resizeMode="contain" />
@@ -21,7 +21,7 @@ const HomeScreen = () => {
             <Text style={styles.text}>Copyright © 2024 Beyond Logic</Text>
           </View>
         </View>
-      </ScrollView>
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -30,12 +30,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1C58F2',
-  },
-  scrollViewContainer: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // scrollViewContainer: {
+  //   flexGrow: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   innerContainer: {
     width: '100%',
     alignItems: 'center',

@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "quizbot",
-    "slug": "quizbot",
+    "name": "quizziebot",
+    "slug": "quizziebot",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "/Users/shiva/Developer/Quizziebot-Frontend/assets/logo.jpeg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.quizbot"
+      "bundleIdentifier": "com.anonymous.quizziebot"
     },
     "android": {
       "adaptiveIcon": {

@@ -1,27 +1,26 @@
+// HomeScreen.jsx
 import React from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Image, Text, View, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import { images } from '../../constants/images'; // Ensure the path is correct
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView contentContainerStyle={styles.scrollViewContainer}> */}
-        <View style={styles.innerContainer}>
-          <Image source={images.title} style={styles.titleImage} resizeMode="contain" />
-          <Image source={images.logo1} style={styles.botImage} resizeMode="contain" />
-          <View style={styles.bottomContainer}>
-            <CustomButton 
-              title="START"
-              screenName="Second"
-            />
-            <Text style={styles.text}>Copyright © 2024 Beyond Logic</Text>
-          </View>
+      <View style={styles.innerContainer}>
+        <Image source={images.title} style={styles.titleImage} resizeMode="contain" />
+        <Image source={images.logo1} style={styles.botImage} resizeMode="contain" />
+        <View style={styles.bottomContainer}>
+          <CustomButton 
+            title="START"
+            screenName="Second"
+          />
+          <Text style={styles.text}>Copyright © 2024 Beyond Logic</Text>
         </View>
-      {/* </ScrollView> */}
+      </View>
     </SafeAreaView>
   );
 };
@@ -30,15 +29,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1C58F2',
-    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // scrollViewContainer: {
-  //   flexGrow: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
   innerContainer: {
     width: '100%',
     alignItems: 'center',
@@ -47,13 +40,13 @@ const styles = StyleSheet.create({
   },
   titleImage: {
     width: '80%',
-    height: height * 0.15, // Increased size of the title logo
+    height: height * 0.15,
     marginTop: height * 0.05,
   },
   botImage: {
     width: '80%',
     height: height * 0.4,
-    marginVertical: height * 0.05, // Added margin to center the image better
+    marginVertical: height * 0.05,
   },
   bottomContainer: {
     width: '100%',
@@ -68,5 +61,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-
-

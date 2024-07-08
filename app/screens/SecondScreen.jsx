@@ -1,14 +1,16 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { images } from '../../constants/images'; // Ensure the path is correct
 import CustomButton2 from '../components/CustomButton2';
 import CustomButton from '../components/CustomButton';
 
+const { width, height } = Dimensions.get('window');
+
 const slides = [
-  { text: 'Experience dynamic quizzes powered by AI. Learn and have fun with interactive challanges anytime,anywhere!' },
-  { text: 'Our AI-curated quizzes adapt to ypur learning style, making every session fun. Discover something new every day.' },
-  { text: 'Take on your friends with AI-enhanced quizzes and see who can climb teh leaderboard.Learning is more fun together!' },
+  { text: 'Experience dynamic quizzes powered by AI. Learn and have fun with interactive challenges anytime, anywhere!' },
+  { text: 'Our AI-curated quizzes adapt to your learning style, making every session fun. Discover something new every day.' },
+  { text: 'Take on your friends with AI-enhanced quizzes and see who can climb the leaderboard. Learning is more fun together!' },
 ];
 
 const SecondScreen = () => {
@@ -19,6 +21,9 @@ const SecondScreen = () => {
         <Swiper
           style={styles.wrapper}
           showsButtons={false}
+          autoplay
+          autoplayTimeout={3}
+          loop
           dot={<View style={styles.dot} />}
           activeDot={<View style={styles.activeDot} />}
         >
@@ -29,21 +34,16 @@ const SecondScreen = () => {
           ))}
         </Swiper>
       </View>
-      <CustomButton2 
-       title="GET STARTED"
-      />
-      <CustomButton
-      title="I ALREADY HAVE AN ACCOUNT"
-      screenName="Third"
-      />
-      {/* <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Button 1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Button 2</Text>
-        </TouchableOpacity>
-      </View> */}
+      <View style={styles.buttonContainer}>
+        <CustomButton2 
+          title="GET STARTED"
+          screenName="CreateAnAccountScreen1" // Update this to the correct screen name
+        />
+        <CustomButton
+          title="I ALREADY HAVE AN ACCOUNT"
+          screenName="Third"
+        />
+      </View>
     </View>
   );
 };
@@ -53,28 +53,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1C58F2',
     alignItems: 'center',
-    paddingTop: 92,
+    justifyContent: 'space-around',
   },
   image: {
-    width: 297,
-    height: 387,
+    width: '80%',
+    height: height * 0.3,
+    marginTop: height * 0.05,
   },
   swiperContainer: {
-    height: 150,
+    height: height * 0.25,
     width: '100%',
-    marginTop: 20,
   },
   wrapper: {},
   slide: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 10,
   },
   text: {
-    fontSize: 18,
+    fontSize: height > 800 ? 20 : 16, // Larger text for larger screens
     color: '#FBFCF6',
     textAlign: 'center',
     fontWeight: 'bold',
+    paddingHorizontal: width * 0.05,
+    marginBottom: height * 0.01, // Reduce the gap between text and swiper
   },
   dot: {
     backgroundColor: 'rgba(0,0,0,.2)',
@@ -92,24 +95,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, // Creates a line effect
   },
   buttonContainer: {
-    marginTop: 20,
+    width: '100%',
     alignItems: 'center',
-  },
-  button: {
-    width: '80%',
-    backgroundColor: '#FBFCF6',
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: '#1C58F2',
-    fontSize: 16,
-    fontWeight: 'bold',
+    marginBottom: height * 0.05,
   },
 });
 
 export default SecondScreen;
+
 

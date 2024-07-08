@@ -9,6 +9,9 @@ import CreateNewPasswordScreen from './screens/CreateNewPasswordScreen';
 import CreateAnAccountScreen1 from './screens/CreateAnAccountScreen1';
 import CreateAnAccountScreen2 from './screens/CreateAnAccountScreen2';
 import AfterSignedScreen from './screens/AfterSignedScreen';
+import SignUpSuccessScreen from './screens/SignUpSuccessScreen';
+import HomePageScreen from './screens/HomePageScreen';
+import SettingsHomePageScreen from './screens/SettingsHomePageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +27,9 @@ function Navigation() {
         <Stack.Screen name="CreateAnAccountScreen1" component={CreateAnAccountScreen1} options={{headerShown:false}} />
         <Stack.Screen name="CreateAnAccountScreen2" component={CreateAnAccountScreen2} options={{headerShown:false}} />
         <Stack.Screen name="AfterSignedScreen" component={AfterSignedScreen} options={{headerShown:false}} />
+        <Stack.Screen name="SignUpSuccessScreen" component={SignUpSuccessScreen} options={{headerShown:false}} />
+        <Stack.Screen name="HomePageScreen" component={HomePageScreen} options={{headerShown:false}} />
+        <Stack.Screen name="SettingsHomePageScreen" component={SettingsHomePageScreen} options={{headerShown:false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

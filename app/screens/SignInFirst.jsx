@@ -276,7 +276,7 @@ const SignInFirst = ({ navigation }) => {
     }
 
     if (valid) {
-      navigation.navigate('Home'); // Update this to the correct screen name
+      navigation.navigate('HomePageScreen'); // Update this to the correct screen name
     }
   };
 

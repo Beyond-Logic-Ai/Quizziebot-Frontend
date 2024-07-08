@@ -8,6 +8,10 @@ export const images = {
     google: require('../assets/Google.png'),
     apple: require('../assets/Apple.png'),
     facebook: require('../assets/Facebook.png'),
+    logosuccess: require('../assets/logosuccess.png'),
+    logoloading: require('../assets/loading-animation.json'),
+    homescreenbg: require('../assets/homescreenbg.png'),
+    homepagecoins: require('../assets/homepagecoins.png'),
     
   };
   

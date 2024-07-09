@@ -38,7 +38,7 @@ const SplashScreen = () => {
   const playSound = async () => {
     try {
       const { sound } = await Audio.Sound.createAsync(
-        require('/Users/shiva/Developer/Quizziebot-Frontend/assets/intro.wav') // Ensure the path is correct
+        require('/Users/sandeepgantasala/Developer/projects/Quizziebot/updatedcode/Quizziebot-Frontend/assets/intro.wav') // Ensure the path is correct
       );
       await sound.playAsync();
     } catch (error) {
@@ -52,7 +52,7 @@ const SplashScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <Image source={require('/Users/shiva/Developer/Quizziebot-Frontend/assets/beyondlogic.png')} style={styles.image} resizeMode="contain" />
+      <Image source={require('/Users/sandeepgantasala/Developer/projects/Quizziebot/updatedcode/Quizziebot-Frontend/assets/beyondlogic.png')} style={styles.image} resizeMode="contain" />
     </Animated.View>
   );
 };

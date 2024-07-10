@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../constants/images';
 import SettingsHomePageScreen from './SettingsHomePageScreen';
+import ArcadePage from './ArcadePage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -37,7 +38,7 @@ const HomePageScreen = ({ navigation }) => {
           <View style={styles.body}>
             <View style={styles.textBox}>
               <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(ArcadePage)}>
                 <Text style={styles.buttonText}>Play Now</Text>
               </TouchableOpacity>
             </View>

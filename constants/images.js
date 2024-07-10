@@ -12,6 +12,17 @@ export const images = {
     logoloading: require('../assets/loading-animation.json'),
     homescreenbg: require('../assets/homescreenbg.png'),
     homepagecoins: require('../assets/homepagecoins.png'),
+    homescreenbg1:require('../assets/homescreenbg1.png'),
+    arcaderobo:require('../assets/arcaderobo.png'),
+    emptyhomeicon:require('../assets/emptyhomeicon.png'),
+    classicimg:require('../assets/classicimg.png'),
+    arcadeimg:require('../assets/arcadeimg.png'),
+    homeicon: require('../assets/homeicon.png'),
+    profileicon:require('../assets/profileicon.png'),
+    trophyicon:require('../assets/trophyicon.png'),
+    settingsicon:require('../assets/settingsicon.png'),
+    notificationicon:require('../assets/notificationicon.png'),
+    homeicon:require('../assets/homeicon.png'),
     
   };
   

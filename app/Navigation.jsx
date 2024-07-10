@@ -14,6 +14,7 @@ import AfterSignedScreen from './screens/AfterSignedScreen';
 import SignUpSuccessScreen from './screens/SignUpSuccessScreen';
 import HomePageScreen from './screens/HomePageScreen';
 import SettingsHomePageScreen from './screens/SettingsHomePageScreen';
+import ArcadePage from './screens/ArcadePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ function Navigation() {
         <Stack.Screen name="SignUpSuccessScreen" component={SignUpSuccessScreen} options={{ headerShown: false }} />
         <Stack.Screen name="HomePageScreen" component={HomePageScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SettingsHomePageScreen" component={SettingsHomePageScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ArcadePage" component={ArcadePage} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

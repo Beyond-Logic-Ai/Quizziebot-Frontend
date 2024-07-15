@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../constants/images';
 import SettingsHomePageScreen from './SettingsHomePageScreen';
+import ArcadePage from './AracdePage';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -13,20 +15,20 @@ const HomePageScreen = ({ navigation }) => {
       <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover">
         <View style={styles.header}>
           <Image
-            source={require('../../assets/profilepic.png')} // Replace with your profile image source
+            source={images.profileImage} // Replace with your profile image source
             style={styles.profileImage}
           />
-          <Text style={styles.username}>John Brown</Text>
+          <Text style={styles.username}>Shiva Nagendra</Text>
           <View style={styles.coinBadgeContainer}>
             <View style={styles.coinContainer}>
               <Image
-                source={require('../../assets/coin.png')} // Replace with your coin image source
+                source={images.profileImage} // Replace with your coin image source
                 style={styles.coinImage}
               />
               <Text style={styles.coinText}>301</Text>
             </View>
             <Image
-              source={require('../../assets/badge.png')} // Replace with your badge image source
+              source={images.badgeImage} // Replace with your badge image source
               style={styles.badgeImage}
             />
           </View>
@@ -37,7 +39,7 @@ const HomePageScreen = ({ navigation }) => {
           <View style={styles.body}>
             <View style={styles.textBox}>
               <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ArcadePage')}>
                 <Text style={styles.buttonText}>Play Now</Text>
               </TouchableOpacity>
             </View>

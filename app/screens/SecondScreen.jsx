@@ -41,7 +41,7 @@ const SecondScreen = () => {
         />
         <CustomButton
           title="I ALREADY HAVE AN ACCOUNT"
-          screenName="Third"
+          screenName="SignInFirst"
         />
       </View>
     </View>

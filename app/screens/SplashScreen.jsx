@@ -1,8 +1,9 @@
-// SplashScreen.jsx
 import React, { useEffect, useRef } from 'react';
 import { View, Image, StyleSheet, Animated, Dimensions, Vibration } from 'react-native';
 import { Audio } from 'expo-av';
 import { useNavigation } from '@react-navigation/native';
+import { images } from '../../constants/images';
+import { sounds } from '../../constants/sounds';
 
 const { height } = Dimensions.get('window');
 
@@ -36,10 +37,9 @@ const SplashScreen = () => {
   }, [fadeAnim, navigation]);
 
   const playSound = async () => {
+    const sound = new Audio.Sound();
     try {
-      const { sound } = await Audio.Sound.createAsync(
-        require('/Users/shiva/Developer/Quizziebot-Frontend/assets/intro.wav') // Ensure the path is correct
-      );
+      await sound.loadAsync(sounds.intro);
       await sound.playAsync();
     } catch (error) {
       console.error("Error playing sound:", error);
@@ -52,7 +52,7 @@ const SplashScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <Image source={require('/Users/shiva/Developer/Quizziebot-Frontend/assets/beyondlogic.png')} style={styles.image} resizeMode="contain" />
+      <Image source={images.beyondlogiclogo} style={styles.image} resizeMode="contain" />
     </Animated.View>
   );
 };

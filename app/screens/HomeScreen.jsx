@@ -1,4 +1,3 @@
-// HomeScreen.jsx
 import React from 'react';
 import { Image, Text, View, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

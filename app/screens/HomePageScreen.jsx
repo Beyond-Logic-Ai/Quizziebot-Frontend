@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../constants/images';
 import SettingsHomePageScreen from './SettingsHomePageScreen';
 import ArcadePage from './AracdePage';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
 const { width, height } = Dimensions.get('window');
@@ -46,7 +47,7 @@ const HomePageScreen = ({ navigation }) => {
           </View>
         </ImageBackground>
 
-        <View style={styles.footer}>
+        {/* <View style={styles.footer}>
           <TouchableOpacity>
             <View style={[styles.footerItem, styles.activeFooterItem]}>
               <Icon name="home" size={28} color="#35383F" />
@@ -71,7 +72,25 @@ const HomePageScreen = ({ navigation }) => {
               <Text style={styles.footerText}>Settings</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
+        <View style={styles.footer}>
+        <TouchableOpacity style={styles.footerButton}>
+          <Image source={images.homeicon} style={styles.footerIcon} />
+          <Text style={styles.footerText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.footerButton}>
+          <Image source={images.profileicon} style={styles.footerIcon} />
+          <Text style={styles.footerText}>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.footerButton}>
+          <Image source={images.trophyicon} style={styles.footerIcon} />
+          <Text style={styles.footerText}>Leaderboard</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
+          <Image source={images.settingsicon} style={styles.footerIcon} />
+          <Text style={styles.footerText}>Settings</Text>
+        </TouchableOpacity>
+      </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -174,18 +193,41 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  // footer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around',
+  //   paddingVertical: 12,
+  //   backgroundColor: '#FFF',
+  //   paddingBottom: 20, // Add extra padding for safe area
+  // },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 12,
+    paddingVertical: '4%',
     backgroundColor: '#FFF',
-    paddingBottom: 20, // Add extra padding for safe area
+    borderTopLeftRadius: wp(5),
+    borderTopRightRadius: wp(5),
+    borderTopWidth: 1,
+    borderTopColor: '#F5F5F5',
+    paddingBottom: hp(3),
+    paddingHorizontal: '5%',
   },
-  footerItem: {
+  footerButton: {
     alignItems: 'center',
   },
+  // footerItem: {
+  //   alignItems: 'center',
+  // },
+  // footerText: {
+  //   fontSize: 12,
+  // },
   footerText: {
-    fontSize: 12,
+    fontSize: wp(3),
+    color: '#000',
+  },
+  footerIcon: {
+    width: wp(6),
+    height: wp(6),
   },
   activeFooterItem: {
     borderTopWidth: 0,

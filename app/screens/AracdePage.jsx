@@ -22,13 +22,14 @@ const ArcadePage = ({ navigation }) => {
         </View>
 
         {/* Main Content */}
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        
           <View style={styles.robotContainer}>
             <Image source={images.arcaderobo} style={styles.robotImage} />
           </View>
           
           <View style={styles.mainContent}>
             <Text style={styles.title}>Pick your path: Creator, Classic, or Arcade. Dive in!</Text>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <ClassicButton 
               title="Classic"
               screenName="HomePageScreen"
@@ -43,11 +44,12 @@ const ArcadePage = ({ navigation }) => {
               title="Create your own quiz by QUIZZIE BOT"
               screenName="HomePageScreen"
             />
+            </ScrollView>
 
           </View>
-        </ScrollView>
+        
       </SafeAreaView>
-      <View style={styles.footer}>
+      {/* <View style={styles.footer}>
         <TouchableOpacity style={styles.footerButton}>
           <Image source={images.emptyhomeicon} style={styles.footerIcon} />
           <Text style={styles.footerText}>Home</Text>
@@ -64,7 +66,7 @@ const ArcadePage = ({ navigation }) => {
           <Image source={images.settingsicon} style={styles.footerIcon} />
           <Text style={styles.footerText}>Settings</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </ImageBackground>
   );
 };
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: screenHeight > 800 ? hp(3) : 0, // Add some padding for larger devices
+    // paddingVertical: screenHeight > 900 ? hp(3) : 0, // Add some padding for larger devices
   },
   robotContainer: {
     alignItems: 'center',
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: wp(5),
     marginHorizontal: wp(6),
     marginTop: hp(0),
-    marginBottom: hp(0),
+    marginBottom: hp(8),
     backgroundColor: 'rgba(0, 0, 0, 0.08)',
   },
   title: {

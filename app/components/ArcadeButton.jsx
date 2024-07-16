@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
     shadowRadius: 8,
+   
   },
   btn: {
-    width: '85%',
+    width: '100%',
     paddingVertical: hp(0),
     borderRadius: wp(10),
     alignItems: 'center',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   buttonImage: {
     margintop:10,
-    width: wp(15),
+    width: wp(14),
     height: hp(7),
     marginLeft: -wp(7), // Adjust the spacing as needed
   },

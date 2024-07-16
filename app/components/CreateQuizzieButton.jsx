@@ -25,7 +25,7 @@ const CreateQuizzieButton = ({ title, screenName }) => {
 
 const styles = StyleSheet.create({
   shadowContainer: {
-    width: '85%',
+    width: '100%',
     borderRadius: wp(10),
     marginBottom: hp(1),
     marginTop: hp(2),
@@ -36,6 +36,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
     shadowRadius: 8,
+    // borderColor:'black',
+    // borderWidth:2
   },
   btn: {
     width: '100%',

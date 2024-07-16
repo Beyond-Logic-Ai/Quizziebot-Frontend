@@ -21,6 +21,7 @@ export const images = {
     profileicon:require('../assets/images/profileicon.png'),
     trophyicon:require('../assets/images/trophyicon.png'),
     settingsicon:require('../assets/images/settingsicon.png'),
+    homeicon:require('../assets/images/homeicon.png'),
     
   };
   

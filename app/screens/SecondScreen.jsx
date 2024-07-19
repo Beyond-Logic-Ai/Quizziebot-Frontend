@@ -4,6 +4,7 @@ import Swiper from 'react-native-swiper';
 import { images } from '../../constants/images'; // Ensure the path is correct
 import CustomButton2 from '../components/CustomButton2';
 import CustomButton from '../components/CustomButton';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
 
@@ -57,14 +58,18 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '80%',
-    height: height * 0.3,
-    marginTop: height * 0.05,
+    height:hp(37),
+    marginTop:hp(7),
+    marginBottom:hp(-5)
+    
   },
   swiperContainer: {
     height: height * 0.25,
     width: '100%',
   },
-  wrapper: {},
+  wrapper: {
+    
+  },
   slide: {
     flex: 1,
     justifyContent: 'center',

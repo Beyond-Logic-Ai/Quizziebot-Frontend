@@ -6,6 +6,7 @@ import CustomButton3 from '../components/CustomButton3';
 import { images } from '../../constants/images';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const { width } = Dimensions.get('window');
 
@@ -327,17 +328,34 @@ const styles = StyleSheet.create({
     color: '#999999',
   },
   socialLogosContainer: {
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // width: '80%', // Adjusted width to reduce space between logos
+    // marginVertical: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%', // Adjusted width to reduce space between logos
-    marginVertical: 10,
+    justifyContent: 'space-around',
+    paddingVertical: hp(1),
+    backgroundColor: '#FFF',
+    // borderTopLeftRadius: wp(5),
+    // borderTopRightRadius: wp(5),
+    // borderTopWidth: 1,
+    // borderTopColor: '#F5F5F5',
+    // paddingBottom: hp(2),
+    // borderColor:'black',
+    // borderWidth:2,
+    marginHorizontal:wp(2)
   },
+
+
   socialLogo: {
-    width: width * 0.25, // Adjusted the size
-    height: undefined,
-    aspectRatio: 258 / 48, // Maintain aspect ratio
-    resizeMode: 'contain',
-    marginHorizontal: 10, // Reduced gap between images
+    // width: width * 0.25, // Adjusted the size
+    // height: undefined,
+    // aspectRatio: 258 / 48, // Maintain aspect ratio
+    // resizeMode: 'contain',
+    // marginHorizontal: 10, // Reduced gap between images
+    width: hp(4),
+    height: hp(4),
+    marginHorizontal: wp(4),
   },
   errorText: {
     color: 'red',

@@ -7,6 +7,7 @@ import { images } from '../../constants/images';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
 
@@ -135,8 +136,19 @@ const SignInFirst = ({ navigation }) => {
 
             <Text style={styles.orText}>or</Text>
 
-            <View style={styles.socialLogosContainer}>
+            {/* <View style={styles.socialLogosContainer}>
               <Image source={images.logo4} style={styles.socialLogo} />
+            </View> */}
+            <View style={styles.socialLogosContainer}>
+              <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
+                <Image source={images.google} style={styles.socialLogo} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { /* handle Apple sign-up */ }}>
+                <Image source={images.apple} style={styles.socialLogo} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => { /* handle Facebook sign-up */ }}>
+                <Image source={images.facebook} style={styles.socialLogo} />
+              </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -233,20 +245,44 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   orText: {
-    marginVertical: 10,
+    // marginVertical: 10,
     color: '#999999',
+    // fontsize:12,
+    fontSize:wp(2)
   },
+  // socialLogosContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   width: '90%',
+  //   marginVertical: 10,
+  // },
+  // socialLogo: {
+  //   width: '35%',
+  //   height: undefined,
+  //   aspectRatio: 258 / 48,
+  // },
   socialLogosContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    width: '90%',
-    marginVertical: 10,
+    justifyContent: 'space-around',
+    paddingVertical: hp(2),
+    backgroundColor: '#FFF',
+    paddingBottom: hp(2),
+    paddingHorizontal: wp(-1),
+    // borderColor:'black',
+    // borderWidth:2,
+    marginHorizontal:wp(-2)
   },
+
   socialLogo: {
-    width: '35%',
-    height: undefined,
-    aspectRatio: 258 / 48,
+    width: hp(4),
+    height: hp(4),
+    marginHorizontal: wp(4),
+    
   },
+
+
+
+
   errorText: {
     color: 'red',
     alignSelf: 'flex-start',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton3 from '../components/CustomButton3';
@@ -7,6 +7,7 @@ import { images } from '../../constants/images';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import debounce from 'lodash.debounce';
 
 const { width } = Dimensions.get('window');
 
@@ -23,15 +24,61 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
   const [emailError, setEmailError] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(null);
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(null);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isCheckingPhoneNumber, setIsCheckingPhoneNumber] = useState(false);
 
-  const validateEmail = (email) => {
+  const validateEmailFormat = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
 
-  const validatePhoneNumber = (phoneNumber) => {
+  const validatePhoneNumberFormat = (phoneNumber) => {
     const re = /^[0-9]{10,15}$/;
     return re.test(phoneNumber);
+  };
+
+  const checkIdentifier = async (identifier, type) => {
+    try {
+      const response = await axios.get(`https://api.quizziebot.com/api/auth/check-identifier?identifier=${identifier}&identifierType=${type}`);
+      return !response.data.exists;
+    } catch (error) {
+      console.error(`Error checking ${type}:`, error);
+      return false;
+    }
+  };
+
+  const debouncedCheckEmail = debounce(async (email) => {
+    if (validateEmailFormat(email)) {
+      setIsCheckingEmail(true);
+      const isValid = await checkIdentifier(email, 'email');
+      setIsEmailValid(isValid);
+      setIsCheckingEmail(false);
+    } else {
+      setIsEmailValid(false);
+    }
+  }, 500);
+
+  const debouncedCheckPhoneNumber = debounce(async (phoneNumber) => {
+    if (validatePhoneNumberFormat(phoneNumber)) {
+      setIsCheckingPhoneNumber(true);
+      const isValid = await checkIdentifier(phoneNumber, 'phoneNumber');
+      setIsPhoneNumberValid(isValid);
+      setIsCheckingPhoneNumber(false);
+    } else {
+      setIsPhoneNumberValid(false);
+    }
+  }, 500);
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+    debouncedCheckEmail(text);
+  };
+
+  const handlePhoneNumberChange = (text) => {
+    setPhoneNumber(text);
+    debouncedCheckPhoneNumber(text);
   };
 
   const validatePassword = (password) => {
@@ -55,14 +102,14 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
       setLastNameError('');
     }
 
-    if (!validateEmail(email)) {
+    if (!validateEmailFormat(email)) {
       setEmailError('Please enter a valid email address');
       valid = false;
     } else {
       setEmailError('');
     }
 
-    if (!validatePhoneNumber(phoneNumber)) {
+    if (!validatePhoneNumberFormat(phoneNumber)) {
       setPhoneNumberError('Please enter a valid phone number');
       valid = false;
     } else {
@@ -76,7 +123,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
       setPasswordError('');
     }
 
-    if (valid) {
+    if (valid && isEmailValid && isPhoneNumberValid) {
       navigation.navigate('CreateAnAccountScreen2', {
         firstname: firstName,
         lastname: lastName,
@@ -122,6 +169,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                   placeholderTextColor="#999"
                   value={firstName}
                   onChangeText={setFirstName}
+                  autoCapitalize="none"
                 />
                 {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
               </View>
@@ -133,31 +181,56 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                   placeholderTextColor="#999"
                   value={lastName}
                   onChangeText={setLastName}
+                  autoCapitalize="none"
                 />
                 {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
               </View>
             </View>
 
             <Text style={styles.label}>Email</Text>
-            <TextInput 
-              style={styles.inputLine}
-              placeholder="Enter your email"
-              placeholderTextColor="#999"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-            />
+            <View style={styles.inputWrapper}>
+              <TextInput 
+                style={styles.inputLine}
+                placeholder="Enter your email"
+                placeholderTextColor="#999"
+                value={email}
+                onChangeText={handleEmailChange}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+              {isCheckingEmail ? (
+                <ActivityIndicator style={styles.inlineIcon} size="small" color="#1C58F2" />
+              ) : (
+                isEmailValid === true ? (
+                  <Ionicons name="checkmark-circle" size={24} color="green" style={styles.inlineIcon} />
+                ) : isEmailValid === false ? (
+                  <Ionicons name="close-circle" size={24} color="red" style={styles.inlineIcon} />
+                ) : null
+              )}
+            </View>
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <Text style={styles.label}>Phone Number</Text>
-            <TextInput 
-              style={styles.inputLine}
-              placeholder="Enter your phone number"
-              placeholderTextColor="#999"
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
+            <View style={styles.inputWrapper}>
+              <TextInput 
+                style={styles.inputLine}
+                placeholder="Enter your phone number"
+                placeholderTextColor="#999"
+                value={phoneNumber}
+                onChangeText={handlePhoneNumberChange}
+                keyboardType="phone-pad"
+                autoCapitalize="none"
+              />
+              {isCheckingPhoneNumber ? (
+                <ActivityIndicator style={styles.inlineIcon} size="small" color="#1C58F2" />
+              ) : (
+                isPhoneNumberValid === true ? (
+                  <Ionicons name="checkmark-circle" size={24} color="green" style={styles.inlineIcon} />
+                ) : isPhoneNumberValid === false ? (
+                  <Ionicons name="close-circle" size={24} color="red" style={styles.inlineIcon} />
+                ) : null
+              )}
+            </View>
             {phoneNumberError ? <Text style={styles.errorText}>{phoneNumberError}</Text> : null}
 
             <Text style={styles.label}>Password</Text>
@@ -169,6 +242,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 secureTextEntry={!isPasswordVisible}
                 value={password}
                 onChangeText={setPassword}
+                autoCapitalize="none"
               />
               <TouchableOpacity
                 style={styles.eyeIcon}
@@ -302,6 +376,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginVertical: 10,
   },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
   passwordContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -328,31 +407,13 @@ const styles = StyleSheet.create({
     color: '#999999',
   },
   socialLogosContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // width: '80%', // Adjusted width to reduce space between logos
-    // marginVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: hp(1),
     backgroundColor: '#FFF',
-    // borderTopLeftRadius: wp(5),
-    // borderTopRightRadius: wp(5),
-    // borderTopWidth: 1,
-    // borderTopColor: '#F5F5F5',
-    // paddingBottom: hp(2),
-    // borderColor:'black',
-    // borderWidth:2,
-    marginHorizontal:wp(2)
+    marginHorizontal: wp(2)
   },
-
-
   socialLogo: {
-    // width: width * 0.25, // Adjusted the size
-    // height: undefined,
-    // aspectRatio: 258 / 48, // Maintain aspect ratio
-    // resizeMode: 'contain',
-    // marginHorizontal: 10, // Reduced gap between images
     width: hp(4),
     height: hp(4),
     marginHorizontal: wp(4),
@@ -362,6 +423,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: -10,
     marginBottom: 10,
+  },
+  inlineIcon: {
+    position: 'absolute',
+    right: 10,
   },
   buttonContainer: {
     width: '100%',

@@ -1,36 +1,86 @@
-import React from 'react';
-import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
-
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
-const HomePageScreen = ({ navigation }) => {
+const HomePageScreen = ({ navigation, route }) => {
+  const [username, setUsername] = useState('');
+  const [coins, setCoins] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchUserData = async () => {
+    try {
+      const userSession = await AsyncStorage.getItem('userSession');
+      if (userSession) {
+        const { token } = JSON.parse(userSession);
+        const response = await axios.get('https://api.quizziebot.com/api/home', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data;
+        setUsername(data.username);
+        setCoins(data.coins != null ? data.coins : 0);
+      } else {
+        navigation.navigate('SignInFirst');
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData(); // Fetch user data when the screen is focused
+
+      return () => {}; // Cleanup if needed
+    }, [])
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchUserData();
+    }, 30); // Poll every 30 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#366EFF" />
+      </View>
+    );
+  }
+
   return (
-    
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover">
       <SafeAreaView style={styles.container}>
-      
         <View style={styles.header}>
           <Image
-            source={images.profileImage} // Replace with your profile image source
+            source={images.profileImage}
             style={styles.profileImage}
           />
-          <Text style={styles.username}>Shiva Nagendra</Text>
+          <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
           <View style={styles.coinBadgeContainer}>
             <View style={styles.coinContainer}>
               <Image
-                source={images.profileImage} // Replace with your coin image source
+                source={images.coinImage}
                 style={styles.coinImage}
               />
-              <Text style={styles.coinText}>301</Text>
+              <Text style={styles.coinText}>{coins}</Text>
             </View>
             <Image
-              source={images.badgeImage} // Replace with your badge image source
+              source={images.badgeImage}
               style={styles.badgeImage}
             />
           </View>
@@ -48,53 +98,25 @@ const HomePageScreen = ({ navigation }) => {
           </View>
         </ImageBackground>
 
-        {/* <View style={styles.footer}>
-          <TouchableOpacity>
-            <View style={[styles.footerItem, styles.activeFooterItem]}>
-              <Icon name="home" size={28} color="#35383F" />
-              <Text style={[styles.footerText, styles.activeFooterText]}>Home</Text>
-            </View>
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.footerButton}>
+            <Image source={images.homeicon} style={styles.footerIcon} />
+            <Text style={styles.footerText}>Home</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.footerItem}>
-              <Icon name="person-outline" size={28} color="#000" />
-              <Text style={styles.footerText}>Profile</Text>
-            </View>
+          <TouchableOpacity style={styles.footerButton}>
+            <Image source={images.profileicon} style={styles.footerIcon} />
+            <Text style={styles.footerText}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.footerItem}>
-              <Icon name="trophy-outline" size={28} color="#000" />
-              <Text style={styles.footerText}>Leaderboard</Text>
-            </View>
+          <TouchableOpacity style={styles.footerButton}>
+            <Image source={images.trophyicon} style={styles.footerIcon} />
+            <Text style={styles.footerText}>Leaderboard</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-            <View style={styles.footerItem}>
-              <Icon name="settings-outline" size={28} color="#000" />
-              <Text style={styles.footerText}>Settings</Text>
-            </View>
+          <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
+            <Image source={images.settingsicon} style={styles.footerIcon} />
+            <Text style={styles.footerText}>Settings</Text>
           </TouchableOpacity>
-        </View> */}
-        
-      
-    </SafeAreaView>
-    <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.homeicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.profileicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.trophyicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Leaderboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-          <Image source={images.settingsicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Settings</Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -102,19 +124,24 @@ const HomePageScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#0044F2',
   },
   backgroundImage: {
     flex: 1,
     width: '100%',
     height: '100%',
   },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.04)', // Slightly transparent background to show underlying image
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
   },
   profileImage: {
     width: 40,
@@ -172,14 +199,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   textBox: {
-    backgroundColor: 'rgba(0, 0, 0, 0.08)', // Slightly transparent box background
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20, // Adjust this value to position the box near the footer
+    marginBottom: 20,
   },
   subtitle: {
-    fontSize: 20, // Increased font size
+    fontSize: 20,
     textAlign: 'center',
     marginBottom: 20,
     color: '#FFFFFF',
@@ -187,8 +214,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#366EFF',
-    paddingVertical: 14, // Increased padding
-    paddingHorizontal: 40, // Increased padding
+    paddingVertical: 14,
+    paddingHorizontal: 40,
     borderRadius: 27,
   },
   buttonText: {
@@ -196,13 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  // footer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around',
-  //   paddingVertical: 12,
-  //   backgroundColor: '#FFF',
-  //   paddingBottom: 20, // Add extra padding for safe area
-  // },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -218,12 +238,6 @@ const styles = StyleSheet.create({
   footerButton: {
     alignItems: 'center',
   },
-  // footerItem: {
-  //   alignItems: 'center',
-  // },
-  // footerText: {
-  //   fontSize: 12,
-  // },
   footerText: {
     fontSize: wp(3),
     color: '#000',
@@ -232,13 +246,6 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
   },
-  // activeFooterItem: {
-  //   borderTopWidth: 0,
-  //   borderTopColor: '#0044F2',
-  // },
-  // activeFooterText: {
-  //   color: '#35383F',
-  // },
 });
 
 export default HomePageScreen;

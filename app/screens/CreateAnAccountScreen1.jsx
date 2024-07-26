@@ -35,7 +35,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
   };
 
   const validatePhoneNumberFormat = (phoneNumber) => {
-    const re = /^[0-9]{10,15}$/;
+    const re = /^[0-9]{10}$/;
     return re.test(phoneNumber);
   };
 
@@ -77,8 +77,9 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
   };
 
   const handlePhoneNumberChange = (text) => {
-    setPhoneNumber(text);
-    debouncedCheckPhoneNumber(text);
+    const formattedText = text.replace(/[^0-9]/g, '').slice(0, 10);
+    setPhoneNumber(formattedText);
+    debouncedCheckPhoneNumber(formattedText);
   };
 
   const validatePassword = (password) => {
@@ -220,6 +221,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 onChangeText={handlePhoneNumberChange}
                 keyboardType="phone-pad"
                 autoCapitalize="none"
+                maxLength={10} // Ensure maximum length is 10 digits
               />
               {isCheckingPhoneNumber ? (
                 <ActivityIndicator style={styles.inlineIcon} size="small" color="#1C58F2" />

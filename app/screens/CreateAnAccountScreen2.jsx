@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
-import { ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton3 from '../components/CustomButton3';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
-import SignUpSuccessScreen from './SignUpSuccessScreen'; // Ensure this import is correct
+import debounce from 'lodash.debounce';
 
 const { width, height } = Dimensions.get('window');
 
+const generateRandomUsername = (firstName, lastName) => {
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_-';
+  let randomUsername = `${firstName}.${lastName}`;
+  for (let i = randomUsername.length; i < 8; i++) {
+    randomUsername += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return randomUsername;
+};
+
 const CreateAnAccountScreen2 = ({ route, navigation }) => {
   const { firstname, lastname, email, phoneNumber, password, rememberMe, loginType, accountType } = route.params;
-  const [username, setUsername] = useState(`${firstname}.${lastname}`);
+  const [username, setUsername] = useState(generateRandomUsername(firstname, lastname));
   const [dob, setDob] = useState(new Date());
   const [country, setCountry] = useState('United States');
   const [gender, setGender] = useState('');
@@ -22,12 +32,45 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
   const [countryError, setCountryError] = useState('');
   const [genderError, setGenderError] = useState('');
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
+  const [isUsernameValid, setIsUsernameValid] = useState(null);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+
+  useEffect(() => {
+    setUsername(generateRandomUsername(firstname, lastname));
+  }, [firstname, lastname]);
+
+  const checkUsernameExists = async (username) => {
+    setIsCheckingUsername(true);
+    try {
+      const response = await axios.get(`https://api.quizziebot.com/api/auth/check-username?username=${username}`);
+      setIsUsernameValid(!response.data.exists);
+    } catch (error) {
+      console.error('Error checking username:', error);
+      setIsUsernameValid(false);
+    }
+    setIsCheckingUsername(false);
+  };
+
+  const debouncedCheckUsernameExists = debounce(checkUsernameExists, 500);
+
+  const handleUsernameChange = (text) => {
+    // Ensure only valid characters and convert to lowercase
+    const sanitizedText = text.replace(/[^a-z0-9._-]/gi, '').toLowerCase();
+    if (sanitizedText.length <= 14) {
+      setUsername(sanitizedText);
+      if (sanitizedText.length >= 3) { // Minimum length for username to check
+        debouncedCheckUsernameExists(sanitizedText);
+      } else {
+        setIsUsernameValid(null); // Reset validation state if less than minimum length
+      }
+    }
+  };
 
   const handleFinalSignUp = async () => {
     let valid = true;
 
-    if (!username) {
-      setUsernameError('Please enter a username');
+    if (!username || username.length < 3) {
+      setUsernameError('Please enter a username with at least 3 characters');
       valid = false;
     } else {
       setUsernameError('');
@@ -79,15 +122,40 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
         console.log('Response from backend:', response);
 
         if (response.status === 201 || response.status === 200) {
-          setIsSignUpSuccessVisible(true);
-          console.log('Navigating to SignUpSuccessScreen...');
-          navigation.navigate('SignUpSuccessScreen');
+          // Log in the user to get the token
+          try {
+            const loginRequestBody = {
+              identifier: email,
+              password,
+            };
+            console.log('Sending login request to backend with body:', loginRequestBody);
+
+            const loginResponse = await axios.post('https://api.quizziebot.com/api/auth/signin', loginRequestBody);
+
+            console.log('Login response from backend:', loginResponse);
+
+            if (loginResponse.status === 200) {
+              const userSession = {
+                token: loginResponse.data.token,
+                username: requestBody.username,
+                coins: 0, // Initialize coins to 0 after signup
+              };
+              console.log('Saving user session:', userSession);
+              await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+              navigation.navigate('HomePageScreen');
+            } else {
+              Alert.alert('Error', 'Login failed. Please try again.');
+            }
+          } catch (loginError) {
+            console.error('Error during login:', loginError);
+            Alert.alert('Error', `Failed to login user: ${loginError.response ? loginError.response.data.message : loginError.message}`);
+          }
         } else {
           Alert.alert('Error', 'Something went wrong. Please try again.');
         }
       } catch (error) {
         console.error('Error during signup:', error);
-        Alert.alert('Error', 'Failed to register user');
+        Alert.alert('Error', `Failed to register user: ${error.response ? error.response.data.message : error.message}`);
       }
     }
   };
@@ -128,9 +196,19 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
                 placeholder="Enter your username"
                 placeholderTextColor="#999"
                 value={username}
-                onChangeText={setUsername}
+                onChangeText={handleUsernameChange}
+                autoCapitalize="none"
+                maxLength={14}
               />
-              <Ionicons name="checkmark-circle" size={24} color="green" style={styles.inlineIcon} />
+              {isCheckingUsername ? (
+                <ActivityIndicator style={styles.inlineIcon} size="small" color="#1C58F2" />
+              ) : (
+                isUsernameValid === true ? (
+                  <Ionicons name="checkmark-circle" size={24} color="green" style={styles.inlineIcon} />
+                ) : isUsernameValid === false && username.length >= 3 ? (
+                  <Ionicons name="close-circle" size={24} color="red" style={styles.inlineIcon} />
+                ) : null
+              )}
             </View>
             {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
 
@@ -142,6 +220,7 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
                 placeholderTextColor="#999"
                 value={dob.toDateString()}
                 onFocus={() => setShowDatePicker(true)}
+                editable={false}
               />
               <Ionicons name="calendar" size={24} color="#1877F2" style={styles.inlineIcon} onPress={() => setShowDatePicker(true)} />
             </View>
@@ -164,7 +243,6 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
                   { label: 'Canada', value: 'Canada' },
                   { label: 'United Kingdom', value: 'United Kingdom' },
                   { label: 'India', value: 'India' },
-                  // Add more countries as needed
                 ]}
                 style={{
                   inputIOS: styles.inputLine,

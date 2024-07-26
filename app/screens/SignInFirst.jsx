@@ -59,8 +59,13 @@ const SignInFirst = ({ navigation }) => {
         const response = await axios.post('https://api.quizziebot.com/api/auth/signin', { identifier: email, password });
 
         if (response.status === 200) {
-          await AsyncStorage.setItem('userSession', JSON.stringify(response.data));
-          navigation.navigate('HomePageScreen');
+          const userSession = {
+            token: response.data.token,
+            username: response.data.username,
+            coins: response.data.coins || 0,
+          };
+          await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+          navigation.navigate('HomePageScreen', { user: userSession });
         } else {
           Alert.alert('Error', 'Invalid credentials. Please try again.');
         }
@@ -136,9 +141,6 @@ const SignInFirst = ({ navigation }) => {
 
             <Text style={styles.orText}>or</Text>
 
-            {/* <View style={styles.socialLogosContainer}>
-              <Image source={images.logo4} style={styles.socialLogo} />
-            </View> */}
             <View style={styles.socialLogosContainer}>
               <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
                 <Image source={images.google} style={styles.socialLogo} />
@@ -245,22 +247,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   orText: {
-    // marginVertical: 10,
     color: '#999999',
-    // fontsize:12,
-    fontSize:wp(2)
+    fontSize: wp(2)
   },
-  // socialLogosContainer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   width: '90%',
-  //   marginVertical: 10,
-  // },
-  // socialLogo: {
-  //   width: '35%',
-  //   height: undefined,
-  //   aspectRatio: 258 / 48,
-  // },
   socialLogosContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -268,21 +257,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingBottom: hp(2),
     paddingHorizontal: wp(-1),
-    // borderColor:'black',
-    // borderWidth:2,
-    marginHorizontal:wp(-2)
+    marginHorizontal: wp(-2)
   },
-
   socialLogo: {
     width: hp(4),
     height: hp(4),
     marginHorizontal: wp(4),
-    
   },
-
-
-
-
   errorText: {
     color: 'red',
     alignSelf: 'flex-start',
@@ -296,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInFirst;      
+export default SignInFirst;

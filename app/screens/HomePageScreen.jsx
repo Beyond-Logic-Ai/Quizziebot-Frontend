@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -6,10 +6,11 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
-const HomePageScreen = ({ navigation }) => {
+const HomePageScreen = ({ navigation, route }) => {
   const [username, setUsername] = useState('');
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -37,14 +38,20 @@ const HomePageScreen = ({ navigation }) => {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData(); // Fetch user data when the screen is focused
+
+      return () => {}; // Cleanup if needed
+    }, [])
+  );
+
   useEffect(() => {
-    fetchUserData(); // Initial fetch
+    const interval = setInterval(() => {
+      fetchUserData();
+    }, 30); // Poll every 30 seconds
 
-    const intervalId = setInterval(() => {
-      fetchUserData(); // Fetch user data periodically
-    }, 2000); // Fetch every 5 seconds
-
-    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    return () => clearInterval(interval); // Cleanup on unmount
   }, []);
 
   if (loading) {
@@ -60,20 +67,20 @@ const HomePageScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Image
-            source={images.profileImage} // Keep the static profile image source
+            source={images.profileImage}
             style={styles.profileImage}
           />
           <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
           <View style={styles.coinBadgeContainer}>
             <View style={styles.coinContainer}>
               <Image
-                source={images.coinImage} // Replace with your coin image source
+                source={images.coinImage}
                 style={styles.coinImage}
               />
               <Text style={styles.coinText}>{coins}</Text>
             </View>
             <Image
-              source={images.badgeImage} // Replace with your badge image source
+              source={images.badgeImage}
               style={styles.badgeImage}
             />
           </View>
@@ -134,7 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.04)', // Slightly transparent background to show underlying image
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
   },
   profileImage: {
     width: 40,
@@ -192,14 +199,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   textBox: {
-    backgroundColor: 'rgba(0, 0, 0, 0.08)', // Slightly transparent box background
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20, // Adjust this value to position the box near the footer
+    marginBottom: 20,
   },
   subtitle: {
-    fontSize: 20, // Increased font size
+    fontSize: 20,
     textAlign: 'center',
     marginBottom: 20,
     color: '#FFFFFF',
@@ -207,8 +214,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#366EFF',
-    paddingVertical: 14, // Increased padding
-    paddingHorizontal: 40, // Increased padding
+    paddingVertical: 14,
+    paddingHorizontal: 40,
     borderRadius: 27,
   },
   buttonText: {

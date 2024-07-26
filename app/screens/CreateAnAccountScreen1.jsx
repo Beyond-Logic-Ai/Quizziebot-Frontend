@@ -122,6 +122,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                   placeholderTextColor="#999"
                   value={firstName}
                   onChangeText={setFirstName}
+                  autoCapitalize="none"
                 />
                 {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
               </View>
@@ -133,6 +134,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                   placeholderTextColor="#999"
                   value={lastName}
                   onChangeText={setLastName}
+                  autoCapitalize="none"
                 />
                 {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
               </View>
@@ -146,6 +148,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              autoCapitalize="none"
             />
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
@@ -157,6 +160,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               keyboardType="phone-pad"
+              autoCapitalize="none"
             />
             {phoneNumberError ? <Text style={styles.errorText}>{phoneNumberError}</Text> : null}
 
@@ -169,6 +173,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 secureTextEntry={!isPasswordVisible}
                 value={password}
                 onChangeText={setPassword}
+                autoCapitalize="none"
               />
               <TouchableOpacity
                 style={styles.eyeIcon}
@@ -328,31 +333,13 @@ const styles = StyleSheet.create({
     color: '#999999',
   },
   socialLogosContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // width: '80%', // Adjusted width to reduce space between logos
-    // marginVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: hp(1),
     backgroundColor: '#FFF',
-    // borderTopLeftRadius: wp(5),
-    // borderTopRightRadius: wp(5),
-    // borderTopWidth: 1,
-    // borderTopColor: '#F5F5F5',
-    // paddingBottom: hp(2),
-    // borderColor:'black',
-    // borderWidth:2,
-    marginHorizontal:wp(2)
+    marginHorizontal: wp(2)
   },
-
-
   socialLogo: {
-    // width: width * 0.25, // Adjusted the size
-    // height: undefined,
-    // aspectRatio: 258 / 48, // Maintain aspect ratio
-    // resizeMode: 'contain',
-    // marginHorizontal: 10, // Reduced gap between images
     width: hp(4),
     height: hp(4),
     marginHorizontal: wp(4),

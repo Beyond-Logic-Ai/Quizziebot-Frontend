@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Image, View, Text, StyleSheet, ImageBackground, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,10 +7,26 @@ import ArcadeButton from '../components/ArcadeButton';
 import CreateQuizzieButton from '../components/CreateQuizzieButton';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height: screenHeight } = Dimensions.get('window');
 
 const ArcadePage = ({ navigation }) => {
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const userSession = await AsyncStorage.getItem('userSession');
+      if (userSession) {
+        const { userId } = JSON.parse(userSession);
+        setUserId(userId);
+      } else {
+        navigation.navigate('SignInFirst');
+      }
+    };
+    fetchUserId();
+  }, []);
+
   return (
     <ImageBackground source={images.homescreenbg1} style={styles.backgroundImage} blurRadius={15}>
       <SafeAreaView style={styles.container}>
@@ -22,51 +38,34 @@ const ArcadePage = ({ navigation }) => {
         </View>
 
         {/* Main Content */}
-        
-          <View style={styles.robotContainer}>
-            <Image source={images.arcaderobo} style={styles.robotImage} />
-          </View>
-          
-          <View style={styles.mainContent}>
-            <Text style={styles.title}>Pick your path: Creator, Classic, or Arcade. Dive in!</Text>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            <ClassicButton 
+        <View style={styles.robotContainer}>
+          <Image source={images.arcaderobo} style={styles.robotImage} />
+        </View>
+
+        <View style={styles.mainContent}>
+          <Text style={styles.title}>Pick your path: Creator, Classic, or Arcade. Dive in!</Text>
+          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <ClassicButton
               title="Classic"
-              screenName="HomePageScreen"
+              screenName="LoadingScreen"
               image={images.classicimg}
+              navigation={navigation}
+              userId={userId}
             />
             <ArcadeButton
               title="Arcade"
               screenName="HomePageScreen"
               image={images.arcadeimg}
+              navigation={navigation}
             />
-            <CreateQuizzieButton 
+            <CreateQuizzieButton
               title="Create your own quiz by QUIZZIE BOT"
               screenName="HomePageScreen"
+              navigation={navigation}
             />
-            </ScrollView>
-
-          </View>
-        
+          </ScrollView>
+        </View>
       </SafeAreaView>
-      {/* <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.emptyhomeicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.profileicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.trophyicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Leaderboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Image source={images.settingsicon} style={styles.footerIcon} />
-          <Text style={styles.footerText}>Settings</Text>
-        </TouchableOpacity>
-      </View> */}
     </ImageBackground>
   );
 };
@@ -93,7 +92,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingVertical: screenHeight > 900 ? hp(3) : 0, // Add some padding for larger devices
   },
   robotContainer: {
     alignItems: 'center',
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: wp(5),
     textAlign: 'center',
     color: '#FFF',
-    marginTop:hp(2),
+    marginTop: hp(2),
     marginBottom: hp(-1),
     fontWeight: 'bold',
   },

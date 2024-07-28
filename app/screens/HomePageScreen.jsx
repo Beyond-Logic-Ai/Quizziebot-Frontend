@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
-import Feather from 'react-native-vector-icons/Feather'; // Import Feather
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useFocusEffect } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
 
 const { width, height } = Dimensions.get('window');
 
@@ -51,18 +52,18 @@ const HomePageScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchUserData(); // Fetch user data when the screen is focused
+      fetchUserData();
 
-      return () => {}; // Cleanup if needed
+      return () => {};
     }, [])
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
       fetchUserData();
-    }, 30000); // Poll every 30 seconds
+    }, 30000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -84,18 +85,17 @@ const HomePageScreen = ({ navigation, route }) => {
           <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
           <View style={styles.coinBadgeContainer}>
             <View style={styles.coinContainer}>
-            <Text style={styles.coinText}>{coins}</Text>
+              <Text style={styles.coinText}>{coins}</Text>
               <Image
                 source={images.coinImage}
                 style={styles.coinImage}
-              />             
-            </View>            
+              />
+            </View>
           </View>
           <Image
-              source={images.badge}
-              style={styles.badgeImage}
-            />
-          </View>
+            source={images.badge}
+            style={styles.badgeImage}
+          />
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
         </View>
 
@@ -103,13 +103,14 @@ const HomePageScreen = ({ navigation, route }) => {
           <View style={styles.body}>
             <View style={styles.textBox}>
               <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
-              <TouchableOpacity  onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
-              <LinearGradient
-                  colors={['#366EFF', '#0044F2']} // Define your gradient colors here
+              <TouchableOpacity onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
+                <LinearGradient
+                  colors={['#366EFF', '#0044F2']}
                   start={{ x: 0.5, y: 0.15 }}
-                  end={{ x: 0.5, y: .6 }}
-                  style={styles.button}>
-                <Text style={styles.buttonText}>Play Now</Text>
+                  end={{ x: 0.5, y: 0.6 }}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>Play Now</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -126,11 +127,11 @@ const HomePageScreen = ({ navigation, route }) => {
             <Text style={styles.footerText}>Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerButton}>
-          <Ionicons name="trophy-outline"  style={styles.footerIcon} />
-          <Text style={styles.footerText}>Leaderboard</Text>
+            <Ionicons name="trophy-outline" style={styles.footerIcon} />
+            <Text style={styles.footerText}>Leaderboard</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-            <Ionicons name="options-outline" style={styles.footerIcon}/>
+            <Ionicons name="options-outline" style={styles.footerIcon} />
             <Text style={styles.footerText}>Settings</Text>
           </TouchableOpacity>
         </View>
@@ -160,15 +161,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    borderColor:'black',
-    borderWidth:2
+    borderColor: 'black',
+    borderWidth: 2,
   },
   profileImage: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    borderColor:'black',
-    borderWidth:2
+    borderColor: 'black',
+    borderWidth: 2,
   },
   username: {
     flex: 1,
@@ -180,12 +181,10 @@ const styles = StyleSheet.create({
   coinBadgeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor:'black',
-    borderWidth:2,
-    
+    borderColor: 'black',
+    borderWidth: 2,
   },
   coinContainer: {
-    
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -193,14 +192,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginRight: 0,
-    borderColor:'black',
-    borderWidth:2
+    borderColor: 'black',
+    borderWidth: 2,
   },
   coinImage: {
     width: 20,
     height: 24,
-    borderColor:'black',
-    borderWidth:2
+    borderColor: 'black',
+    borderWidth: 2,
   },
   coinText: {
     marginLeft: 4,
@@ -209,22 +208,22 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   badgeImage: {
-    marginLeft:7,
+    marginLeft: 7,
     width: 37,
     height: 37,
-    borderColor:'black',
-    borderWidth:2
+    borderColor: 'black',
+    borderWidth: 2,
   },
   notificationIcon: {
     marginLeft: 7,
-    fontSize: 29,  
+    fontSize: 29,
     color: '#FFFFFF',
-    borderColor:'black',
-    borderWidth:2
+    borderColor: 'black',
+    borderWidth: 2,
   },
   overlayImage: {
     flex: 1,
-    textAlign:'center',
+    textAlign: 'center',
     width: '100%',
     height: '100%',
     justifyContent: 'flex-end',
@@ -252,32 +251,25 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#366EFF',
-    // paddingVertical: hp(1.3),
-    // paddingHorizontal: wp(20),
-    width:250,
-    height:48,
+    width: 250,
+    height: 48,
     borderRadius: wp(9),
-     borderColor:'#031952',
-     borderWidth:.1,
-    
-  
+    borderColor: '#031952',
+    borderWidth: 0.1,
   },
-  play:{
-    // borderColor:'black',
-    // borderWidth:2,
+  play: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
   },
   buttonText: {
-    textAlign:'center',
+    textAlign: 'center',
     color: '#FFF',
     fontSize: wp(6),
     fontWeight: 'bold',
-    marginTop:7,
+    marginTop: 7,
     fontFamily: 'Nunito',
-    
   },
   footer: {
     flexDirection: 'row',
@@ -290,7 +282,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#F5F5F5',
     paddingBottom: hp(4),
     paddingHorizontal: '5%',
-
   },
   footerButton: {
     alignItems: 'center',
@@ -300,8 +291,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   footerIcon: {
-    fontSize: 32,  
-   
+    fontSize: 32,
   },
 });
 

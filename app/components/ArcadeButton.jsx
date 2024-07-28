@@ -98,8 +98,8 @@ const ArcadeButton = ({ title, screenName, image }) => {
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(screenName)}>
         <LinearGradient
           colors={['#9DFF4F', '#1ABD00']} // Define your gradient colors here
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+          start={{ x: .5, y: .3 }}
+          end={{ x: .5, y: 1 }}
           style={styles.btn}
         >
           <View style={styles.content}>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
-    shadowRadius: 8,
+    shadowRadius: 4,
     
     borderRadius: wp(10),
   },
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
-    shadowRadius: 8, // Adjust the spacing as needed
+    shadowRadius: 4, // Adjust the spacing as needed
   },
 });
 

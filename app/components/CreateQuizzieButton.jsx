@@ -86,8 +86,8 @@ const CreateQuizzieButton = ({ title, screenName }) => {
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(screenName)}>
       <LinearGradient
         colors={['#FF8A35', '#F17400']} // Define your gradient colors here
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        start={{ x: .5, y: .1 }}
+          end={{ x: .5, y: 1 }}
         style={styles.btn}
       >
         
@@ -105,14 +105,16 @@ const styles = StyleSheet.create({
     borderRadius: wp(4),
     marginBottom: hp(0),
     marginTop: hp(1),
-    height:hp(12),
+    height:hp(9.8),
     alignItems: 'center',
     justifyContent: 'center',
     // iOS shadow properties
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.6,
-    shadowRadius: 8,
+    shadowOpacity: .3,
+    shadowRadius:2,
+    // borderColor:'black',
+    // borderWidth:2
    
    
     
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
   btn: {
     
     width: wp(62),
-    height:hp(11),
+    height:hp(9.5),
    
     borderRadius: wp(7),
     alignItems: 'center',

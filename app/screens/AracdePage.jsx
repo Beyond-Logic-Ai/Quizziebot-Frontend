@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     marginTop: hp(2),
     marginBottom: hp(-1),
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
   },
   footer: {
     flexDirection: 'row',

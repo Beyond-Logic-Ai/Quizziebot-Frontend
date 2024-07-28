@@ -26,7 +26,7 @@ const LoadingScreen = () => {
           duration: 2000, // 2 seconds
           useNativeDriver: false,
         }).start(() => {
-          navigation.navigate('QuizScreen'); // Navigate to the questions screen after loading
+          navigation.navigate('QuizQuestionScreen'); // Navigate to the questions screen after loading
         });
       } catch (error) {
         console.error('Failed to load questions:', error);

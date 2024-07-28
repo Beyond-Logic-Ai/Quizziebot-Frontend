@@ -19,7 +19,7 @@ const SplashScreen = () => {
     // Fade in animation
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000, // Fade in duration
+      duration: 500, // Fade in duration
       useNativeDriver: true,
     }).start(() => {
       setTimeout(() => {
@@ -32,7 +32,7 @@ const SplashScreen = () => {
           // Navigate to Home screen after fade-out
           navigation.replace('Home');
         });
-      }, 2000); // Show splash screen for 2 seconds
+      }, 1000); // Show splash screen for 2 seconds
     });
   }, [fadeAnim, navigation]);
 

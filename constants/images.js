@@ -18,6 +18,6 @@ export const images = {
     classicimg:require('../assets/images/classicimg.png'),
     arcadeimg:require('../assets/images/arcadeimg.png'),
     profilepicture:require('../assets/images/pp.png'),
-    badge:require('../assets/images/badge.png'),
+    
   };
   

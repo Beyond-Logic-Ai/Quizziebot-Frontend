@@ -16,7 +16,8 @@ import HomePageScreen from './screens/HomePageScreen';
 import SettingsHomePageScreen from './screens/SettingsHomePageScreen';
 import ArcadePage from './screens/AracdePage'
 import LoadingScreen from './screens/LoadingScreen';
-import QuizScreen from './screens/QuizScreen';
+import QuizQuestionScreen from './screens/QuizQuestionScreen';
+import QuizResultScreen from './screens/QuizResultScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +59,8 @@ function Navigation() {
         <Stack.Screen name="SettingsHomePageScreen" component={SettingsHomePageScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ArcadePage" component={ArcadePage} options={{ headerShown: false }} /> 
         <Stack.Screen name="LoadingScreen" component={LoadingScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="QuizScreen" component={QuizScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="QuizQuestionScreen" component={QuizQuestionScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="QuizResultScreen" component={QuizResultScreen} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

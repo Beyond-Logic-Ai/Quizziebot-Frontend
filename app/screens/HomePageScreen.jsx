@@ -1,12 +1,8 @@
-
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import { LinearGradient } from 'expo-linear-gradient';
-
+import Feather from 'react-native-vector-icons/Feather'; // Import Feather
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
@@ -25,20 +21,30 @@ const HomePageScreen = ({ navigation, route }) => {
       const userSession = await AsyncStorage.getItem('userSession');
       if (userSession) {
         const { token } = JSON.parse(userSession);
+
+        console.log('Fetching user data with token:', token);
+
         const response = await axios.get('https://api.quizziebot.com/api/home', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        console.log('User data fetched successfully:', response.data);
+
         const data = response.data;
         setUsername(data.username);
         setCoins(data.coins != null ? data.coins : 0);
+        
       } else {
         navigation.navigate('SignInFirst');
       }
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching user data:', error.message);
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+      }
       setLoading(false);
     }
   };
@@ -89,10 +95,8 @@ const HomePageScreen = ({ navigation, route }) => {
               source={images.badge}
               style={styles.badgeImage}
             />
-          
-          <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-          <Ionicons name="notifications-outline"  style={styles.notificationIcon} />
-          </TouchableOpacity>
+          </View>
+          <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
         </View>
 
         <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover">
@@ -111,14 +115,14 @@ const HomePageScreen = ({ navigation, route }) => {
             </View>
           </View>
         </ImageBackground>
-        </SafeAreaView>
+
         <View style={styles.footer}>
           <TouchableOpacity style={styles.footerButton}>
-            <Fontisto name="home" style={styles.footerIcon} />
+            <Feather name="home" size={32} color="#000" />
             <Text style={styles.footerText}>Home</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerButton}>
-            <Ionicons name="person-outline" style={styles.footerIcon} />
+            <Ionicons name="person-outline" size={32} color="#000" />
             <Text style={styles.footerText}>Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerButton}>
@@ -130,7 +134,7 @@ const HomePageScreen = ({ navigation, route }) => {
             <Text style={styles.footerText}>Settings</Text>
           </TouchableOpacity>
         </View>
-      
+      </SafeAreaView>
     </ImageBackground>
   );
 };

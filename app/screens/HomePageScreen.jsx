@@ -115,8 +115,9 @@ const HomePageScreen = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
 
+        </ImageBackground>
+        </SafeAreaView>
         <View style={styles.footer}>
           <TouchableOpacity style={styles.footerButton}>
             <Feather name="home" size={32} color="#000" />
@@ -135,7 +136,7 @@ const HomePageScreen = ({ navigation, route }) => {
             <Text style={styles.footerText}>Settings</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      
     </ImageBackground>
   );
 };

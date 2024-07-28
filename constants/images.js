@@ -23,6 +23,6 @@ export const images = {
     settingsicon:require('../assets/images/settingsicon.png'),
     homeicon:require('../assets/images/homeicon.png'),
     profilepicture:require('../assets/images/pp.png'),
-    
+    trophyimage:require('../assets/images/trophy.png'),
   };
   

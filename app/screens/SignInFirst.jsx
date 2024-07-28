@@ -35,7 +35,7 @@ const SignInFirst = ({ navigation }) => {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 6;
+    return password.length >= 8;
   };
 
   const handleSignIn = async () => {
@@ -48,7 +48,7 @@ const SignInFirst = ({ navigation }) => {
     }
 
     if (!validatePassword(password)) {
-      setPasswordError('Password must be at least 6 characters long');
+      setPasswordError('Password must be at least 8 characters long');
       valid = false;
     } else {
       setPasswordError('');
@@ -99,6 +99,7 @@ const SignInFirst = ({ navigation }) => {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              autoCapitalize="none"
             />
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
@@ -111,6 +112,7 @@ const SignInFirst = ({ navigation }) => {
                 secureTextEntry={!isPasswordVisible}
                 value={password}
                 onChangeText={setPassword}
+                autoCapitalize="none"
               />
               <TouchableOpacity
                 style={styles.eyeIcon}

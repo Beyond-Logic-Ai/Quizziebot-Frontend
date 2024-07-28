@@ -97,8 +97,8 @@ const ClassicButton = ({ title, screenName, image }) => {
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(screenName)}>
       <LinearGradient
         colors={['#FFC107', '#FF5722']} // Define your gradient colors here
-        start={{ x: 1, y: 5 }}
-        end={{ x: 4, y: 1 }}
+        start={{ x: .5, y: .3 }}
+        end={{ x: .5, y: 1.8 }}
         style={styles.btn}
       >
         
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
-    shadowRadius: 8,
+    shadowRadius: 4,
     
     borderRadius: wp(10),
   },
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
-    shadowRadius: 8, // Adjust the spacing as needed
+    shadowRadius: 5, // Adjust the spacing as needed
   },
 });
 

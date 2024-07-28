@@ -17,12 +17,7 @@ export const images = {
     arcaderobo:require('../assets/images/arcaderobo.png'),
     classicimg:require('../assets/images/classicimg.png'),
     arcadeimg:require('../assets/images/arcadeimg.png'),
-    emptyhomeicon:require('../assets/images/emptyhomeicon.png'),
-    profileicon:require('../assets/images/profileicon.png'),
-    trophyicon:require('../assets/images/trophyicon.png'),
-    settingsicon:require('../assets/images/settingsicon.png'),
-    homeicon:require('../assets/images/homeicon.png'),
     profilepicture:require('../assets/images/pp.png'),
-    trophyimage:require('../assets/images/trophy.png'),
+    
   };
   

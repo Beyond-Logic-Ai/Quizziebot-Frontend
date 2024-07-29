@@ -152,7 +152,7 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
               };
               console.log('Saving user session:', userSession);
               await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
-              navigation.navigate('HomePageScreen');
+              navigation.navigate('SignUpSuccessScreen'); // Navigate to the success screen
             } else {
               Alert.alert('Error', 'Login failed. Please try again.');
             }

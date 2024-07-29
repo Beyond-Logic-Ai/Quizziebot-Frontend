@@ -60,7 +60,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
           initialValue={10}
           showProgressValue={true}
         />
-        <Ionicons name="close" size={24} color="#000" onPress={() => navigation.goBack()} />
+        <Ionicons name="close" size={24} color="#000" onPress={() => navigation.navigate('HomePageScreen')} />
       </View>
       <Image source={images.logo2} style={styles.robotImage} />
       <Text style={styles.questionText}>{currentQuestion.questionText}</Text>

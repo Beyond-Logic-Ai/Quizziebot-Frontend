@@ -1,31 +1,54 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { images } from '../../constants/images';
 import { animation } from '../../constants/animations';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpSuccessScreen = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      // Save user session
-      const userSession = {
-        email: 'user@example.com', // Replace with actual user data
-        token: 'jwt_token', // Replace with actual token
-      };
-      await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+    const fetchData = async () => {
+      try {
+        const userSession = await AsyncStorage.getItem('userSession');
+        if (userSession) {
+          const { token } = JSON.parse(userSession);
+          const response = await axios.get('https://api.quizziebot.com/api/home', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'HomePageScreen' }],
-      });
-    }, 3000); // 3 seconds delay
+          const data = response.data;
+          setUserData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
-  }, [navigation]);
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && userData) {
+      const timer = setTimeout(() => {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'HomePageScreen', params: { userData } }],
+        });
+      }, 3000); // 3 seconds delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading, userData, navigation]);
 
   return (
     <View style={styles.container}>
@@ -45,6 +68,7 @@ const SignUpSuccessScreen = () => {
           loop
           style={styles.loadingAnimation}
         />
+        {loading && <ActivityIndicator size="large" color="#366EFF" />}
       </View>
     </View>
   );

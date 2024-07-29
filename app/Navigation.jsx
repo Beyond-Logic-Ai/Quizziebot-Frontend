@@ -44,23 +44,24 @@ function Navigation() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Second" component={SecondScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SignInFirst" component={SignInFirst} options={{ headerShown: false }} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CreateNewPassword" component={CreateNewPasswordScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CreateAnAccountScreen1" component={CreateAnAccountScreen1} options={{ headerShown: false }} />
-        <Stack.Screen name="CreateAnAccountScreen2" component={CreateAnAccountScreen2} options={{ headerShown: false }} />
-        <Stack.Screen name="AfterSignedScreen" component={AfterSignedScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SignUpSuccessScreen" component={SignUpSuccessScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="HomePageScreen" component={HomePageScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SettingsHomePageScreen" component={SettingsHomePageScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="ArcadePage" component={ArcadePage} options={{ headerShown: false }} /> 
-        <Stack.Screen name="LoadingScreen" component={LoadingScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="QuizQuestionScreen" component={QuizQuestionScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="QuizResultScreen" component={QuizResultScreen} options={{headerShown: false}}/>
+      <Stack.Navigator  initialRouteName={initialRoute} >
+      
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, animation: 'fade'}} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false , animation: 'fade'}} />
+        <Stack.Screen name="Second" component={SecondScreen} options={{ headerShown: false , animation: 'fade' }} />
+        <Stack.Screen name="SignInFirst" component={SignInFirst} options={{ headerShown: false , animation: 'fade'}} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false , animation: 'fade'}} />
+        <Stack.Screen name="CreateNewPassword" component={CreateNewPasswordScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="CreateAnAccountScreen1" component={CreateAnAccountScreen1} options={{ headerShown: false , animation: 'fade'}} />
+        <Stack.Screen name="CreateAnAccountScreen2" component={CreateAnAccountScreen2} options={{ headerShown: false , animation: 'fade'}} />
+        <Stack.Screen name="AfterSignedScreen" component={AfterSignedScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="SignUpSuccessScreen" component={SignUpSuccessScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="HomePageScreen" component={HomePageScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="SettingsHomePageScreen" component={SettingsHomePageScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="ArcadePage" component={ArcadePage} options={{ headerShown: false , animation: 'fade'}} /> 
+        <Stack.Screen name="LoadingScreen" component={LoadingScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="QuizQuestionScreen" component={QuizQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="QuizResultScreen" component={QuizResultScreen} options={{headerShown: false , animation: 'fade'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

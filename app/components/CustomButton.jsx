@@ -1,14 +1,28 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Dimensions, Vibration } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Audio } from 'expo-av';
 
 const { width } = Dimensions.get('window');
 
 const CustomButton = ({ title, screenName }) => {
   const navigation = useNavigation();
 
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/sounds/Vibrant_Next_Page_Button.wav') // Ensure the sound file path is correct
+    );
+    await sound.playAsync();
+  };
+
+  const handlePress = async () => {
+    Vibration.vibrate(100);
+    await playSound();
+    navigation.navigate(screenName);
+  };
+
   return (
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(screenName)}>
+    <TouchableOpacity style={styles.button} onPress={handlePress}>
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -32,4 +46,3 @@ const styles = StyleSheet.create({
 });
 
 export default CustomButton;
-

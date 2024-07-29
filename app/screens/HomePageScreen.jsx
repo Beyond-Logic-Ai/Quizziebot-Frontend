@@ -8,22 +8,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useFocusEffect } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
-const HomePageScreen = ({ navigation, route }) => {
+const HomePageScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [deferredLoading, setDeferredLoading] = useState(false);
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const userSession = await AsyncStorage.getItem('userSession');
       if (userSession) {
         const { token } = JSON.parse(userSession);
-
-        console.log('Fetching user data with token:', token);
 
         const response = await axios.get('https://api.quizziebot.com/api/home', {
           headers: {
@@ -31,43 +30,44 @@ const HomePageScreen = ({ navigation, route }) => {
           },
         });
 
-        console.log('User data fetched successfully:', response.data);
-
         const data = response.data;
         setUsername(data.username);
         setCoins(data.coins != null ? data.coins : 0);
         
-        // Store userId
         await AsyncStorage.setItem('userId', data.userId);
-        
       } else {
         navigation.navigate('SignInFirst');
       }
-      setLoading(false);
     } catch (error) {
       console.error('Error fetching user data:', error.message);
       if (error.response) {
         console.error('Error response data:', error.response.data);
       }
+    } finally {
       setLoading(false);
     }
-  };
+  }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
       fetchUserData();
 
-      return () => {};
-    }, [])
+      const interval = setInterval(() => {
+        fetchUserData();
+      }, 30000);
+
+      return () => clearInterval(interval);
+    }, [fetchUserData])
   );
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchUserData();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
+    if (!loading) {
+      // Defer loading of additional content
+      setTimeout(() => {
+        setDeferredLoading(true);
+      }, 500); // Adjust this delay as needed
+    }
+  }, [loading]);
 
   if (loading) {
     return (
@@ -81,68 +81,63 @@ const HomePageScreen = ({ navigation, route }) => {
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover">
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Image
-            source={images.profileImage}
-            style={styles.profileImage}
-          />
+          <Image source={images.profileImage} style={styles.profileImage} />
           <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
           <View style={styles.coinBadgeContainer}>
             <View style={styles.coinContainer}>
               <Text style={styles.coinText}>{coins}</Text>
-              <Image
-                source={images.coinImage}
-                style={styles.coinImage}
-              />
+              <Image source={images.coinImage} style={styles.coinImage} />
             </View>
           </View>
-          <Image
-            source={images.badge}
-            style={styles.badgeImage}
-          />
+          <Image source={images.badge} style={styles.badgeImage} />
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
         </View>
 
-        <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover">
-          <View style={styles.body}>
-            <View style={styles.textBox}>
-              <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
-                <LinearGradient
-                  colors={['#366EFF', '#0044F2']}
-                  start={{ x: 0.5, y: 0.15 }}
-                  end={{ x: 0.5, y: 0.6 }}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}>Play Now</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+        {deferredLoading && (
+          <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover">
+            <View style={styles.body}>
+              <View style={styles.textBox}>
+                <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
+                  <LinearGradient
+                    colors={['#366EFF', '#0044F2']}
+                    start={{ x: 0.5, y: 0.15 }}
+                    end={{ x: 0.5, y: 0.6 }}
+                    style={styles.button}
+                  >
+                    <Text style={styles.buttonText}>Play Now</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-
-        </ImageBackground>
-        </SafeAreaView>
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.footerButton}>
-            <Feather name="home" size={32} color="#000" />
-            <Text style={styles.footerText}>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton}>
-            <Ionicons name="person-outline" size={32} color="#000" />
-            <Text style={styles.footerText}>Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton}>
-            <Ionicons name="trophy-outline" style={styles.footerIcon} />
-            <Text style={styles.footerText}>Leaderboard</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-            <Ionicons name="options-outline" style={styles.footerIcon} />
-            <Text style={styles.footerText}>Settings</Text>
-          </TouchableOpacity>
-        </View>
-      
+          </ImageBackground>
+        )}
+      </SafeAreaView>
+      {deferredLoading && <Footer navigation={navigation} />}
     </ImageBackground>
   );
 };
+
+const Footer = ({ navigation }) => (
+  <View style={styles.footer}>
+    <TouchableOpacity style={styles.footerButton}>
+      <Feather name="home" size={32} color="#000" />
+      <Text style={styles.footerText}>Home</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.footerButton}>
+      <Ionicons name="person-outline" size={32} color="#000" />
+      <Text style={styles.footerText}>Profile</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.footerButton}>
+      <Ionicons name="trophy-outline" style={styles.footerIcon} />
+      <Text style={styles.footerText}>Leaderboard</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
+      <Ionicons name="options-outline" style={styles.footerIcon} />
+      <Text style={styles.footerText}>Settings</Text>
+    </TouchableOpacity>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

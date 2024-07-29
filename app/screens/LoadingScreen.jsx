@@ -3,6 +3,8 @@ import { View, Text, Image, StyleSheet, Dimensions, Animated } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 
 const { width, height } = Dimensions.get('window');
@@ -10,9 +12,9 @@ const { width, height } = Dimensions.get('window');
 const LoadingScreen = () => {
   const navigation = useNavigation();
   const [progress, setProgress] = useState(new Animated.Value(0));
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Disable back gesture and back button
     navigation.setOptions({
       gestureEnabled: false,
       headerLeft: () => null,
@@ -20,16 +22,42 @@ const LoadingScreen = () => {
 
     const loadQuestions = async () => {
       try {
-        // Simulate loading questions with a timeout
-        Animated.timing(progress, {
-          toValue: 1,
-          duration: 2000, // 2 seconds
-          useNativeDriver: false,
-        }).start(() => {
-          navigation.navigate('QuizQuestionScreen'); // Navigate to the questions screen after loading
-        });
+        const userSession = await AsyncStorage.getItem('userSession');
+        const storedUserId = await AsyncStorage.getItem('userId');
+
+        console.log('userSession:', userSession);
+        console.log('storedUserId:', storedUserId);
+
+        if (userSession && storedUserId) {
+          const { token } = JSON.parse(userSession);
+
+          // Check for token validity
+          if (!token) {
+            throw new Error('Token is missing');
+          }
+
+          const response = await axios.get(`https://api.quizziebot.com/api/quizzes/questions?userId=${storedUserId}&mode=classic`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const questions = response.data.questions;
+          const quizId = response.data.quizId;
+
+          Animated.timing(progress, {
+            toValue: 1,
+            duration: 2000, // 2 seconds
+            useNativeDriver: false,
+          }).start(() => {
+            navigation.replace('QuizQuestionScreen', { questions, quizId, userId: storedUserId });
+          });
+        } else {
+          navigation.navigate('SignInFirst');
+        }
       } catch (error) {
         console.error('Failed to load questions:', error);
+        setError(error.response ? error.response.data : error.message);
       }
     };
 
@@ -57,6 +85,7 @@ const LoadingScreen = () => {
         <View style={styles.progressBarContainer}>
           <Animated.View style={[styles.progressBar, { width: progressWidth }]} />
         </View>
+        {error && <Text style={styles.errorText}>Error: {error.message || error}</Text>}
       </View>
     </SafeAreaView>
   );
@@ -127,6 +156,10 @@ const styles = StyleSheet.create({
   progressBar: {
     height: '100%',
     backgroundColor: '#FFAA00',
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 20,
   },
 });
 

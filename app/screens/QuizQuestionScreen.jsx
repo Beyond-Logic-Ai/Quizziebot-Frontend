@@ -1,54 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { images } from '../../constants/images';
 
-const QuizQuestionScreen = ({ navigation }) => {
-  const [questions, setQuestions] = useState([]);
+const QuizQuestionScreen = ({ route, navigation }) => {
+  const { questions, quizId, userId } = route.params;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timer, setTimer] = useState(10);
   const [isCorrect, setIsCorrect] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [quizId, setQuizId] = useState(null);
-  const [userId, setUserId] = useState(null);
   const [answers, setAnswers] = useState([]);
-
-  const fetchQuestions = async () => {
-    try {
-      const userSession = await AsyncStorage.getItem('userSession');
-      const storedUserId = await AsyncStorage.getItem('userId');
-      if (userSession && storedUserId) {
-        const { token } = JSON.parse(userSession);
-        setUserId(storedUserId);
-        const response = await axios.get(`https://api.quizziebot.com/api/quizzes/questions?userId=${storedUserId}&mode=classic`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setQuestions(response.data.questions);
-        setQuizId(response.data.quizId);
-        setIsLoading(false);
-      } else {
-        navigation.navigate('SignInFirst');
-      }
-    } catch (error) {
-      console.error('Failed to load questions:', error);
-      setError(error.response ? error.response.data : error.message);
-      setIsLoading(false);
-    }
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchQuestions();
-      return () => {};
-    }, [])
-  );
 
   useEffect(() => {
     if (timer > 0) {
@@ -82,31 +44,6 @@ const QuizQuestionScreen = ({ navigation }) => {
       }
     }, 2000);
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#1C58F2" />
-        <Text>Loading Questions...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>Error: {error.message || error}</Text>
-      </View>
-    );
-  }
-
-  if (!questions.length) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text>No Questions Available</Text>
-      </View>
-    );
-  }
 
   const currentQuestion = questions[currentQuestionIndex];
 

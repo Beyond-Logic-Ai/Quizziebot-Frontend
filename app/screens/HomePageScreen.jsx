@@ -37,6 +37,9 @@ const HomePageScreen = ({ navigation, route }) => {
         setUsername(data.username);
         setCoins(data.coins != null ? data.coins : 0);
         
+        // Store userId
+        await AsyncStorage.setItem('userId', data.userId);
+        
       } else {
         navigation.navigate('SignInFirst');
       }

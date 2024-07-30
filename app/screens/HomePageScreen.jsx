@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
@@ -83,14 +83,16 @@ const HomePageScreen = ({ navigation }) => {
         <View style={styles.header}>
           <Image source={images.profileImage} style={styles.profileImage} />
           <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
-          <View style={styles.coinBadgeContainer}>
+          
             <View style={styles.coinContainer}>
               <Text style={styles.coinText}>{coins}</Text>
-              <Image source={images.coinImage} style={styles.coinImage} />
+              <Image source={images.coin} style={styles.coinImage} />
             </View>
-          </View>
+          
           <Image source={images.badge} style={styles.badgeImage} />
+          <TouchableOpacity  onPress={() => navigation.navigate('SettingsHomePageScreen')}>
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
+          </TouchableOpacity>
         </View>
 
         {deferredLoading && (
@@ -121,7 +123,7 @@ const HomePageScreen = ({ navigation }) => {
 const Footer = ({ navigation }) => (
   <View style={styles.footer}>
     <TouchableOpacity style={styles.footerButton}>
-      <Feather name="home" size={32} color="#000" />
+      <Fontisto name="home" size={32} color="#000" />
       <Text style={styles.footerText}>Home</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton}>
@@ -158,49 +160,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    borderColor: 'black',
-    borderWidth: 2,
+    padding: hp(1.5),
+    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    
+    
   },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 43,
+    height: 43,
+    borderRadius: 22,
     borderColor: 'black',
     borderWidth: 2,
+    
   },
   username: {
-    flex: 1,
-    marginLeft: 16,
+    flex:0.95,
+    marginLeft:1,
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
+    
+    
+    
   },
-  coinBadgeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: 'black',
-    borderWidth: 2,
-  },
+  // coinBadgeContainer: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   borderColor: 'black',
+  //   borderWidth: 2,
+  // },
   coinContainer: {
+    left:5,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    marginRight: 0,
-    borderColor: 'black',
-    borderWidth: 2,
+   
   },
   coinImage: {
-    width: 20,
+    right: -3,
+    backgroundColor: 'blue',
+    width: 24,
     height: 24,
-    borderColor: 'black',
-    borderWidth: 2,
+    borderRadius: 12,
   },
   coinText: {
+    left: -5,
     marginLeft: 4,
     fontSize: 16,
     fontWeight: 'bold',
@@ -210,15 +217,13 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     width: 37,
     height: 37,
-    borderColor: 'black',
-    borderWidth: 2,
+    
   },
   notificationIcon: {
     marginLeft: 7,
     fontSize: 29,
     color: '#FFFFFF',
-    borderColor: 'black',
-    borderWidth: 2,
+
   },
   overlayImage: {
     flex: 1,
@@ -265,9 +270,9 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
     color: '#FFF',
-    fontSize: wp(6),
+    fontSize: 27,
     fontWeight: 'bold',
-    marginTop: 7,
+    marginTop: 6,
     fontFamily: 'Nunito',
   },
   footer: {

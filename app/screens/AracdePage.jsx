@@ -54,7 +54,7 @@ const ArcadePage = ({ navigation }) => {
             />
             <ArcadeButton
               title="Arcade"
-              screenName="HomePageScreen"
+              screenName="ArcadeCategory"
               image={images.arcadeimg}
               navigation={navigation}
             />

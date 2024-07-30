@@ -8,7 +8,7 @@ import Svg, { Defs, RadialGradient, Circle, Stop } from 'react-native-svg';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const QuizResultScreen = ({ route, navigation }) => {
+const ArcadeResult = ({ route, navigation }) => {
   const { userId, quizId, answers } = route.params;
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,13 +103,13 @@ const QuizResultScreen = ({ route, navigation }) => {
       </View>
       <Text style={styles.achievementsTitle}>Your Achievements</Text>
       <View style={styles.achievementGrid}>
-        <View style={styles.achievementItem}>
+        {/* <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.IQ} style={styles.achievementIcon} />
             <Text style={styles.achievementValue}>00{result.iqScore}</Text>
           </View>
           <Text style={styles.achievementText}>IQ</Text>
-        </View>
+        </View> */}
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.coins} style={styles.achievementIcon} />
@@ -131,13 +131,13 @@ const QuizResultScreen = ({ route, navigation }) => {
           </View>
           <Text style={styles.achievementText}>Correct Questions</Text>
         </View>
-        <View style={styles.achievementItem}>
+        {/* <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.rank} style={styles.achievementIcon} />
             <Text style={styles.achievementValue}>000{result.rank}</Text>
           </View>
           <Text style={styles.achievementText}>Rank</Text>
-        </View>
+        </View> */}
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.avgtime} style={styles.achievementIcon} />
@@ -279,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizResultScreen;
+export default ArcadeResult;

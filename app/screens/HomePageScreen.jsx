@@ -81,7 +81,7 @@ const HomePageScreen = ({ navigation }) => {
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover">
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Image source={images.profileImage} style={styles.profileImage} />
+          <Image source={images.profilepic} style={styles.profileImage} />
           <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
           
             <View style={styles.coinContainer}>
@@ -102,7 +102,7 @@ const HomePageScreen = ({ navigation }) => {
                 <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
                   <LinearGradient
-                    colors={['#366EFF', '#0044F2']}
+                    colors={['#9DFF4F', '#1ABD00']}
                     start={{ x: 0.5, y: 0.15 }}
                     end={{ x: 0.5, y: 0.6 }}
                     style={styles.button}
@@ -169,13 +169,13 @@ const styles = StyleSheet.create({
     width: 43,
     height: 43,
     borderRadius: 22,
-    borderColor: 'black',
-    borderWidth: 2,
+    // borderColor: 'black',
+    // borderWidth: 2,
     
   },
   username: {
     flex:0.95,
-    marginLeft:1,
+    marginLeft:5,
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   textBox: {
-    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
@@ -256,8 +256,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#366EFF',
     width: 250,
-    height: 48,
-    borderRadius: wp(9),
+    height: 50,
+    borderRadius: wp(5),
     borderColor: '#031952',
     borderWidth: 0.1,
   },

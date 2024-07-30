@@ -50,10 +50,10 @@ const LoadingScreen = () => {
             duration: 2000, // 2 seconds
             useNativeDriver: false,
           }).start(() => {
-            navigation.replace('QuizQuestionScreen', { questions, quizId, userId: storedUserId });
+            navigation.replace('ArcadeQuestionScreen', { questions, quizId, userId: storedUserId });
           });
         } else {
-          navigation.navigate('SignInFirst');
+          navigation.navigate('HomePageScreen');
         }
       } catch (error) {
         console.error('Failed to load questions:', error);

@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
   },
   robotImage: {
     position: 'absolute',
-    width: '80%',
-    height: '80%',
+    width: '100%',
+    height: '100%',
     resizeMode: 'contain',
   },
   subtitle: {

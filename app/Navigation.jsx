@@ -21,6 +21,8 @@ import QuizResultScreen from './screens/QuizResultScreen';
 import ArcadeLoadingScreen from './screens/ArcadeLoadingScreen';
 import ArcadeCategory from './screens/ArcadeCategory';
 import ArcadeModes from './screens/ArcadeModes';
+import ArcadeResult from './screens/ArcadeResult';
+import ArcadeQuestionScreen from './screens/ArcadeQuestionScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -69,6 +71,8 @@ function Navigation() {
         <Stack.Screen name="ArcadeLoadingScreen" component={ArcadeLoadingScreen} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="ArcadeCategory" component={ArcadeCategory} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="ArcadeModes" component={ArcadeModes} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeResult" component={ArcadeResult} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeQuestionScreen" component={ArcadeQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

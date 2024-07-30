@@ -20,6 +20,14 @@ export const images = {
     profilepicture:require('../assets/images/pp.png'),
     coin:require('../assets/images/coin.png'),
     badge:require('../assets/images/badge.png'),
-    
+    trophy:require('../assets/images/trophy.png'),
+    rank:require('../assets/images/rank.png'),
+    xp:require('../assets/images/xp.png'),
+    avgtime:require('../assets/images/avgtime.png'),
+    correct:require('../assets/images/correct.png'),
+    IQ:require('../assets/images/IQ.png'),
+    coins:require('../assets/images/coins.png'),
+    starlayer:require('../assets/images/starlayer.png'),
+    profilepic:require('../assets/images/profilepic.png')
   };
   

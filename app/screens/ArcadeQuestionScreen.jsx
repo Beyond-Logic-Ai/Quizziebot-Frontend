@@ -8,7 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-const QuizQuestionScreen = ({ route, navigation }) => {
+const ArcadeQuestionScreen = ({ route, navigation }) => {
   const { questions, quizId, userId } = route.params;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timer, setTimer] = useState(10);
@@ -43,7 +43,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
         setTimer(10);
         setIsCorrect(null);
       } else {
-        navigation.navigate('QuizResultScreen', { userId, quizId, answers });
+        navigation.navigate('ArcadeResult', { userId, quizId, answers });
       }
     }, 2000);
   };
@@ -197,4 +197,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizQuestionScreen;
+export default ArcadeQuestionScreen;

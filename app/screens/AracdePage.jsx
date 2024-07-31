@@ -58,11 +58,7 @@ const ArcadePage = ({ navigation }) => {
               image={images.arcadeimg}
               navigation={navigation}
             />
-            <CreateQuizzieButton
-              title="Create your own quiz by QUIZZIE BOT"
-              screenName="HomePageScreen"
-              navigation={navigation}
-            />
+            
           </ScrollView>
         </View>
       </SafeAreaView>
@@ -106,7 +102,7 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingHorizontal: '5%',
     borderRadius: wp(5),
     marginHorizontal: wp(6),

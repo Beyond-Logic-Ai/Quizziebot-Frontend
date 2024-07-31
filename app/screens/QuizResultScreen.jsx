@@ -135,42 +135,42 @@ const QuizResultScreen = ({ route, navigation }) => {
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.IQ} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.iqScore}</Text>
+            <Text style={styles.achievementValue}>{result.iqScore}</Text>
           </View>
           <Text style={styles.achievementText}>IQ</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.coins} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.score}</Text>
+            <Text style={styles.achievementValue}>{result.score}</Text>
           </View>
           <Text style={styles.achievementText}>Coins Earned</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.xp} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.xpGained}</Text>
+            <Text style={styles.achievementValue}>{result.xpGained}</Text>
           </View>
           <Text style={styles.achievementText}>XP</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.correct} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.correctAnswers}</Text>
+            <Text style={styles.achievementValue}>{result.correctAnswers}</Text>
           </View>
           <Text style={styles.achievementText}>Correct Questions</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.rank} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.rank}</Text>
+            <Text style={styles.achievementValue}>0{result.rank}</Text>
           </View>
           <Text style={styles.achievementText}>Rank</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.avgtime} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.avgTime}</Text>
+            <Text style={styles.achievementValue}>0{result.avgTime}</Text>
           </View>
           <Text style={styles.achievementText}>Avg Time</Text>
         </View>

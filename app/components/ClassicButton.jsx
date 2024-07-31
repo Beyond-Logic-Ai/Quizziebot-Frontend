@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     width: wp(62),
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: hp(1),
-    marginTop: hp(1),
+    marginBottom: hp(2),
+    // marginTop: hp(1),
     // iOS shadow properties
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },

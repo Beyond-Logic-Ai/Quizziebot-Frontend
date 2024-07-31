@@ -78,16 +78,16 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const CreateQuizzieButton = ({ title, screenName }) => {
+const CreateQuizzieButton = ({ title, screenName,color }) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.shadowContainer}>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(screenName)}>
       <LinearGradient
-        colors={['#FF8A35', '#F17400']} // Define your gradient colors here
-        start={{ x: .5, y: .1 }}
-          end={{ x: .5, y: 1 }}
+        colors={['#F27400','#BF5C00' ]} // Define your gradient colors here
+        // start={{ x: 0.5, y: 0.15 }}
+        // end={{ x: 0.5, y: 0.6 }}
         style={styles.btn}
       >
         
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: wp(4),
     marginBottom: hp(0),
     marginTop: hp(1),
-    height:hp(9.8),
+    height:hp(8.8),
     alignItems: 'center',
     justifyContent: 'center',
     // iOS shadow properties
@@ -121,12 +121,14 @@ const styles = StyleSheet.create({
   },
   btn: {
     
-    width: wp(62),
-    height:hp(9.5),
+    width: 250,
+    height: hp(8.5),
    
-    borderRadius: wp(7),
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    // borderColor: 'black',
+    // borderWidth: 2,
     
   },
   button: {
@@ -143,18 +145,19 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontSize: wp(4),
+    fontSize: 19,
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Nunito', // Ensure you have the Nunito font properly linked in your project
-    fontStyle: 'normal',
     fontWeight: '800',
-     lineHeight: wp(6),
-    letterSpacing: 1.0,
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
+    lineHeight: hp(3),
+    letterSpacing: 1,
+    
+    
+    // shadowColor: '#000',
+    // shadowOffset: { width: 2, height: 5 },
+    // shadowOpacity: 0.3,
+    // shadowRadius: 3.84,
   },
  
 });

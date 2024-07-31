@@ -19,14 +19,14 @@ const SplashScreen = () => {
     // Fade in animation
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 500, // Fade in duration
+      duration: 1200, // Fade in duration
       useNativeDriver: true,
     }).start(() => {
       setTimeout(() => {
         // Fade out animation
         Animated.timing(fadeAnim, {
           toValue: 0,
-          duration: 1000, // Fade out duration
+          duration: 800, // Fade out duration
           useNativeDriver: true,
         }).start(() => {
           // Navigate to Home screen after fade-out

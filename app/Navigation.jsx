@@ -19,6 +19,7 @@ import ArcadePage from '../app/screens/AracdePage';
 import LoadingScreen from '../app/screens/LoadingScreen';
 import QuizQuestionScreen from '../app/screens/QuizQuestionScreen';
 import QuizResultScreen from '../app/screens/QuizResultScreen';
+import CreatingOwnQuizPage from './screens/CreatingOwnQuizPage';
 import ArcadeLoadingScreen from '../app/screens/ArcadeLoadingScreen';
 import ArcadeCategory from '../app/screens/ArcadeCategory';
 import ArcadeModes from '../app/screens/ArcadeModes';
@@ -26,6 +27,8 @@ import ArcadeResult from '../app/screens/ArcadeResult';
 import ArcadeQuestionScreen from '../app/screens/ArcadeQuestionScreen';
 import BackgroundMusic from '../app/components/BackgroundMusic';
 import { BackgroundMusicContext } from '../app/context/BackgroundMusicContext';
+import MusicAndEffectsScreen from '../app/screens/MusicAndEffectsScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -90,15 +93,21 @@ function Navigation() {
         <Stack.Screen name="AfterSignedScreen" component={AfterSignedScreen} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="SignUpSuccessScreen" component={SignUpSuccessScreen} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="SettingsHomePageScreen" component={SettingsHomePageScreen} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="ArcadePage" component={ArcadePage} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="LoadingScreen" component={LoadingScreen} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="QuizQuestionScreen" component={QuizQuestionScreen} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="QuizResultScreen" component={QuizResultScreen} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="ArcadeLoadingScreen" component={ArcadeLoadingScreen} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="ArcadeCategory" component={ArcadeCategory} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="ArcadeModes" component={ArcadeModes} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="ArcadeResult" component={ArcadeResult} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="ArcadeQuestionScreen" component={ArcadeQuestionScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="ArcadePage" component={ArcadePage} options={{ headerShown: false , animation: 'fade'}} /> 
+        <Stack.Screen name="LoadingScreen" component={LoadingScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="QuizQuestionScreen" component={QuizQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="QuizResultScreen" component={QuizResultScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeLoadingScreen" component={ArcadeLoadingScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeCategory" component={ArcadeCategory} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeModes" component={ArcadeModes} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeResult" component={ArcadeResult} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="ArcadeQuestionScreen" component={ArcadeQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="CreatingOwnQuizPage" component={CreatingOwnQuizPage} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="MusicAndEffectsScreen" component={MusicAndEffectsScreen} options={{headerShown: false , animation: 'fade'}}/>
+        
+        
+        
+        
       </Stack.Navigator>
       {routeNameRef.current !== 'Splash' && <BackgroundMusic />}
     </NavigationContainer>

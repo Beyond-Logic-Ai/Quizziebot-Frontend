@@ -31,7 +31,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
 
   return (
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={10}>
-        <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover" blurRadius={10}>
+        {/* <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover" blurRadius={10}> */}
     <SafeAreaView style={styles.container}>
       
           <View style={styles.headerContainer}>
@@ -58,7 +58,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
               />
             </View>
 
-            <TouchableOpacity style={styles.optionRow}>
+            <TouchableOpacity style={styles.optionRow}onPress={() => navigation.navigate('MusicAndEffectsScreen')}>
               <View style={styles.iconContainer}>
                 <View style={styles.iconBackground}>
                   <Icon name="musical-notes-outline" size={28} color="#FF00FF" />
@@ -99,7 +99,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
             <Text style={styles.privacyText}>Privacy Policy @ Quizzie Bot</Text>
           </View>
           </SafeAreaView>
-        </ImageBackground>
+        {/* </ImageBackground> */}
         <View style={styles.footer}>
     
           <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('HomePageScreen')}>
@@ -136,13 +136,16 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     backgroundColor: '#0044F2',
-  },
-  overlayImage: {
-    flex: 1,
     width: '100%',
     height: '100%',
     justifyContent: 'space-between',
   },
+  // overlayImage: {
+  //   flex: 1,
+  //   width: '100%',
+  //   height: '100%',
+  //   justifyContent: 'space-between',
+  // },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -158,6 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
+    fontFamily: 'Nunito',
   },
   body: {
     flex: 1,
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    // backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderRadius: 10,
     marginVertical: 10,
   },
@@ -194,10 +198,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#FFFFFF',
     marginLeft: 10,
+    fontFamily: 'Nunito',
+    fontWeight: 'bold',
   },
   languageText: {
     fontSize: 18,
     color: '#FFFFFF',
+    fontFamily: 'Nunito',
+    fontWeight: 'bold',
   },
   switch: {
     marginRight: 10,
@@ -207,6 +215,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
     marginVertical: 20,
+    fontFamily: 'Nunito',
   },
   footer: {
     flexDirection: 'row',
@@ -229,6 +238,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: wp(3),
     color: '#000',
+    fontFamily: 'Nunito',
   },
   activeFooterItem: {
     borderTopWidth: 0,

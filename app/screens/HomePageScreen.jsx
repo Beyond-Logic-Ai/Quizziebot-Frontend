@@ -9,6 +9,7 @@ import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import CreateQuizzieButton from '../components/CreateQuizzieButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -86,7 +87,9 @@ const HomePageScreen = ({ navigation }) => {
           
             <View style={styles.coinContainer}>
               <Text style={styles.coinText}>{coins}</Text>
+              <View style={styles.coinborder}>
               <Image source={images.coin} style={styles.coinImage} />
+              </View>
             </View>
           
           <Image source={images.badge} style={styles.badgeImage} />
@@ -108,8 +111,14 @@ const HomePageScreen = ({ navigation }) => {
                     style={styles.button}
                   >
                     <Text style={styles.buttonText}>Play Now</Text>
-                  </LinearGradient>
+                  </LinearGradient>                  
                 </TouchableOpacity>
+                <CreateQuizzieButton
+              title="Create your own quiz by QUIZZIE BOT"
+              screenName="CreatingOwnQuizPage"
+              navigation={navigation}
+            
+            />
               </View>
             </View>
           </ImageBackground>
@@ -195,19 +204,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 16,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
    
   },
-  coinImage: {
-    right: -3,
+  coinborder:
+  {
+    right: -2,
     backgroundColor: 'blue',
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 27,
+    height: 27,
+    borderRadius: 15,
+    alignItems:"center"
+    
+    
+  },
+  coinImage: {
+    top:2,
+    alignSelf:"center",
+    width: 22,
+    height: 22,
+    // borderRadius: 12,
+    // borderColor:"black",
+    // borderWidth:2,
+    
   },
   coinText: {
-    left: -5,
+    left: -4,
     marginLeft: 4,
     fontSize: 16,
     fontWeight: 'bold',
@@ -240,10 +263,10 @@ const styles = StyleSheet.create({
   },
   textBox: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 10,
+    borderRadius: 18,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 0,
   },
   subtitle: {
     fontSize: wp(4.8),
@@ -257,9 +280,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#366EFF',
     width: 250,
     height: 50,
-    borderRadius: wp(5),
-    borderColor: '#031952',
-    borderWidth: 0.1,
+    borderRadius: 20,
+    // borderColor: 'black',
+    // borderWidth: 2,
   },
   play: {
     shadowColor: '#000',
@@ -293,6 +316,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: wp(3),
     color: '#000',
+    fontFamily: 'Nunito',
   },
   footerIcon: {
     fontSize: 32,

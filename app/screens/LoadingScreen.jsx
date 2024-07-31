@@ -44,7 +44,7 @@ const LoadingScreen = () => {
 
           const questions = response.data.questions;
           const quizId = response.data.quizId;
-
+          console.log(questions)
           Animated.timing(progress, {
             toValue: 1,
             duration: 2000, // 2 seconds

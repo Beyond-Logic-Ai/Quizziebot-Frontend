@@ -15,6 +15,8 @@ const QuizResultScreen = ({ route, navigation }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const submitQuizAndFetchResults = async () => {
       try {
         const userSession = await AsyncStorage.getItem('userSession');
@@ -25,34 +27,61 @@ const QuizResultScreen = ({ route, navigation }) => {
             throw new Error('No answers provided');
           }
 
-          const response = await axios.post(
-            'https://api.quizziebot.com/api/quizzes/submit',
-            {
-              userId,
-              quizId,
-              answers,
-              initialQuiz: false,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+          const formattedAnswers = answers.map(answer => ({
+            questionId: answer.questionId,
+            selectedOption: answer.selectedOption,
+            timeTaken: answer.timeTaken,
+            answered: answer.answered,
+          }));
 
-          setResult(response.data);
+          const questionStatuses = answers.map(answer => ({
+            questionId: answer.questionId,
+            isAnswered: !!answer.selectedOption,
+          }));
+
+          if (isMounted) {
+            console.log("Formatted Answers:", formattedAnswers);
+            console.log("Question Statuses:", questionStatuses);
+
+            const response = await axios.post(
+              'https://api.quizziebot.com/api/quizzes/submit',
+              {
+                userId,
+                quizId,
+                answers: formattedAnswers,
+                questionStatuses: questionStatuses,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+
+            if (isMounted) {
+              setResult(response.data);
+            }
+          }
         } else {
           navigation.navigate('SignInFirst');
         }
       } catch (error) {
-        setError(error.response ? error.response.data : error.message);
+        if (isMounted) {
+          setError(error.response ? error.response.data : error.message);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     submitQuizAndFetchResults();
+
+    return () => {
+      isMounted = false;
+    };
   }, [userId, quizId, answers, navigation]);
 
   if (isLoading) {
@@ -106,42 +135,42 @@ const QuizResultScreen = ({ route, navigation }) => {
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.IQ} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.iqScore}</Text>
+            <Text style={styles.achievementValue}>{result.iqScore}</Text>
           </View>
           <Text style={styles.achievementText}>IQ</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.coins} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.coins}</Text>
+            <Text style={styles.achievementValue}>{result.score}</Text>
           </View>
           <Text style={styles.achievementText}>Coins Earned</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.xp} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.xpGained}</Text>
+            <Text style={styles.achievementValue}>{result.xpGained}</Text>
           </View>
           <Text style={styles.achievementText}>XP</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.correct} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.correctAnswers}</Text>
+            <Text style={styles.achievementValue}>{result.correctAnswers}</Text>
           </View>
           <Text style={styles.achievementText}>Correct Questions</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.rank} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.rank}</Text>
+            <Text style={styles.achievementValue}>0{result.rank}</Text>
           </View>
           <Text style={styles.achievementText}>Rank</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.avgtime} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.avgTime}</Text>
+            <Text style={styles.achievementValue}>0{result.avgTime}</Text>
           </View>
           <Text style={styles.achievementText}>Avg Time</Text>
         </View>
@@ -240,7 +269,7 @@ const styles = StyleSheet.create({
   achievementIcon: {
     width: 32,
     height: 32,
-    right:20,
+    right: 20,
     marginRight: 5,
   },
   achievementText: {
@@ -249,10 +278,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: 'Nunito',
     fontWeight: 'bold',
-
   },
   achievementValue: {
-    right:10,
+    right: 10,
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',

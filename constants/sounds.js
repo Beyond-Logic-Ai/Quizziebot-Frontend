@@ -1,3 +1,4 @@
 export const sounds ={
-    intro: require('../assets/sounds/intro.wav')
+    intro: require('../assets/sounds/introbeyondlogic.wav'),
+    gamebgm: require('../assets/sounds/gamebgm.wav'),
 };

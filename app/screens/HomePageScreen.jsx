@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: wp(3),
     color: '#000',
+    fontFamily: 'Nunito',
   },
   footerIcon: {
     fontSize: 32,

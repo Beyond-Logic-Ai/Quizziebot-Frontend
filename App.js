@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+// App.js
+import React, { useEffect } from 'react';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import Navigation from './app/Navigation';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
+import { BackgroundMusicProvider } from './app/context/BackgroundMusicContext';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -39,8 +41,10 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Navigation />
-    </GestureHandlerRootView>
+    <BackgroundMusicProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Navigation />
+      </GestureHandlerRootView>
+    </BackgroundMusicProvider>
   );
 }

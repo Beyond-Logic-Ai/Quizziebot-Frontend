@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,7 +29,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     setIsCorrect(isAnswerCorrect);
 
     const answerData = {
-      questionId: currentQuestion.id,
+      questionId: currentQuestion.questionId, // Corrected line
       selectedOption: selectedAnswer,
       timeTaken: 10 - timer,
       answered: selectedAnswer !== null,

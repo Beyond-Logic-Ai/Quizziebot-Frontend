@@ -1,3 +1,4 @@
+// screens/SplashScreen.js
 import React, { useEffect, useRef } from 'react';
 import { View, Image, StyleSheet, Animated, Dimensions, Vibration } from 'react-native';
 import { Audio } from 'expo-av';

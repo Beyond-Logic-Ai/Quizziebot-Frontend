@@ -135,7 +135,7 @@ const Footer = ({ navigation }) => (
       <Fontisto name="home" size={32} color="#000" />
       <Text style={styles.footerText}>Home</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.footerButton}>
+    <TouchableOpacity style={styles.footerButton}onPress={() => navigation.navigate('ProfilePage')}>
       <Ionicons name="person-outline" size={32} color="#000" />
       <Text style={styles.footerText}>Profile</Text>
     </TouchableOpacity>
@@ -153,6 +153,7 @@ const Footer = ({ navigation }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
   backgroundImage: {
     flex: 1,
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
     
     
     
@@ -235,6 +237,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
+    fontFamily: 'Nunito',
   },
   badgeImage: {
     marginLeft: 7,

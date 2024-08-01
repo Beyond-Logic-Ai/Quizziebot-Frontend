@@ -13,7 +13,7 @@ const MusicAndEffectsScreen = ({ navigation }) => {
   const [isVibrationsEnabled, setVibrationsEnabled] = useState(true);
 
   return (
-    <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={10}>
+    <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={22}>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
+    fontFamily: 'Nunito',
   },
   body: {
     flex: 1,
@@ -115,8 +116,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#FFFFFF',
+    fontFamily: 'Nunito',
+    fontWeight: 'bold',
   },
   footer: {
     flexDirection: 'row',

@@ -28,7 +28,7 @@ import ArcadeQuestionScreen from '../app/screens/ArcadeQuestionScreen';
 import BackgroundMusic from '../app/components/BackgroundMusic';
 import { BackgroundMusicContext } from '../app/context/BackgroundMusicContext';
 import MusicAndEffectsScreen from '../app/screens/MusicAndEffectsScreen';
-
+import ProfilePage from '../app/screens/ProfilePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -104,7 +104,7 @@ function Navigation() {
         <Stack.Screen name="ArcadeQuestionScreen" component={ArcadeQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="CreatingOwnQuizPage" component={CreatingOwnQuizPage} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="MusicAndEffectsScreen" component={MusicAndEffectsScreen} options={{headerShown: false , animation: 'fade'}}/>
-        
+        <Stack.Screen name="ProfilePage" component={ProfilePage} options={{headerShown: false , animation: 'fade'}}/>
         
         
         

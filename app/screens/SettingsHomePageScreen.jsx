@@ -30,7 +30,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={10}>
+    <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={22}>
         {/* <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover" blurRadius={10}> */}
     <SafeAreaView style={styles.container}>
       
@@ -52,7 +52,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
               <Switch
                 value={isNotificationEnabled}
                 onValueChange={(value) => setNotificationEnabled(value)}
-                trackColor={{ false: "#FFFFFF", true: "#FFFFFF" }}
+                trackColor={{ false: "#FBFCF6", true: "#FFFFFF" }}
                 thumbColor={isNotificationEnabled ? "#0044F2" : "#FFFFFF"}
                 style={styles.switch}
               />
@@ -106,7 +106,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
             <SimpleLineIcons name="home" style={styles.footerIcon} />
             <Text style={styles.footerText}>Home</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton}>
+          <TouchableOpacity style={styles.footerButton}onPress={() => navigation.navigate('ProfilePage')}>
             <Ionicons name="person-outline" style={styles.footerIcon} />
             <Text style={styles.footerText}>Profile</Text>
           </TouchableOpacity>
@@ -173,22 +173,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     // backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderRadius: 10,
-    marginVertical: 10,
+    marginVertical: hp(1),
   },
   iconContainer: {
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    // borderColor:"black",
+    // borderWidth:2
   },
   iconBackground: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     color: '#FFFFFF',
-    marginLeft: 10,
+    marginLeft: 19,
     fontFamily: 'Nunito',
     fontWeight: 'bold',
   },
@@ -209,12 +211,13 @@ const styles = StyleSheet.create({
   },
   switch: {
     marginRight: 10,
+   
   },
   privacyText: {
     
     color: '#FFFFFF',
     textAlign: 'center',
-    marginVertical: 20,
+    marginVertical: 50,
     fontFamily: 'Nunito',
   },
   footer: {

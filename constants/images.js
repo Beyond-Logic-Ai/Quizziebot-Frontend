@@ -28,6 +28,10 @@ export const images = {
     IQ:require('../assets/images/IQ.png'),
     coins:require('../assets/images/coins.png'),
     starlayer:require('../assets/images/starlayer.png'),
-    profilepic:require('../assets/images/profilepic.png')
+    profilepic:require('../assets/images/profilepic.png'),
+    homescreenbg12:require('../assets/images/homescreenbg12.png'),
+    quizpassedimg:require('../assets/images/quizpassedimg.png'),
+    challengepassedimg:require('../assets/images/challengepassedimg.png'),
+    top3img:require('../assets/images/Top3img.png'),
   };
   

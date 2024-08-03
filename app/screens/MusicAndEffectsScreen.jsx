@@ -52,7 +52,7 @@ const MusicAndEffectsScreen = ({ navigation }) => {
           </View>
         </View>
       </SafeAreaView>
-      <View style={styles.footer}>
+      {/* <View style={styles.footer}>
         <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('HomePageScreen')}>
           <SimpleLineIcons name="home" style={styles.footerIcon} />
           <Text style={styles.footerText}>Home</Text>
@@ -69,7 +69,7 @@ const MusicAndEffectsScreen = ({ navigation }) => {
           <Ionicons name="options" style={styles.footerIcon} />
           <Text style={styles.footerText}>Settings</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </ImageBackground>
   );
 };

@@ -110,7 +110,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
             <Ionicons name="person-outline" style={styles.footerIcon} />
             <Text style={styles.footerText}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton}>
+          <TouchableOpacity style={styles.footerButton}onPress={() => navigation.navigate('LeaderBoard')}>
           <Ionicons name="trophy-outline"  style={styles.footerIcon} />
           <Text style={styles.footerText}>Leaderboard</Text>
           </TouchableOpacity>

@@ -175,7 +175,7 @@ const Footer = ({ navigation }) => (
       <Ionicons name="person" size={32} color="#000" />
       <Text style={styles.footerText}>Profile</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('LeaderboardPage')}>
+    <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('LeaderBoard')}>
       <Ionicons name="trophy-outline" size={32} color="#000" />
       <Text style={styles.footerText}>Leaderboard</Text>
     </TouchableOpacity>

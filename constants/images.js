@@ -33,5 +33,6 @@ export const images = {
     quizpassedimg:require('../assets/images/quizpassedimg.png'),
     challengepassedimg:require('../assets/images/challengepassedimg.png'),
     top3img:require('../assets/images/Top3img.png'),
+    crown:require('../assets/images/crown.png'),
   };
   

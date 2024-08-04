@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const categories = [
   { name: 'Science', colors: ['#FFD540', '#FFA800'] },
@@ -25,6 +26,11 @@ const CategoryButton = ({ name, colors, onPress }) => (
 const ArcadeCategory = ({ navigation }) => {
   return (
     <View style={styles.container}>
+     
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={wp(6)} color="#FFF" />
+          </TouchableOpacity>
+       
       <Text style={styles.title}>Arcade</Text>
       <View style={styles.robotImageContainer}>
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
@@ -73,6 +79,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#0048BF',
+  },
+  //  header: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+    
+  // },
+  backButton: {
+    top:hp(.5),
+    marginTop:-hp(1),
+    left:-wp(40)
   },
   title: {
     fontSize: wp(9),

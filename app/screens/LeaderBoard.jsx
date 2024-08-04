@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,30 +11,14 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
-const mockLeaderboardData = [
-  { id: 1, name: 'Bobby Gantasala Fisher', points: 36, avatar: images.profilepic },
-  { id: 2, name: 'sandeeo Cormier', points: 35, avatar: images.profilepic },
-  { id: 3, name: 'You', points: 34, avatar: images.profilepic },
-  { id: 4, name: 'Dronacharya Schmidt', points: 33, avatar: images.profilepic },
-  { id: 5, name: 'Kalki Veum', points: 32, avatar: images.profilepic },
-  { id: 6, name: 'Bobby Gantasala', points: 31, avatar: images.profilepic },
-  { id: 7, name: 'Sandeep Sanford', points: 31, avatar: images.profilepic },
-  { id: 8, name: 'Drona Sanford', points: 31, avatar: images.profilepic },
-  { id: 9, name: 'gantasala Sanford', points: 31, avatar: images.profilepic },
-  { id: 10, name: 'Gary Sanford', points: 31, avatar: images.profilepic },
-  { id: 11, name: 'Gary Sanford', points: 31, avatar: images.profilepic },
-  { id: 12, name: 'Gary Sanford', points: 31, avatar: images.profilepic },
-  { id: 13, name: 'Gary Sanford', points: 31, avatar: images.profilepic },
-
-];
-
 const LeaderBoard = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [leaderboard, setLeaderboard] = useState(mockLeaderboardData); // Use mock data for testing
+  const [leaderboard, setLeaderboard] = useState([]);
   const [activeTab, setActiveTab] = useState('Global');
-  const [deferredLoading, setDeferredLoading] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userCountry, setUserCountry] = useState('');
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -43,18 +26,57 @@ const LeaderBoard = ({ navigation }) => {
       if (userSession) {
         const { token } = JSON.parse(userSession);
 
-        const response = await axios.get('https://api.quizziebot.com/api/home', {
+        const userResponse = await axios.get('https://api.quizziebot.com/api/home', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        const data = response.data;
-        setUsername(data.username);
-        setCoins(data.coins != null ? data.coins : 0);
-        setLeaderboard(data.leaderboard || mockLeaderboardData); // Fallback to mock data if needed
+        const userData = userResponse.data;
+        setUsername(userData.username);
+        setCoins(userData.coins != null ? userData.coins : 0);
+        setUserId(userData.userId);
+        setUserCountry(userData.country); // Assuming 'country' is part of the user data
 
-        await AsyncStorage.setItem('userId', data.userId);
+        await AsyncStorage.setItem('userId', userData.userId);
+
+        const leaderboardResponse = await axios.get(
+          activeTab === 'Global' ? 
+            'https://api.quizziebot.com/api/leaderboard/global' : 
+            `https://api.quizziebot.com/api/leaderboard/local?country=${userData.country}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const userRankResponse = await axios.get(`https://api.quizziebot.com/api/leaderboard/user/${userData.userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const leaderboardData = leaderboardResponse.data.map(item => ({
+          id: item.userId,
+          name: item.username,
+          points: item.score,
+          avatar: images.profilepic,
+        }));
+
+        const userRankData = userRankResponse.data;
+        const userRank = {
+          id: userRankData.userId,
+          name: userRankData.username,
+          points: userRankData.score,
+          avatar: images.profilepic,
+        };
+
+        // Ensure the user's rank is included only once in the leaderboard
+        const updatedLeaderboard = leaderboardData.filter(item => item.id !== userRank.id);
+        updatedLeaderboard.push(userRank);
+
+        setLeaderboard(updatedLeaderboard.sort((a, b) => b.points - a.points));
       } else {
         navigation.navigate('SignInFirst');
       }
@@ -66,7 +88,7 @@ const LeaderBoard = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  }, [navigation]);
+  }, [navigation, activeTab]);
 
   useFocusEffect(
     useCallback(() => {
@@ -80,45 +102,39 @@ const LeaderBoard = ({ navigation }) => {
     }, [fetchUserData])
   );
 
-  useEffect(() => {
-    if (!loading) {
-      setTimeout(() => {
-        setDeferredLoading(true);
-      }, 500);
-    }
-  }, [loading]);
-
   const renderTopThree = () => {
+    if (leaderboard.length < 3) return null;
+    const topThree = leaderboard.slice(0, 3);
     return (
       <View style={styles.topThreeContainer}>
         <View style={styles.topThreeContainercurve}>
           <View style={styles.topThreeItem2}>
             <Image source={images.profilepic} style={styles.topThreeAvatar2} />
             <View style={styles.topnum2}>
-                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:20 }} >2</Text>
+              <Text style={{ marginTop: 3, color: "#FFFFFF", fontWeight: "bold", fontSize: 20 }}>2</Text>
             </View>
-            <Text style={styles.topThreeName}>Jackson</Text>
-            <Text style={styles.topThreePoints}>1847</Text>
-            <Text style={styles.userid2}>@username</Text>
+            <Text style={styles.topThreeName}>{topThree[1].name}</Text>
+            <Text style={styles.topThreePoints}>{topThree[1].points}</Text>
+            <Text style={styles.userid2}>@{topThree[1].name}</Text>
           </View>
           <View style={styles.topThreeItemFirst}>
             <Image source={images.crown} style={styles.crownImage} />
             <Image source={images.profilepic} style={styles.topThreeAvatar} />
             <View style={styles.topnum1}>
-                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:20 }} >1</Text>
+              <Text style={{ marginTop: 3, color: "#FFFFFF", fontWeight: "bold", fontSize: 20 }}>1</Text>
             </View>
-            <Text style={styles.topThreeName1}>Eiden biden</Text>
-            <Text style={styles.topThreePoints1}>243022</Text>
-            <Text style={styles.userid}>@username</Text>
+            <Text style={styles.topThreeName1}>{topThree[0].name}</Text>
+            <Text style={styles.topThreePoints1}>{topThree[0].points}</Text>
+            <Text style={styles.userid}>@{topThree[0].name}</Text>
           </View>
           <View style={styles.topThreeItem3}>
             <Image source={images.profilepic} style={styles.topThreeAvatar3} />
             <View style={styles.topnum3}>
-                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:20 }} >3</Text>
+              <Text style={{ marginTop: 3, color: "#FFFFFF", fontWeight: "bold", fontSize: 20 }}>3</Text>
             </View>
-            <Text style={styles.topThreeName}>Emma Aria</Text>
-            <Text style={styles.topThreePoints}>1674</Text>
-            <Text style={styles.userid3}>@username</Text>
+            <Text style={styles.topThreeName}>{topThree[2].name}</Text>
+            <Text style={styles.topThreePoints}>{topThree[2].points}</Text>
+            <Text style={styles.userid3}>@{topThree[2].name}</Text>
           </View>
         </View>
       </View>
@@ -126,10 +142,10 @@ const LeaderBoard = ({ navigation }) => {
   };
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.leaderboardItem}>
+    <View style={[styles.leaderboardItem, item.id === userId && styles.currentUserItem]} key={item.id}>
       <Text style={styles.rank}>{index + 1}</Text>
       <Image source={item.avatar} style={styles.avatar} />
-      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.name}>{item.id === userId ? 'You' : item.name}</Text>
       <Text style={styles.points}>{item.points} pts</Text>
     </View>
   );
@@ -191,7 +207,7 @@ const Footer = ({ navigation }) => (
       <Ionicons name="person-outline" size={32} color="#000" />
       <Text style={styles.footerText}>Profile</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.footerButton}onPress={() => navigation.navigate('LeaderBoard')}>
+    <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('LeaderBoard')}>
       <Ionicons name="trophy" style={styles.footerIcon} />
       <Text style={styles.footerText}>Leaderboard</Text>
     </TouchableOpacity>
@@ -341,9 +357,7 @@ const styles = StyleSheet.create({
   topnum2:{
     width: 30,
     height: 30,
-    // textAlignVertical:"center",
-   alignItems:"center",
-    // borderColor: "#009BD6",
+    alignItems:"center",
     borderRadius:20,
     backgroundColor:"#009BD6"
     
@@ -351,9 +365,7 @@ const styles = StyleSheet.create({
   topnum3:{
     width: 30,
     height: 30,
-    // textAlignVertical:"center",
-   alignItems:"center",
-    // borderColor: "#009BD6",
+    alignItems:"center",
     borderRadius:20,
     backgroundColor:"#00D95F"
     
@@ -361,9 +373,7 @@ const styles = StyleSheet.create({
   topnum1:{
     width: 30,
     height: 30,
-    // textAlignVertical:"center",
-   alignItems:"center",
-    // borderColor: "#009BD6",
+    alignItems:"center",
     borderRadius:20,
     backgroundColor:"#FFAA00",
     top:-99
@@ -384,14 +394,12 @@ const styles = StyleSheet.create({
     top: -75
   },
   topThreeName: {
-    // flexDirection:"row",
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000000',
     fontFamily: 'Nunito',
   },
   topThreeName1: {
-    // flexDirection:"row",
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000000',
@@ -404,7 +412,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: '#000000',
     fontFamily: 'Nunito',
-    // fontWeight:"bold"
   },
   topThreePoints1: {
     fontSize: 14,
@@ -440,8 +447,6 @@ const styles = StyleSheet.create({
     width: "40%",
   },
   activeTab: {
-    // backgroundColor: '#0048BF',
-    
     borderColor:"#0048BF",
     borderBottomWidth:4
   },
@@ -472,9 +477,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     marginHorizontal:10,
-    
     backgroundColor:"#FFFFFF"
-    
+  },
+  currentUserItem: {
+    backgroundColor: '#cde1ff', // Highlight color for current user
   },
   rank: {
     fontSize: 18,
@@ -487,8 +493,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    
-
   },
   name: {
     flex:.7,

@@ -31,11 +31,11 @@ const ArcadePage = ({ navigation }) => {
     <ImageBackground source={images.homescreenbg1} style={styles.backgroundImage} blurRadius={15}>
       <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View style={styles.header}>
+        
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('HomePageScreen')}>
             <Icon name="arrow-back" size={wp(6)} color="#FFF" />
           </TouchableOpacity>
-        </View>
+      
 
         {/* Main Content */}
         <View style={styles.robotContainer}>
@@ -70,19 +70,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   backgroundImage: {
     flex: 1,
     width: '100%',
     height: '100%',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: '4%',
-  },
+  // header: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+    
+  //   borderWidth:2
+  // },
   backButton: {
-    marginRight: '4%',
+    marginTop:hp(3.5),
+    left:-wp(40)
   },
   scrollViewContent: {
     flexGrow: 1,

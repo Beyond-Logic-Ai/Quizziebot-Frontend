@@ -95,7 +95,7 @@ const LeaderBoard = ({ navigation }) => {
           <View style={styles.topThreeItem2}>
             <Image source={images.profilepic} style={styles.topThreeAvatar2} />
             <View style={styles.topnum2}>
-                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:20 }} >2</Text>
+                <Text style={{ marginTop: hp(.2), color: "#FFFFFF",fontWeight:"bold",fontSize:hp(2) }} >2</Text>
             </View>
             <Text style={styles.topThreeName}>Jackson</Text>
             <Text style={styles.topThreePoints}>1847</Text>
@@ -105,7 +105,7 @@ const LeaderBoard = ({ navigation }) => {
             <Image source={images.crown} style={styles.crownImage} />
             <Image source={images.profilepic} style={styles.topThreeAvatar} />
             <View style={styles.topnum1}>
-                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:20 }} >1</Text>
+                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:wp(5) }} >1</Text>
             </View>
             <Text style={styles.topThreeName1}>Eiden biden</Text>
             <Text style={styles.topThreePoints1}>243022</Text>
@@ -114,7 +114,7 @@ const LeaderBoard = ({ navigation }) => {
           <View style={styles.topThreeItem3}>
             <Image source={images.profilepic} style={styles.topThreeAvatar3} />
             <View style={styles.topnum3}>
-                <Text style={{ marginTop: 3, color: "#FFFFFF",fontWeight:"bold",fontSize:20 }} >3</Text>
+                <Text style={{ marginTop: hp(.2), color: "#FFFFFF",fontWeight:"bold",fontSize:hp(2) }} >3</Text>
             </View>
             <Text style={styles.topThreeName}>Emma Aria</Text>
             <Text style={styles.topThreePoints}>1674</Text>
@@ -272,40 +272,48 @@ const styles = StyleSheet.create({
   leaderboardContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    marginTop: 30,
+    marginTop: hp(2.3),
   },
   topThreeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    width: '100%',
-    marginTop: 60,
+    alignSelf:"center",
+    width: wp(85),
+    height:hp(30),
+    marginTop:hp(1),
+    borderWidth:2
   },
   topThreeContainercurve:{
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    width: '95%',
-    marginTop: 80,
-    height: hp(12),
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    backgroundColor: "#F0F0F0"
+    width: wp(85),
+    marginTop: hp(7),
+    height:hp(17),
+    borderTopLeftRadius: wp(4),
+    borderTopRightRadius: wp(4),
+    borderBottomLeftRadius: wp(4),
+    borderBottomRightRadius: wp(4),
+    backgroundColor: "#F0F0F0",
+    borderWidth:2
   },
-  topThreeItem: {
-    alignItems: 'center',
-    width: wp(25),
-  },
+  // topThreeItem: {
+  //   alignItems: 'center',
+  //   width: wp(25),
+  // },
   topThreeItemFirst: {
     alignItems: 'center',
     width: wp(30),
-    height: hp(18),
-    top: -hp(3),
+    height:"100%",
+    
+    top: -hp(2.8),
+    
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: wp(6),
+    borderTopRightRadius: wp(6),
+    borderWidth:2,
+   
     
   },
 
@@ -321,17 +329,17 @@ const styles = StyleSheet.create({
     marginRight: 30
   },
   topThreeAvatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 60,
+    width: wp(18),
+    height: wp(18),
+    borderRadius: wp(10),
     borderColor: "#FFAA00",
     borderWidth: 4,
     marginBottom: 5,
-    top: -79
+    top: -hp(7)
   },
   topThreeAvatar2: {
-    width: 80,
-    height: 80,
+    width: wp(15),
+    height: wp(15),
     borderRadius: 60,
     borderColor: "#009BD6",
     borderWidth: 4,
@@ -339,18 +347,18 @@ const styles = StyleSheet.create({
     bottom:-24
   },
   topnum2:{
-    width: 30,
-    height: 30,
+    width: hp(3),
+    height: hp(3),
     // textAlignVertical:"center",
    alignItems:"center",
     // borderColor: "#009BD6",
-    borderRadius:20,
+    borderRadius:wp(3),
     backgroundColor:"#009BD6"
     
   },
   topnum3:{
-    width: 30,
-    height: 30,
+    width: hp(3),
+    height: hp(3),
     // textAlignVertical:"center",
    alignItems:"center",
     // borderColor: "#009BD6",
@@ -359,19 +367,19 @@ const styles = StyleSheet.create({
     
   },
   topnum1:{
-    width: 30,
-    height: 30,
+    width: wp(7),
+    height: wp(7),
     // textAlignVertical:"center",
    alignItems:"center",
     // borderColor: "#009BD6",
-    borderRadius:20,
+    borderRadius:wp(7),
     backgroundColor:"#FFAA00",
-    top:-99
+    top:-hp(9.5)
     
   },
   topThreeAvatar3: {
-    width: 80,
-    height: 80,
+    width: wp(15),
+    height: wp(15),
     borderRadius: 60,
     borderColor: "#00D95F",
     borderWidth: 4,
@@ -379,9 +387,9 @@ const styles = StyleSheet.create({
     bottom:-24
   },
   crownImage: {
-    width: 40,
-    height: 40,
-    top: -75
+    width: wp(8),
+    height: wp(8),
+    top: -hp(6.5)
   },
   topThreeName: {
     // flexDirection:"row",
@@ -429,26 +437,26 @@ const styles = StyleSheet.create({
     width: wp(85),
     flexDirection: 'row',
     justifyContent: 'space-around',
-    top: 20,
+    top: hp(2),
     marginHorizontal: wp(8),
-    borderRadius: 15,
+    borderRadius: wp(2),
     backgroundColor: "#FFFFFF",
     paddingVertical: 5,
   },
   tab: {
     height: "auto",
-    width: "40%",
+    width: "30%",
   },
   activeTab: {
     // backgroundColor: '#0048BF',
     
     borderColor:"#0048BF",
-    borderBottomWidth:4
+    borderBottomWidth:hp(0.5)
   },
   tabText: {
     alignSelf: "center",
-    fontSize: 20,
-    top: hp(.8),
+    fontSize: hp(2),
+    top: hp(.7),
     fontWeight: "bold",
     fontFamily: 'Nunito',
     color: '#0048BF',
@@ -458,9 +466,9 @@ const styles = StyleSheet.create({
   },
   leaderboard: {
     flex: 1,
-    marginTop: 20,
+    marginTop:hp(1),
     backgroundColor: "#F0F0F0",
-    borderRadius: 30,
+    borderRadius: wp(4),
     marginBottom:-hp(5)
   },
   leaderboardItem: {

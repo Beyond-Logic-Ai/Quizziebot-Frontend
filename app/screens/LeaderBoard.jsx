@@ -112,7 +112,7 @@ const LeaderBoard = ({ navigation }) => {
             <Image source={images.profilepic} style={styles.topThreeAvatar2} />
             <View style={styles.topnum2}>
 
-              <Text style={{ marginTop: 3, color: "#FFFFFF", fontWeight: "bold", fontSize: 20 }}>2</Text>
+              <Text style={{ marginTop: wp(.5), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>2</Text>
             </View>
             <Text style={styles.topThreeName}>{topThree[1].name}</Text>
             <Text style={styles.topThreePoints}>{topThree[1].points}</Text>
@@ -122,7 +122,7 @@ const LeaderBoard = ({ navigation }) => {
             <Image source={images.crown} style={styles.crownImage} />
             <Image source={images.profilepic} style={styles.topThreeAvatar} />
             <View style={styles.topnum1}>
-              <Text style={{ marginTop: 3, color: "#FFFFFF", fontWeight: "bold", fontSize: 20 }}>1</Text>
+              <Text style={{ marginTop: wp(1), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>1</Text>
             </View>
             <Text style={styles.topThreeName1}>{topThree[0].name}</Text>
             <Text style={styles.topThreePoints1}>{topThree[0].points}</Text>
@@ -132,7 +132,7 @@ const LeaderBoard = ({ navigation }) => {
             <Image source={images.profilepic} style={styles.topThreeAvatar3} />
             <View style={styles.topnum3}>
 
-              <Text style={{ marginTop: 3, color: "#FFFFFF", fontWeight: "bold", fontSize: 20 }}>3</Text>
+              <Text style={{ marginTop: wp(.5), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>3</Text>
             </View>
             <Text style={styles.topThreeName}>{topThree[2].name}</Text>
             <Text style={styles.topThreePoints}>{topThree[2].points}</Text>
@@ -145,10 +145,10 @@ const LeaderBoard = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => (
     <View style={[styles.leaderboardItem, item.id === userId && styles.currentUserItem]} key={item.id}>
-      <Text style={styles.rank}>{index + 1}</Text>
+      <Text style={[styles.rank, item.id === userId && styles.currentUserName]}>{index + 1}</Text>
       <Image source={item.avatar} style={styles.avatar} />
-      <Text style={styles.name}>{item.id === userId ? 'You' : item.name}</Text>
-      <Text style={styles.points}>{item.points} pts</Text>
+      <Text style={[styles.name, item.id === userId && styles.currentUserName]} >{item.id === userId ? 'You' : item.name}</Text>
+      <Text style={[styles.points, item.id === userId && styles.currentUserName]}>{item.points} pts</Text>
     </View>
   );
 
@@ -290,161 +290,163 @@ const styles = StyleSheet.create({
   leaderboardContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    marginTop: hp(2.3),
+    marginTop: wp(2.5),
   },
   topThreeContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     alignSelf:"center",
     width: wp(85),
-    height:hp(30),
-    marginTop:hp(1),
-    borderWidth:2
+    height:wp(40),
+    marginTop:wp(7),
+    
+
   },
   topThreeContainercurve:{
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: wp(85),
-    marginTop: hp(7),
-    height:hp(17),
-    borderTopLeftRadius: wp(4),
-    borderTopRightRadius: wp(4),
-    borderBottomLeftRadius: wp(4),
-    borderBottomRightRadius: wp(4),
+    marginTop: wp(30),
+    height:wp(25),
+    borderRadius:wp(4),
     backgroundColor: "#F0F0F0",
-    borderWidth:2
-  },
-  // topThreeItem: {
-  //   alignItems: 'center',
-  //   width: wp(25),
-  // },
-  topThreeItemFirst: {
-    alignItems: 'center',
-    width: wp(30),
-    height:"100%",
-    
-    top: -hp(2.8),
-    
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: wp(6),
-    borderTopRightRadius: wp(6),
-    borderWidth:2,
-   
     
   },
 
+  // },
+  topThreeItemFirst: {
+    alignItems: 'center',
+    top: -wp(4),
+    width:wp(28),
+    height:wp(33),
+    backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: wp(7),
+    borderTopRightRadius: wp(7),
+    
+
+  },
   topThreeItem2:{
     alignItems: "center",
-    top: -40,
-    marginLeft: 30
+    top: -wp(8),
+    marginLeft: wp(4),
+    
     
   },
   topThreeItem3:{
     alignItems: "center",
-    top: -40,
-    marginRight: 30
+    top: -wp(8),
+    marginRight: wp(4),
+    
   },
   topThreeAvatar: {
     width: wp(18),
     height: wp(18),
     borderRadius: wp(10),
     borderColor: "#FFAA00",
-    borderWidth: 4,
-    marginBottom: 5,
-    top: -hp(7)
+    borderWidth: wp(1),
+    marginBottom: hp(0),
+    bottom:-wp(3),
+    top: -wp(4.5)
   },
   topThreeAvatar2: {
     width: wp(15),
     height: wp(15),
-    borderRadius: 60,
+    borderRadius: wp(8),
     borderColor: "#009BD6",
-    borderWidth: 4,
-    marginBottom: 5,
-    bottom:-24
+    borderWidth: wp(1),
+    marginBottom: hp(.5),
+    bottom:-hp(2)
   },
   topnum2:{
-    width: hp(3),
-    height: hp(3),
+    width: wp(6),
+    height: wp(5),
     // textAlignVertical:"center",
-   alignItems:"center",
+    alignItems:"center",
     // borderColor: "#009BD6",
     borderRadius:wp(3),
     backgroundColor:"#009BD6"
     
   },
   topnum3:{
-    width: hp(3),
-    height: hp(3),
+    width: wp(6),
+    height: wp(5),
     // textAlignVertical:"center",
    alignItems:"center",
     // borderColor: "#009BD6",
-    borderRadius:20,
+    borderRadius:wp(3),
     backgroundColor:"#00D95F"
     
   },
   topnum1:{
     width: wp(7),
-    height: wp(7),
+    height: wp(6),
     // textAlignVertical:"center",
    alignItems:"center",
     // borderColor: "#009BD6",
-    borderRadius:wp(7),
+    borderRadius:wp(3),
     backgroundColor:"#FFAA00",
-    top:-hp(9.5)
+    top: -wp(7)
+    
     
   },
   topThreeAvatar3: {
     width: wp(15),
     height: wp(15),
-    borderRadius: 60,
+    borderRadius: wp(8),
     borderColor: "#00D95F",
-    borderWidth: 4,
-    marginBottom: 5,
-    bottom:-24
+    borderWidth: wp(1),
+    marginBottom: hp(.5),
+    bottom:-hp(2)
   },
   crownImage: {
     width: wp(8),
     height: wp(8),
-    top: -hp(6.5)
+    bottom:-wp(3.5),
+    marginTop:-wp(11),
+    
+    top: -wp(4)
   },
   topThreeName: {
-    fontSize: 16,
+    fontSize: wp(3),
     fontWeight: 'bold',
     color: '#000000',
     fontFamily: 'Nunito',
+
   },
   topThreeName1: {
-    fontSize: 16,
+    fontSize: wp(4),
     fontWeight: 'bold',
     color: '#000000',
-    top:-80,
+    top: -wp(7),
     fontFamily: 'Nunito',
    
   },
   topThreePoints: {
-    fontSize: 14,
+    fontSize: wp(3),
     alignSelf: "center",
     color: '#000000',
     fontFamily: 'Nunito',
   },
   topThreePoints1: {
-    fontSize: 14,
+    fontSize: wp(3.5),
     alignSelf: "center",
     color: '#000000',
-    top:-80,
+    top: -wp(7),
     fontFamily: 'Nunito',
   },
   userid:{
-    top:-80,
+    top: -wp(7),
     fontFamily: 'Nunito',
-    
+    fontSize:wp(3),
+    marginBottom:wp(2)
   },
   userid2:{
+    fontSize:wp(2.5),
     fontFamily: 'Nunito',
   },
   userid3:{
+    fontSize:wp(2.5),
     fontFamily: 'Nunito',
   },
   leaderboardHeader: {
@@ -468,7 +470,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     alignSelf: "center",
-    fontSize: hp(2),
+    fontSize: wp(3.5),
     top: hp(.7),
     fontWeight: "bold",
     fontFamily: 'Nunito',
@@ -479,46 +481,51 @@ const styles = StyleSheet.create({
   },
   leaderboard: {
     flex: 1,
-    marginTop:hp(1),
+    marginTop:wp(13),
     backgroundColor: "#F0F0F0",
     borderRadius: wp(4),
-    marginBottom:-hp(5)
+     marginBottom:-wp(10),
+    marginHorizontal:wp(2.5)
   },
   leaderboardItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    marginHorizontal:10,
+    paddingVertical: hp(1),
+    paddingHorizontal: wp(2),
+    borderRadius: wp(2),
+    marginBottom: wp(1),
+    marginHorizontal:wp(1),
     backgroundColor:"#FFFFFF"
   },
   currentUserItem: {
-    backgroundColor: '#cde1ff', // Highlight color for current user
+    backgroundColor: '#1C58F2', 
+    color:'#1C58F2'// Highlight color for current user
   },
   rank: {
-    fontSize: 18,
+    fontSize: wp(3),
     fontWeight: 'bold',
     color: '#000000',
     fontFamily: 'Nunito',
     
   },
   avatar: {
-    width: 40,
-    height: 40,
+    width: wp(6),
+    height: wp(6),
     borderRadius: 20,
   },
   name: {
-    flex:.7,
-    fontSize: 16,
+    flex:.9,
+    fontSize: wp(3.5),
     fontWeight: 'bold',
     color: '#000',
     fontFamily: 'Nunito',
   },
+  currentUserName:{
+    color: '#FFF',
+  },
   points: {
-    fontSize: 16,
+    fontSize: wp(3),
     color: '#000',
     fontFamily: 'Nunito',
   },

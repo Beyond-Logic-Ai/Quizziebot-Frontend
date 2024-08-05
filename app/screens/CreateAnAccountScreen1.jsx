@@ -275,12 +275,6 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
               <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
                 <Image source={images.google} style={styles.socialLogo} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => { /* handle Apple sign-up */ }}>
-                <Image source={images.apple} style={styles.socialLogo} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => { /* handle Facebook sign-up */ }}>
-                <Image source={images.facebook} style={styles.socialLogo} />
-              </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>

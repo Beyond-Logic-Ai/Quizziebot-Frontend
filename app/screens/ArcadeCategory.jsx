@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { View, Text, StyleSheet,ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -26,11 +25,9 @@ const CategoryButton = ({ name, colors, onPress }) => (
 const ArcadeCategory = ({ navigation }) => {
   return (
     <View style={styles.container}>
-     
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={wp(6)} color="#FFF" />
-          </TouchableOpacity>
-       
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={wp(6)} color="#FFF" />
+      </TouchableOpacity>
       <Text style={styles.title}>Arcade</Text>
       <View style={styles.robotImageContainer}>
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
@@ -54,19 +51,19 @@ const ArcadeCategory = ({ navigation }) => {
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
       <View style={styles.mainContent}>
-      <Text style={styles.subtitle}>Choose your category{'\n'}Explore!</Text>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-      <View style={styles.buttonWrapper}>
-        {categories.map((category, index) => (
-          <CategoryButton
-            key={index}
-            name={category.name}
-            colors={category.colors}
-            onPress={() => navigation.navigate('ArcadeModes')} // Replace with navigation logic
-          />
-        ))}
-      </View>
-      </ScrollView>
+        <Text style={styles.subtitle}>Choose your category{'\n'}Explore!</Text>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <View style={styles.buttonWrapper}>
+            {categories.map((category, index) => (
+              <CategoryButton
+                key={index}
+                name={category.name}
+                colors={category.colors}
+                onPress={() => navigation.navigate('ArcadeModes', { category: category.name })} // Pass category
+              />
+            ))}
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -80,15 +77,10 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#0048BF',
   },
-  //  header: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-    
-  // },
   backButton: {
-    top:hp(.5),
-    marginTop:-hp(1),
-    left:-wp(40)
+    top: hp(0.5),
+    marginTop: -hp(1),
+    left: -wp(40)
   },
   title: {
     fontSize: wp(9),
@@ -96,7 +88,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
     color: '#fff',
     marginVertical: 10,
-    marginBottom: hp(4), // Adjust spacing as needed
+    marginBottom: hp(4),
   },
   robotImageContainer: {
     width: wp(35),
@@ -105,8 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 18,
-    bottom:20,
-    
+    bottom: 20,
   },
   robotImage: {
     position: 'absolute',
@@ -118,23 +109,19 @@ const styles = StyleSheet.create({
     fontSize: wp(5),
     color: '#fff',
     textAlign: 'center',
-    marginTop:hp(.5),
-    marginBottom:hp(3.7),
+    marginTop: hp(0.5),
+    marginBottom: hp(3.7),
     fontWeight: 'bold',
     fontFamily: 'Nunito',
-    // borderColor:'black',
-    // borderWidth:2
   },
-  mainContent:{
-    flex:.75,
-    width:wp(78),
-    height:"50%",
+  mainContent: {
+    flex: 0.75,
+    width: wp(78),
+    height: "50%",
     justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.08)',
-    borderRadius:15,
-    
+    borderRadius: 15,
   },
-
   buttonWrapper: {
     width: '100%',
     alignItems: 'center',
@@ -149,7 +136,6 @@ const styles = StyleSheet.create({
     padding: 13,
     alignItems: 'center',
     borderRadius: 25,
-    
   },
   buttonText: {
     fontSize: 18,

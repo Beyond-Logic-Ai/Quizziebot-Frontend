@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,6 +25,8 @@ const ArcadeQuestionScreen = ({ route, navigation }) => {
 
   const handleAnswer = (selectedAnswer) => {
     const currentQuestion = questions[currentQuestionIndex];
+    if (!currentQuestion) return;
+
     const isAnswerCorrect = selectedAnswer === currentQuestion.correctOption;
     setIsCorrect(isAnswerCorrect);
 
@@ -49,6 +50,14 @@ const ArcadeQuestionScreen = ({ route, navigation }) => {
   };
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  if (!currentQuestion) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.errorText}>No questions available.</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -144,8 +153,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 14,
     overflow: 'hidden',
-    // borderColor:"black",
-    // borderWidth:2
   },
   gradient: {
     position: 'absolute',
@@ -168,8 +175,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#448AF7',
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: "black",
-    // borderWidth: 2,
   },
   answerText: {
     fontSize: wp(4),
@@ -194,6 +199,12 @@ const styles = StyleSheet.create({
   incorrectFeedback: {
     fontSize: 18,
     color: 'red',
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

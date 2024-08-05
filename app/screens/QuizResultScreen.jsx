@@ -27,17 +27,21 @@ const QuizResultScreen = ({ route, navigation }) => {
             throw new Error('No answers provided');
           }
 
-          const formattedAnswers = answers.map(answer => ({
-            questionId: answer.questionId,
-            selectedOption: answer.selectedOption,
-            timeTaken: answer.timeTaken,
-            answered: answer.answered,
-          }));
+          const formattedAnswers = answers
+            .filter(answer => answer.questionId !== null && answer.questionId !== undefined)
+            .map(answer => ({
+              questionId: answer.questionId,
+              selectedOption: answer.selectedOption,
+              timeTaken: answer.timeTaken,
+              answered: answer.answered,
+            }));
 
-          const questionStatuses = answers.map(answer => ({
-            questionId: answer.questionId,
-            isAnswered: !!answer.selectedOption,
-          }));
+          const questionStatuses = answers
+            .filter(answer => answer.questionId !== null && answer.questionId !== undefined)
+            .map(answer => ({
+              questionId: answer.questionId,
+              isAnswered: !!answer.selectedOption,
+            }));
 
           if (isMounted) {
             console.log("Formatted Answers:", formattedAnswers);
@@ -68,7 +72,7 @@ const QuizResultScreen = ({ route, navigation }) => {
         }
       } catch (error) {
         if (isMounted) {
-          setError(error.response ? error.response.data : error.message);
+          setError(error.response ? error.response.data.message : error.message);
         }
       } finally {
         if (isMounted) {
@@ -142,7 +146,7 @@ const QuizResultScreen = ({ route, navigation }) => {
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.coins} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>{result.score}</Text>
+            <Text style={styles.achievementValue}>{result.coinsGained}</Text>
           </View>
           <Text style={styles.achievementText}>Coins Earned</Text>
         </View>
@@ -163,16 +167,16 @@ const QuizResultScreen = ({ route, navigation }) => {
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.rank} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>0{result.rank}</Text>
+            <Text style={styles.achievementValue}>{result.wrongAnswers}</Text>
           </View>
-          <Text style={styles.achievementText}>Rank</Text>
+          <Text style={styles.achievementText}>Wrong Questions</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
-            <Image source={images.avgtime} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>0{result.avgTime}</Text>
+            <Image source={images.rank} style={styles.achievementIcon} />
+            <Text style={styles.achievementValue}>{result.totalQuestions}</Text>
           </View>
-          <Text style={styles.achievementText}>Avg Time</Text>
+          <Text style={styles.achievementText}>Total Questions</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>

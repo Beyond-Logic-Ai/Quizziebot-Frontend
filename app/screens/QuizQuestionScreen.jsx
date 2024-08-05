@@ -29,6 +29,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     setIsCorrect(isAnswerCorrect);
 
     const answerData = {
+      
       questionId: currentQuestion.questionId, // Corrected line
       selectedOption: selectedAnswer,
       timeTaken: 10 - timer,

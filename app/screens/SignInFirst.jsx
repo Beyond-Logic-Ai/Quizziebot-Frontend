@@ -23,11 +23,14 @@ const SignInFirst = ({ navigation }) => {
     const checkSession = async () => {
       const userSession = await AsyncStorage.getItem('userSession');
       if (userSession) {
-        navigation.navigate('HomePageScreen');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'HomePageScreen' }],
+        });
       }
     };
     checkSession();
-  }, []);
+  }, [navigation]);
 
   const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
@@ -65,7 +68,10 @@ const SignInFirst = ({ navigation }) => {
             coins: response.data.coins || 0,
           };
           await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
-          navigation.navigate('HomePageScreen', { user: userSession });
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'HomePageScreen', params: { user: userSession } }],
+          });
         } else {
           Alert.alert('Error', 'Invalid credentials. Please try again.');
         }

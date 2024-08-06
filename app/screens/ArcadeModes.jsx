@@ -5,6 +5,7 @@ import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 const categories = [
   { name: 'Easy', colors: ['#AEFF6E', '#1ABD00'] },
   { name: 'Medium', colors: ['#FFD540', '#FFA800'] },
@@ -19,39 +20,23 @@ const CategoryButton = ({ name, colors, onPress }) => (
   </TouchableOpacity>
 );
 
-const ArcadeModes = ({ navigation }) => {
-  const handleCategoryPress = (categoryName) => {
-    if (categoryName === 'Hard') {
-      // Replace 'HardLevelScreen' with the actual screen name you want to navigate to
-      navigation.navigate('ArcadeLoadingScreen');
-    } else if(categoryName ==='Medium'){
-        navigation.navigate('ArcadeLoadingScreen');
-    }else if(categoryName ==='Easy'){
-        navigation.navigate('ArcadeLoadingScreen')
-    } else{
-      console.log(`${categoryName} selected`);
-    }
+const ArcadeModes = ({ navigation, route }) => {
+  const { category } = route.params; // Get the category from params
+
+  const handleCategoryPress = (difficulty) => {
+    navigation.navigate('ArcadeLoadingScreen', { category, difficulty }); // Pass category and difficulty
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={wp(6)} color="#FFF" />
-          </TouchableOpacity>
+        <Icon name="arrow-back" size={wp(6)} color="#FFF" />
+      </TouchableOpacity>
       <Text style={styles.title}>Arcade</Text>
       <View style={styles.robotImageContainer}>
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
           <Defs>
-            <RadialGradient
-              id="grad"
-              cx="50%"
-              cy="50%"
-              rx="50%"
-              ry="50%"
-              fx="50%"
-              fy="50%"
-              gradientUnits="userSpaceOnUse"
-            >
+            <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%" fx="50%" fy="50%" gradientUnits="userSpaceOnUse">
               <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
               <Stop offset="100%" stopColor="#0048BF" stopOpacity="1" />
             </RadialGradient>
@@ -62,18 +47,16 @@ const ArcadeModes = ({ navigation }) => {
       </View>
       <View style={styles.mainContent}>
         <Text style={styles.subtitle}>Choose your level!</Text>
-        {/* <ScrollView contentContainerStyle={styles.scrollViewContent}> */}
-          <View style={styles.buttonWrapper}>
-            {categories.map((category, index) => (
-              <CategoryButton
-                key={index}
-                name={category.name}
-                colors={category.colors}
-                onPress={handleCategoryPress}
-              />
-            ))}
-          </View>
-        {/* </ScrollView> */}
+        <View style={styles.buttonWrapper}>
+          {categories.map((category, index) => (
+            <CategoryButton
+              key={index}
+              name={category.name}
+              colors={category.colors}
+              onPress={handleCategoryPress}
+            />
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -88,10 +71,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#0048BF',
   },
   backButton: {
-    // marginRight: '4%',
-    top:-hp(3.8),
-    marginTop:-hp(1),
-    left:-wp(40)
+    top: -hp(3.8),
+    marginTop: -hp(1),
+    left: -wp(40)
   },
   title: {
     fontSize: wp(9),
@@ -132,13 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 15,
   },
-//   scrollViewContent: {
-//     flexGrow: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
   buttonWrapper: {
-    
     width: '100%',
     alignItems: 'center',
   },
@@ -147,7 +123,6 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     borderRadius: 25,
     overflow: 'hidden',
-    
   },
   button: {
     padding: 13,

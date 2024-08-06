@@ -103,13 +103,6 @@ const ArcadeResult = ({ route, navigation }) => {
       </View>
       <Text style={styles.achievementsTitle}>Your Achievements</Text>
       <View style={styles.achievementGrid}>
-        {/* <View style={styles.achievementItem}>
-          <View style={styles.iconAndValue}>
-            <Image source={images.IQ} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.iqScore}</Text>
-          </View>
-          <Text style={styles.achievementText}>IQ</Text>
-        </View> */}
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.coins} style={styles.achievementIcon} />
@@ -131,13 +124,6 @@ const ArcadeResult = ({ route, navigation }) => {
           </View>
           <Text style={styles.achievementText}>Correct Questions</Text>
         </View>
-        {/* <View style={styles.achievementItem}>
-          <View style={styles.iconAndValue}>
-            <Image source={images.rank} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.rank}</Text>
-          </View>
-          <Text style={styles.achievementText}>Rank</Text>
-        </View> */}
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.avgtime} style={styles.achievementIcon} />
@@ -151,7 +137,7 @@ const ArcadeResult = ({ route, navigation }) => {
           <Ionicons name="home-outline" size={24} color="#fff" />
           <Text style={styles.buttonText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => {/* handle share */}}>
+        <TouchableOpacity style={styles.button} onPress={() => { /* handle share */ }}>
           <Ionicons name="share-outline" size={24} color="#fff" />
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
@@ -240,7 +226,7 @@ const styles = StyleSheet.create({
   achievementIcon: {
     width: 32,
     height: 32,
-    right:20,
+    right: 20,
     marginRight: 5,
   },
   achievementText: {
@@ -249,10 +235,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: 'Nunito',
     fontWeight: 'bold',
-
   },
   achievementValue: {
-    right:10,
+    right: 10,
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',

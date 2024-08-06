@@ -9,8 +9,9 @@ import { images } from '../../constants/images';
 
 const { width, height } = Dimensions.get('window');
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { category, difficulty } = route.params; // Get category and difficulty from params
   const [progress, setProgress] = useState(new Animated.Value(0));
   const [error, setError] = useState(null);
 
@@ -25,18 +26,16 @@ const LoadingScreen = () => {
         const userSession = await AsyncStorage.getItem('userSession');
         const storedUserId = await AsyncStorage.getItem('userId');
 
-        console.log('userSession:', userSession);
-        console.log('storedUserId:', storedUserId);
-
         if (userSession && storedUserId) {
           const { token } = JSON.parse(userSession);
 
-          // Check for token validity
-          if (!token) {
-            throw new Error('Token is missing');
-          }
-
-          const response = await axios.get(`https://api.quizziebot.com/api/quizzes/questions?userId=${storedUserId}&mode=classic`, {
+          const response = await axios.get(`https://api.quizziebot.com/api/quizzes/questions`, {
+            params: {
+              userId: storedUserId,
+              mode: 'arcade',
+              category,
+              difficulty
+            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -45,13 +44,17 @@ const LoadingScreen = () => {
           const questions = response.data.questions;
           const quizId = response.data.quizId;
 
-          Animated.timing(progress, {
-            toValue: 1,
-            duration: 2000, // 2 seconds
-            useNativeDriver: false,
-          }).start(() => {
-            navigation.replace('ArcadeQuestionScreen', { questions, quizId, userId: storedUserId });
-          });
+          if (questions && questions.length > 0) {
+            Animated.timing(progress, {
+              toValue: 1,
+              duration: 2000, // 2 seconds
+              useNativeDriver: false,
+            }).start(() => {
+              navigation.replace('ArcadeQuestionScreen', { questions, quizId, userId: storedUserId });
+            });
+          } else {
+            setError('No questions available for the selected category and difficulty.');
+          }
         } else {
           navigation.navigate('HomePageScreen');
         }

@@ -74,11 +74,11 @@ const CreatingOwnQuizPage = ({ navigation }) => {
   const renderIcon = (iconSet, iconName) => {
     switch (iconSet) {
       case 'Feather':
-        return <Feather name={iconName} size={30} color="#fff" style={styles.icon} />;
+        return <Feather name={iconName} size={wp(6)} color="#fff" style={styles.icon} />;
       case 'MaterialCommunityIcons':
-        return <MaterialCommunityIcons name={iconName} size={30} color="#fff" style={styles.icon} />;
+        return <MaterialCommunityIcons name={iconName} size={wp(6)} color="#fff" style={styles.icon} />;
       case 'Ionicons':
-        return <Ionicons name={iconName} size={30} color="#fff" style={styles.icon} />;
+        return <Ionicons name={iconName} size={wp(6)} color="#fff" style={styles.icon} />;
       default:
         return null;
     }
@@ -158,73 +158,84 @@ const styles = StyleSheet.create({
     backgroundColor: '#0048BF',
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   backButton: {
     // marginRight: '4%',
-    top:hp(7.5),
+    top:hp(6),
     marginTop:-hp(4),
-    left:-wp(40)
+    left:-wp(40),
+  
   },
   robotImageContainer: {
-    width: wp(30),
-    height: wp(30),
-    borderRadius: wp(17.5),
+    width: hp(20),
+    height: hp(20),
+    borderRadius: hp(17.5),
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: hp(5),
-    top: hp(3),
+    marginBottom: hp(3),
+    marginTop:hp(4),
+    
   },
   robotImage: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    width: hp(20),
+    height: hp(25),
     resizeMode: 'contain',
+    
   },
   title: {
-    bottom: hp(1),
+    bottom: hp(2),
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Nunito',
-    fontSize: wp(6.5),
+    fontSize: hp(4),
     fontWeight: 'bold',
     color: '#fff',
+    
   },
   subtitle: {
     top: hp(1),
-    fontSize: wp(4),
+    fontSize: hp(2.5),
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Nunito',
+    
   },
   slide: {
     width: wp(100),
-    height: hp(40),
+    height: hp(80),
     alignItems: 'center',
-    top: hp(2),
+    marginTop:hp(4),
+
+    
   
   
   },
   icon: {
-    marginTop:hp(1.2),
-    marginBottom:hp(1.2),
+    marginTop:hp(.8),
+    marginBottom:hp(.8),
   },
   sectionTitle: {
-    fontSize: wp(4),
+    fontSize: hp(2),
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: hp(2),
+    marginBottom:hp(1)
+    
   },
   textContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 10,
-    padding: hp(2),
-    marginVertical: hp(.7),
-    width: width * 0.8,
+    borderRadius: hp(2),
+    padding: hp(1.5),
+    marginVertical: hp(.4),
+    width:hp(40),
+    height:hp(9),
+   
   },
   text: {
     color: '#fff',
-    fontSize: wp(3),
+    fontSize: hp(1.8),
     textAlign: 'center',
     fontFamily: 'Nunito',
   },
@@ -232,15 +243,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: hp(4),
-    
+    marginBottom: hp(1),
+  
+   
   },
   indicator: {
-    width: wp(6),
-    height: 2,
-    borderRadius: 2,
+    width: hp(5),
+    height: hp(.2),
+    borderRadius: wp(.5),
     backgroundColor: '#888',
-    marginHorizontal: 4,
+    marginHorizontal: wp(1),
   },
   activeIndicator: {
     backgroundColor: '#FFF',

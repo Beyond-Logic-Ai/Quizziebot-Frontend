@@ -112,7 +112,7 @@ const ProfilePage = ({ navigation }) => {
             <Text style={styles.username}>{username}</Text>
             <Text style={styles.userHandle}>@johnbrown_12</Text>
           </View>
-          <TouchableOpacity style={styles.editProfileButton}>
+          <TouchableOpacity style={styles.editProfileButton}onPress={() => navigation.navigate('EditProfilePage')}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>

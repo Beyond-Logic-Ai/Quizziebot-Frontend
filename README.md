@@ -1,5 +1,12 @@
 # Welcome to Quizziebot
 
+![App Screenshot](![AF40C415-625E-4CFB-AAC2-056DEC45E156_1_105_c](https://github.com/user-attachments/assets/c4897555-89bc-4741-8c4e-ded62a643960)
+)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c4897555-89bc-4741-8c4e-ded62a643960)" alt="App Screenshot" width="600" height="400">
+</p>
+
 This is a React Native application built with Expo. This README will guide you on how to run the application on iOS emulator, Android emulator, and web.
 
 ## Prerequisites

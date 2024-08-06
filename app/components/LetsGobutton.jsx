@@ -31,17 +31,17 @@ const LetsGobutton = ({ title, screenName }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: width * 0.7,
-    height: 50,
+    width: wp(60),
+    height: hp(5),
     backgroundColor: '#FBFCF6',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 29,
+    borderRadius: hp(5),
     marginBottom: hp(1),
   },
   buttonText: {
     color: '#1C58F2',
-    fontSize: 16,
+    fontSize: hp(2.5),
     fontWeight: 'bold',
   },
 });

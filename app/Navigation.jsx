@@ -30,7 +30,7 @@ import { BackgroundMusicContext } from '../app/context/BackgroundMusicContext';
 import MusicAndEffectsScreen from '../app/screens/MusicAndEffectsScreen';
 import ProfilePage from '../app/screens/ProfilePage';
 import LeaderBoard from '../app/screens/LeaderBoard';
-
+import EditProfilePage from '../app/screens/EditProfilePage';
 const Stack = createNativeStackNavigator();
 
 function Navigation() {
@@ -107,7 +107,7 @@ function Navigation() {
         <Stack.Screen name="MusicAndEffectsScreen" component={MusicAndEffectsScreen} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="ProfilePage" component={ProfilePage} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="LeaderBoard" component={LeaderBoard} options={{headerShown: false , animation: 'fade'}}/>
-        
+        <Stack.Screen name="EditProfilePage" component={EditProfilePage} options={{headerShown: false , animation: 'fade'}}/>
         
         
       </Stack.Navigator>

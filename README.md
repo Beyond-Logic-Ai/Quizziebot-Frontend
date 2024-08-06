@@ -1,7 +1,7 @@
 # Welcome to Quizziebot
 
 <p align="center">
-  <img src="https://github.com/Beyond-Logic-Ai/Quizziebot-Frontend/blob/main/assets/images/logo.jpeg" alt="App Screenshot" width="640" height="480">
+  <img src="https://github.com/Beyond-Logic-Ai/Quizziebot-Frontend/blob/main/assets/images/logo.jpeg" alt="App Screenshot" width="400" height="400">
 </p>
 
 This is a React Native application built with Expo. This README will guide you on how to run the application on iOS emulator, Android emulator, and web.

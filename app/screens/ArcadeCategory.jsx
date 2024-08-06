@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const categories = [
   { name: 'Science', colors: ['#FFD540', '#FFA800'] },
-  { name: 'Maths', colors: ['#AEFF6E', '#1ABD00'] },
+  { name: 'Math', colors: ['#AEFF6E', '#1ABD00'] },
   { name: 'Social', colors: ['#FFA767', '#F17400'] },
   { name: 'Technology', colors: ['#FF738D', '#FF3156'] },
   { name: 'Movies', colors: ['#AB68FF', '#7A12FF'] },

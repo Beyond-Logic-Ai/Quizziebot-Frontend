@@ -18,6 +18,7 @@ const QuizResultScreen = ({ route, navigation }) => {
     let isMounted = true;
 
     const submitQuizAndFetchResults = async () => {
+      console.log("Component mounted and API call initiated");
       try {
         const userSession = await AsyncStorage.getItem('userSession');
         if (userSession) {
@@ -27,29 +28,36 @@ const QuizResultScreen = ({ route, navigation }) => {
             throw new Error('No answers provided');
           }
 
-          const formattedAnswers = answers.map(answer => ({
+          const uniqueAnswers = answers.reduce((acc, answer) => {
+            const existingIndex = acc.findIndex(a => a.questionId === answer.questionId);
+            if (existingIndex === -1) {
+              acc.push(answer);
+            } else {
+              acc[existingIndex] = answer; // Update with the latest answer if duplicate
+            }
+            return acc;
+          }, []);
+
+          const formattedAnswers = uniqueAnswers.map(answer => ({
             questionId: answer.questionId,
             selectedOption: answer.selectedOption,
             timeTaken: answer.timeTaken,
             answered: answer.answered,
           }));
 
-          const questionStatuses = answers.map(answer => ({
-            questionId: answer.questionId,
-            isAnswered: !!answer.selectedOption,
-          }));
-          
+          const requestBody = {
+            userId,
+            quizId,
+            answers: formattedAnswers,
+            date: "2024-01-01T00:00:00Z", // Add a dummy date field
+          };
+
+          console.log("Request Body: ", JSON.stringify(requestBody));
 
           if (isMounted) {
             const response = await axios.post(
               'https://api.quizziebot.com/api/quizzes/submit',
-              {
-                userId,
-                quizId,
-                answers: formattedAnswers,
-                questionStatuses: questionStatuses,
-                
-              },
+              requestBody,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -57,6 +65,8 @@ const QuizResultScreen = ({ route, navigation }) => {
                 },
               }
             );
+
+            console.log("API Response: ", response.data);
 
             if (isMounted) {
               setResult(response.data);
@@ -66,20 +76,23 @@ const QuizResultScreen = ({ route, navigation }) => {
           navigation.navigate('SignInFirst');
         }
       } catch (error) {
+        console.log("Error: ", error.response ? error.response.data.message : error.message);
         if (isMounted) {
           setError(error.response ? error.response.data.message : error.message);
         }
       } finally {
+        console.log("API call completed");
         if (isMounted) {
           setIsLoading(false);
         }
       }
     };
-    
+
     submitQuizAndFetchResults();
 
     return () => {
       isMounted = false;
+      console.log("Component unmounted");
     };
   }, [userId, quizId, answers, navigation]);
 

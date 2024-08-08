@@ -23,6 +23,21 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     }
   }, [timer]);
 
+  useEffect(() => {
+    if (isCorrect !== null) {
+      const timerId = setTimeout(() => {
+        if (currentQuestionIndex + 1 < questions.length) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setTimer(10);
+          setIsCorrect(null);
+        } else {
+          navigation.navigate('QuizResultScreen', { userId, quizId, answers });
+        }
+      }, 2000);
+      return () => clearTimeout(timerId);
+    }
+  }, [isCorrect]);
+
   const handleAnswer = (selectedAnswer) => {
     const currentQuestion = questions[currentQuestionIndex];
     const isAnswerCorrect = selectedAnswer === currentQuestion.correctOption;
@@ -36,15 +51,18 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     };
     setAnswers((prevAnswers) => [...prevAnswers, answerData]);
 
-    setTimeout(() => {
-      if (currentQuestionIndex + 1 < questions.length) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setTimer(10);
-        setIsCorrect(null);
-      } else {
-        navigation.navigate('QuizResultScreen', { userId, quizId, answers });
-      }
-    }, 2000);
+    if (isCorrect !== null) {
+      const timerId = setTimeout(() => {
+        if (currentQuestionIndex + 1 < questions.length) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setTimer(10);
+          setIsCorrect(null);
+        } else {
+          navigation.navigate('QuizResultScreen', { userId, quizId, answers });
+        }
+      }, 2000);
+      return () => clearTimeout(timerId);
+    }
   };
 
   const currentQuestion = questions[currentQuestionIndex];

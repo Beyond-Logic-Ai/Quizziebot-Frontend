@@ -8,14 +8,18 @@ import Svg, { Defs, RadialGradient, Circle, Stop } from 'react-native-svg';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const ArcadeResult = ({ route, navigation }) => {
+const ArcadeResultScreen = ({ route, navigation }) => {
   const { userId, quizId, answers } = route.params;
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const submitQuizAndFetchResults = async () => {
+      console.log('ArcadeResultScreen mounted with userId:', userId, 'quizId:', quizId, 'answers:', answers);
+
       try {
         const userSession = await AsyncStorage.getItem('userSession');
         if (userSession) {
@@ -25,34 +29,87 @@ const ArcadeResult = ({ route, navigation }) => {
             throw new Error('No answers provided');
           }
 
-          const response = await axios.post(
-            'https://api.quizziebot.com/api/quizzes/submit',
-            {
-              userId,
-              quizId,
-              answers,
-              initialQuiz: false,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+          // Log each answer to check questionId
+          answers.forEach(answer => {
+            console.log('Answer:', answer);
+          });
 
-          setResult(response.data);
+          const uniqueAnswers = answers.reduce((acc, answer) => {
+            const existingIndex = acc.findIndex(a => a.questionId === answer.questionId);
+            if (existingIndex === -1) {
+              acc.push(answer);
+            } else {
+              acc[existingIndex] = answer; // Update with the latest answer if duplicate
+            }
+            return acc;
+          }, []);
+
+          // Ensure questionId is included in each answer
+          const formattedAnswers = uniqueAnswers.map(answer => ({
+            questionId: answer.questionId,
+            selectedOption: answer.selectedOption,
+            timeTaken: answer.timeTaken,
+            answered: answer.answered,
+          }));
+
+          // Log formatted answers
+          formattedAnswers.forEach(answer => {
+            console.log('Formatted Answer:', answer);
+          });
+
+          if (formattedAnswers.some(answer => !answer.questionId)) {
+            throw new Error('Some answers are missing questionId');
+          }
+
+          const requestBody = {
+            userId,
+            quizId,
+            answers: formattedAnswers,
+            date: new Date().toISOString(), // Add current date
+          };
+
+          console.log('Request Body:', JSON.stringify(requestBody));
+
+          if (isMounted) {
+            const response = await axios.post(
+              'https://api.quizziebot.com/api/quizzes/submit',
+              requestBody,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+
+            console.log('API Response:', response.data);
+
+            if (isMounted) {
+              setResult(response.data);
+            }
+          }
         } else {
           navigation.navigate('SignInFirst');
         }
       } catch (error) {
-        setError(error.response ? error.response.data : error.message);
+        console.log('Error:', error.response ? error.response.data.message : error.message);
+        if (isMounted) {
+          setError(error.response ? error.response.data.message : error.message);
+        }
       } finally {
-        setIsLoading(false);
+        console.log('API call completed');
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     submitQuizAndFetchResults();
+
+    return () => {
+      isMounted = false;
+      console.log('ArcadeResultScreen unmounted');
+    };
   }, [userId, quizId, answers, navigation]);
 
   if (isLoading) {
@@ -105,31 +162,45 @@ const ArcadeResult = ({ route, navigation }) => {
       <View style={styles.achievementGrid}>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
+            <Image source={images.IQ} style={styles.achievementIcon} />
+            <Text style={styles.achievementValue}>{result.iqScore}</Text>
+          </View>
+          <Text style={styles.achievementText}>IQ</Text>
+        </View>
+        <View style={styles.achievementItem}>
+          <View style={styles.iconAndValue}>
             <Image source={images.coins} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.coins}</Text>
+            <Text style={styles.achievementValue}>{result.coinsGained}</Text>
           </View>
           <Text style={styles.achievementText}>Coins Earned</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.xp} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.xpGained}</Text>
+            <Text style={styles.achievementValue}>{result.xpGained}</Text>
           </View>
           <Text style={styles.achievementText}>XP</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
             <Image source={images.correct} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>00{result.correctAnswers}</Text>
+            <Text style={styles.achievementValue}>{result.correctAnswers}</Text>
           </View>
           <Text style={styles.achievementText}>Correct Questions</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
-            <Image source={images.avgtime} style={styles.achievementIcon} />
-            <Text style={styles.achievementValue}>000{result.avgTime}</Text>
+            <Image source={images.rank} style={styles.achievementIcon} />
+            <Text style={styles.achievementValue}>{result.wrongAnswers}</Text>
           </View>
-          <Text style={styles.achievementText}>Avg Time</Text>
+          <Text style={styles.achievementText}>Wrong Questions</Text>
+        </View>
+        <View style={styles.achievementItem}>
+          <View style={styles.iconAndValue}>
+            <Image source={images.rank} style={styles.achievementIcon} />
+            <Text style={styles.achievementValue}>{result.totalQuestions}</Text>
+          </View>
+          <Text style={styles.achievementText}>Total Questions</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -137,7 +208,7 @@ const ArcadeResult = ({ route, navigation }) => {
           <Ionicons name="home-outline" size={24} color="#fff" />
           <Text style={styles.buttonText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => { /* handle share */ }}>
+        <TouchableOpacity style={styles.button} onPress={() => {/* handle share */}}>
           <Ionicons name="share-outline" size={24} color="#fff" />
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
@@ -264,4 +335,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ArcadeResult;
+export default ArcadeResultScreen;

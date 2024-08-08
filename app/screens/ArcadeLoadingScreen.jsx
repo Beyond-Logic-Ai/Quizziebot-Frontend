@@ -11,11 +11,13 @@ const { width, height } = Dimensions.get('window');
 
 const LoadingScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { category, difficulty } = route.params; // Get category and difficulty from params
+  const { category, difficulty } = route.params;
   const [progress, setProgress] = useState(new Animated.Value(0));
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('LoadingScreen mounted with category:', category, 'and difficulty:', difficulty);
+
     navigation.setOptions({
       gestureEnabled: false,
       headerLeft: () => null,
@@ -25,6 +27,9 @@ const LoadingScreen = ({ route }) => {
       try {
         const userSession = await AsyncStorage.getItem('userSession');
         const storedUserId = await AsyncStorage.getItem('userId');
+
+        console.log('userSession:', userSession);
+        console.log('storedUserId:', storedUserId);
 
         if (userSession && storedUserId) {
           const { token } = JSON.parse(userSession);
@@ -41,13 +46,15 @@ const LoadingScreen = ({ route }) => {
             },
           });
 
+          console.log('API Response:', response.data);
+
           const questions = response.data.questions;
           const quizId = response.data.quizId;
 
           if (questions && questions.length > 0) {
             Animated.timing(progress, {
               toValue: 1,
-              duration: 2000, // 2 seconds
+              duration: 2000,
               useNativeDriver: false,
             }).start(() => {
               navigation.replace('ArcadeQuestionScreen', { questions, quizId, userId: storedUserId });

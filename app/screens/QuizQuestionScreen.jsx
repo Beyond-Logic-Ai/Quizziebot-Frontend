@@ -29,8 +29,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     setIsCorrect(isAnswerCorrect);
 
     const answerData = {
-      
-      questionId: currentQuestion.questionId, // Corrected line
+      questionId: currentQuestion.questionId,
       selectedOption: selectedAnswer,
       timeTaken: 10 - timer,
       answered: selectedAnswer !== null,
@@ -144,8 +143,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 14,
     overflow: 'hidden',
-    // borderColor:"black",
-    // borderWidth:2
   },
   gradient: {
     position: 'absolute',
@@ -168,8 +165,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#448AF7',
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: "black",
-    // borderWidth: 2,
   },
   answerText: {
     fontSize: wp(4),

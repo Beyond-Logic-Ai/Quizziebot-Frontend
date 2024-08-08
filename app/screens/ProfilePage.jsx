@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 import { useFocusEffect } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { LineChart } from 'react-native-chart-kit';
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,14 +17,9 @@ const ProfilePage = ({ navigation }) => {
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
   const [deferredLoading, setDeferredLoading] = useState(false);
-  const achievements = [
-    { id: 1, label: 'Quizzle', value: '85', icon: images.logo1 },
-    { id: 2, label: 'Lifetime Point', value: '245,679', icon: images.coins },
-    { id: 3, label: 'Quiz Passed', value: '124', icon: images.quizpassedimg },
-    { id: 4, label: 'Top 3 Positions', value: '38', icon: images.top3img },
-    { id: 5, label: 'Challenge Passed', value: '269', icon: images.challengepassedimg },
-    { id: 6, label: 'Fastest Record', value: '72', icon: images.avgtime },
-  ];
+  const [profileData, setProfileData] = useState({});
+  const [achievements, setAchievements] = useState([]);
+  const [iqData, setIqData] = useState({ labels: [], datasets: [{ data: [] }] });
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -43,6 +38,35 @@ const ProfilePage = ({ navigation }) => {
         setCoins(data.coins != null ? data.coins : 0);
 
         await AsyncStorage.setItem('userId', data.userId);
+
+        // Fetch profile data from the new API
+        const profileResponse = await axios.get(`https://api.quizziebot.com/api/profile/${data.userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const profileData = profileResponse.data;
+        setProfileData(profileData);
+        console.log(profileData);
+        const achievementsData = [
+          { id: 1, label: 'Classic Games', value: profileData.classicGamesPlayed, icon: images.logo1 },
+          { id: 2, label: 'Lifetime Point', value: profileData.totalPlays, icon: images.coins },
+          { id: 3, label: 'Daily Streak', value: profileData.achievements.streak, icon: images.quizpassedimg },
+          { id: 4, label: 'Top 3 Positions', value: profileData.achievements.topPositions, icon: images.top3img },
+          { id: 5, label: 'Challenge Passed', value: profileData.achievements.challengePassed, icon: images.challengepassedimg },
+          { id: 6, label: 'Total Time Spent(sec)', value: profileData.totalTimeSpent, icon: images.avgtime },
+        ];
+
+        setAchievements(achievementsData);
+
+        const iqGraphData = profileData.iqGraph.map(item => item.iq);
+        const iqGraphLabels = profileData.iqGraph.map((item, index) => `${index + 1}`);
+
+        setIqData({
+          labels: iqGraphLabels,
+          datasets: [{ data: iqGraphData }],
+        });
       } else {
         navigation.navigate('SignInFirst');
       }
@@ -109,10 +133,10 @@ const ProfilePage = ({ navigation }) => {
         <View style={styles.profileSection}>
           <Image source={images.profilepic} style={styles.profileImage} />
           <View style={styles.usernameContainer}>
-            <Text style={styles.username}>{username}</Text>
-            <Text style={styles.userHandle}>@johnbrown_12</Text>
+            <Text style={styles.username}>{profileData.firstname} {profileData.lastname}</Text>
+            <Text style={styles.userHandle}>@{profileData.username}</Text>
           </View>
-          <TouchableOpacity style={styles.editProfileButton}onPress={() => navigation.navigate('EditProfilePage')}>
+          <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate('EditProfilePage')}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
@@ -121,26 +145,57 @@ const ProfilePage = ({ navigation }) => {
           <View style={styles.statisticsSection}>
             <View style={styles.statisticsRow}>
               <View style={styles.statisticBox1}>
-                <Text style={styles.statisticValue}>45</Text>
-                <Text style={styles.statisticLabel}>Quizzle</Text>
+                <Text style={styles.statisticValue}>{profileData.classicGamesPlayed}</Text>
+                <Text style={styles.statisticLabel}>Classic Games</Text>
               </View>
               <View style={styles.statisticBox2}>
-                <Text style={styles.statisticValue}>5.6M</Text>
-                <Text style={styles.statisticLabel}>Plays</Text>
+                <Text style={styles.statisticValue}>{profileData.totalPlays}</Text>
+                <Text style={styles.statisticLabel}>Total Games</Text>
               </View>
               <View style={styles.statisticBox}>
-                <Text style={styles.statisticValue}>16.8M</Text>
-                <Text style={styles.statisticLabel}>Rank</Text>
+                <Text style={styles.statisticValue}>{profileData.rank}</Text>
+                <Text style={styles.statisticLabel}> National Rank</Text>
               </View>
             </View>
           </View>
 
-           <Text style={styles.statisticsTitle}>My Statistics</Text>
+          <Text style={styles.statisticsTitle}>My Statistics</Text>
 
           <View style={styles.chartContainer}>
-            <Text style={styles.chartTitle}>Your Point this Week</Text>
+            <Text style={styles.chartTitle}>Your IQ Progress</Text>
             <View style={styles.chart}>
-              <Text style={{ color: '#FFF' }}>Chart goes here</Text>
+              <LineChart
+                data={iqData}
+                width={width * 0.9} // from react-native
+                height={220}
+                yAxisLabel=""
+                yAxisSuffix=""
+                yAxisInterval={1} // optional, defaults to 1
+                chartConfig={{
+                  backgroundColor: '#0000ff',
+                  backgroundGradientFrom: '#0000ff',
+                  backgroundGradientTo: '#87CEFA',
+                  decimalPlaces: 0, // optional, defaults to 2dp
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
+                  },
+                  propsForDots: {
+                    r: '6',
+                    strokeWidth: '2',
+                    stroke: '#87CEFA',
+                  },
+                }}
+                bezier
+                style={{
+                  marginVertical: 8,
+                  borderRadius: 16,
+                }}
+                formatXLabel={(label) => `${label}`}
+              />
+              <Text style={styles.axisLabelX}>No.of Games</Text>
+              <Text style={styles.axisLabelY}>IQ</Text>
             </View>
           </View>
 
@@ -158,7 +213,7 @@ const ProfilePage = ({ navigation }) => {
               ))}
             </View>
           </View>
-        </ScrollView> 
+        </ScrollView>
       </SafeAreaView>
       <Footer navigation={navigation} />
     </ImageBackground>
@@ -302,55 +357,44 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
   },
   statisticsSection: {
-    // borderColor:"black",
-    // borderWidth:1
     marginTop: hp(2),
-    marginHorizontal:wp(4),
+    marginHorizontal: wp(4),
     paddingHorizontal: 16,
     padding: 5,
     borderColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderTopWidth:1
-
+    borderTopWidth: 1,
   },
   statisticsTitle: {
-    marginTop:30,
+    marginTop: 30,
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontFamily: 'Nunito',
-    // borderWidth:2,
-    marginLeft:14
-   
-    
+    marginLeft: 14,
   },
   statisticsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // backgroundColor: 'rgba(255, 255, 255, 0.1)',
     padding: 10,
-    // borderRadius: 10,
-    
-    
   },
   statisticBox: {
     alignItems: 'center',
     flex: 1,
-    borderColor:"#FFFFFF",
-    // borderRightWidth:2
+    borderColor: "#FFFFFF",
   },
   statisticBox1: {
     alignItems: 'center',
     flex: 1,
-    borderColor:"#FFFFFF",
-    borderRightWidth:1
+    borderColor: "#FFFFFF",
+    borderRightWidth: 1,
   },
   statisticBox2: {
     alignItems: 'center',
     flex: 1,
-    borderColor:"#FFFFFF",
-    borderRightWidth:1
+    borderColor: "#FFFFFF",
+    borderRightWidth: 1,
   },
   statisticValue: {
     fontSize: 18,
@@ -367,7 +411,7 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     marginTop: hp(2),
-    paddingHorizontal:0,
+    paddingHorizontal: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 10,
     paddingVertical: 20,
@@ -381,6 +425,20 @@ const styles = StyleSheet.create({
   },
   chart: {
     alignItems: 'center',
+  },
+  axisLabelX: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  axisLabelY: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    transform: [{ rotate: '-90deg' }],
   },
   achievementsSection: {
     marginTop: hp(2),
@@ -408,20 +466,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     padding: 10,
-    backgroundColor:"#FFFFFF",
-    
+    backgroundColor: "#FFFFFF",
   },
   iconAndValue: {
     flexDirection: 'row',
     alignItems: 'center',
-    
-    width:"75%",
+    width: "75%",
   },
   achievementIcon: {
     width: 32,
     height: 32,
     marginRight: 5,
-    
   },
   achievementText: {
     fontSize: 14,
@@ -446,7 +501,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#F5F5F5',
     paddingBottom: hp(4),
     paddingHorizontal: '5%',
-    
   },
   footerButton: {
     alignItems: 'center',

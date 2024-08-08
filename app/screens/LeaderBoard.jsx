@@ -36,26 +36,28 @@ const LeaderBoard = ({ navigation }) => {
         setUsername(userData.username);
         setCoins(userData.coins != null ? userData.coins : 0);
         setUserId(userData.userId);
-        setUserCountry(userData.country); // Assuming 'country' is part of the user data
+        setUserCountry(userData.country);
 
         await AsyncStorage.setItem('userId', userData.userId);
 
-        const leaderboardResponse = await axios.get(
-          activeTab === 'Global' ? 
-            'https://api.quizziebot.com/api/leaderboard/global' : 
-            `https://api.quizziebot.com/api/leaderboard/local?country=${userData.country}`,
-          {
+        // Fetch leaderboard and user rank data in parallel
+        const [leaderboardResponse, userRankResponse] = await Promise.all([
+          axios.get(
+            activeTab === 'Global' ? 
+              'https://api.quizziebot.com/api/leaderboard/global' : 
+              `https://api.quizziebot.com/api/leaderboard/local?country=${userData.country}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          ),
+          axios.get(`https://api.quizziebot.com/api/leaderboard/user/${userData.userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
-        );
-
-        const userRankResponse = await axios.get(`https://api.quizziebot.com/api/leaderboard/user/${userData.userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+          })
+        ]);
 
         const leaderboardData = leaderboardResponse.data.map(item => ({
           id: item.userId,
@@ -111,7 +113,6 @@ const LeaderBoard = ({ navigation }) => {
           <View style={styles.topThreeItem2}>
             <Image source={images.profilepic} style={styles.topThreeAvatar2} />
             <View style={styles.topnum2}>
-
               <Text style={{ marginTop: wp(.5), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>2</Text>
             </View>
             <Text style={styles.topThreeName}>{topThree[1].name}</Text>
@@ -131,7 +132,6 @@ const LeaderBoard = ({ navigation }) => {
           <View style={styles.topThreeItem3}>
             <Image source={images.profilepic} style={styles.topThreeAvatar3} />
             <View style={styles.topnum3}>
-
               <Text style={{ marginTop: wp(.5), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>3</Text>
             </View>
             <Text style={styles.topThreeName}>{topThree[2].name}</Text>
@@ -299,8 +299,6 @@ const styles = StyleSheet.create({
     width: wp(85),
     height:wp(40),
     marginTop:wp(7),
-    
-
   },
   topThreeContainercurve:{
     flexDirection: 'row',
@@ -311,10 +309,7 @@ const styles = StyleSheet.create({
     height:wp(25),
     borderRadius:wp(4),
     backgroundColor: "#F0F0F0",
-    
   },
-
-  // },
   topThreeItemFirst: {
     alignItems: 'center',
     top: -wp(4),
@@ -323,21 +318,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: wp(7),
     borderTopRightRadius: wp(7),
-    
-
   },
   topThreeItem2:{
     alignItems: "center",
     top: -wp(8),
     marginLeft: wp(4),
-    
-    
   },
   topThreeItem3:{
     alignItems: "center",
     top: -wp(8),
     marginRight: wp(4),
-    
   },
   topThreeAvatar: {
     width: wp(18),
@@ -361,34 +351,24 @@ const styles = StyleSheet.create({
   topnum2:{
     width: wp(6),
     height: wp(5),
-    // textAlignVertical:"center",
     alignItems:"center",
-    // borderColor: "#009BD6",
     borderRadius:wp(3),
     backgroundColor:"#009BD6"
-    
   },
   topnum3:{
     width: wp(6),
     height: wp(5),
-    // textAlignVertical:"center",
-   alignItems:"center",
-    // borderColor: "#009BD6",
+    alignItems:"center",
     borderRadius:wp(3),
     backgroundColor:"#00D95F"
-    
   },
   topnum1:{
     width: wp(7),
     height: wp(6),
-    // textAlignVertical:"center",
-   alignItems:"center",
-    // borderColor: "#009BD6",
+    alignItems:"center",
     borderRadius:wp(3),
     backgroundColor:"#FFAA00",
     top: -wp(7)
-    
-    
   },
   topThreeAvatar3: {
     width: wp(15),
@@ -404,7 +384,6 @@ const styles = StyleSheet.create({
     height: wp(8),
     bottom:-wp(3.5),
     marginTop:-wp(11),
-    
     top: -wp(4)
   },
   topThreeName: {
@@ -412,7 +391,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000000',
     fontFamily: 'Nunito',
-
   },
   topThreeName1: {
     fontSize: wp(4),
@@ -420,7 +398,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     top: -wp(7),
     fontFamily: 'Nunito',
-   
   },
   topThreePoints: {
     fontSize: wp(3),
@@ -484,7 +461,7 @@ const styles = StyleSheet.create({
     marginTop:wp(13),
     backgroundColor: "#F0F0F0",
     borderRadius: wp(4),
-     marginBottom:-wp(10),
+    marginBottom:-wp(10),
     marginHorizontal:wp(2.5)
   },
   leaderboardItem: {

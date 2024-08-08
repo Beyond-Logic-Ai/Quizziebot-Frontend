@@ -13,11 +13,16 @@ import CreateQuizzieButton from '../components/CreateQuizzieButton';
 
 const { width, height } = Dimensions.get('window');
 
+// Import your profile images
+import maleProfilePic from '../../assets/images/profile-male.png';
+import femaleProfilePic from '../../assets/images/profile-female.png';
+
 const HomePageScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
   const [deferredLoading, setDeferredLoading] = useState(false);
+  const [profilePic, setProfilePic] = useState(maleProfilePic); // Default to male profile picture
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -35,6 +40,13 @@ const HomePageScreen = ({ navigation }) => {
         setUsername(data.username);
         setCoins(data.coins != null ? data.coins : 0);
         
+        // Assign profile picture based on gender
+        if (data.gender === 'Female') {
+          setProfilePic(femaleProfilePic);
+        } else {
+          setProfilePic(maleProfilePic);
+        }
+
         await AsyncStorage.setItem('userId', data.userId);
       } else {
         navigation.navigate('SignInFirst');
@@ -82,19 +94,19 @@ const HomePageScreen = ({ navigation }) => {
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover">
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Image source={images.profilepic} style={styles.profileImage} />
+          <Image source={profilePic} style={styles.profileImage} />
           <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
           
-            <View style={styles.coinContainer}>
-              <Text style={styles.coinText}>{coins}</Text>
-              <View style={styles.coinborder}>
+          <View style={styles.coinContainer}>
+            <Text style={styles.coinText}>{coins}</Text>
+            <View style={styles.coinborder}>
               <Image source={images.coin} style={styles.coinImage} />
-              </View>
             </View>
+          </View>
           
           <Image source={images.badge} style={styles.badgeImage} />
           <TouchableOpacity  onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-          <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
+            <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
           </TouchableOpacity>
         </View>
 
@@ -114,11 +126,10 @@ const HomePageScreen = ({ navigation }) => {
                   </LinearGradient>                  
                 </TouchableOpacity>
                 <CreateQuizzieButton
-              title="Create your own quiz by QUIZZIE BOT"
-              screenName="CreatingOwnQuizPage"
-              navigation={navigation}
-            
-            />
+                  title="Create your own quiz by QUIZZIE BOT"
+                  screenName="CreatingOwnQuizPage"
+                  navigation={navigation}
+                />
               </View>
             </View>
           </ImageBackground>
@@ -135,11 +146,11 @@ const Footer = ({ navigation }) => (
       <Fontisto name="home" size={32} color="#000" />
       <Text style={styles.footerText}>Home</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.footerButton}onPress={() => navigation.navigate('ProfilePage')}>
+    <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('ProfilePage')}>
       <Ionicons name="person-outline" size={32} color="#000" />
       <Text style={styles.footerText}>Profile</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.footerButton}onPress={() => navigation.navigate('LeaderBoard')}>
+    <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('LeaderBoard')}>
       <Ionicons name="trophy-outline" style={styles.footerIcon} />
       <Text style={styles.footerText}>Leaderboard</Text>
     </TouchableOpacity>
@@ -153,7 +164,6 @@ const Footer = ({ navigation }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
   backgroundImage: {
     flex: 1,
@@ -172,64 +182,42 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: hp(1.5),
     backgroundColor: 'rgba(0, 0, 0, 0.03)',
-    
-    
   },
   profileImage: {
     width: 43,
     height: 43,
     borderRadius: 22,
-    // borderColor: 'black',
-    // borderWidth: 2,
-    
   },
   username: {
-    flex:0.95,
-    marginLeft:5,
+    flex: 0.95,
+    marginLeft: 5,
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'Nunito',
-    
-    
-    
   },
-  // coinBadgeContainer: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   borderColor: 'black',
-  //   borderWidth: 2,
-  // },
   coinContainer: {
-    left:5,
+    left: 5,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 16,
     paddingHorizontal: 5,
     paddingVertical: 3,
-   
   },
-  coinborder:
-  {
+  coinborder: {
     right: -2,
     backgroundColor: 'blue',
     width: 27,
     height: 27,
     borderRadius: 15,
-    alignItems:"center"
-    
-    
+    alignItems: "center"
   },
   coinImage: {
-    top:2,
-    alignSelf:"center",
+    top: 2,
+    alignSelf: "center",
     width: 22,
     height: 22,
-    // borderRadius: 12,
-    // borderColor:"black",
-    // borderWidth:2,
-    
   },
   coinText: {
     left: -4,
@@ -243,13 +231,11 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     width: 37,
     height: 37,
-    
   },
   notificationIcon: {
     marginLeft: 7,
     fontSize: 29,
     color: '#FFFFFF',
-
   },
   overlayImage: {
     flex: 1,
@@ -284,8 +270,6 @@ const styles = StyleSheet.create({
     width: 250,
     height: 50,
     borderRadius: 20,
-    // borderColor: 'black',
-    // borderWidth: 2,
   },
   play: {
     shadowColor: '#000',

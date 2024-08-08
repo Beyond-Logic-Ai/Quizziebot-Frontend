@@ -27,26 +27,20 @@ const QuizResultScreen = ({ route, navigation }) => {
             throw new Error('No answers provided');
           }
 
-          const formattedAnswers = answers
-            .filter(answer => answer.questionId !== null && answer.questionId !== undefined)
-            .map(answer => ({
-              questionId: answer.questionId,
-              selectedOption: answer.selectedOption,
-              timeTaken: answer.timeTaken,
-              answered: answer.answered,
-            }));
+          const formattedAnswers = answers.map(answer => ({
+            questionId: answer.questionId,
+            selectedOption: answer.selectedOption,
+            timeTaken: answer.timeTaken,
+            answered: answer.answered,
+          }));
 
-          const questionStatuses = answers
-            .filter(answer => answer.questionId !== null && answer.questionId !== undefined)
-            .map(answer => ({
-              questionId: answer.questionId,
-              isAnswered: !!answer.selectedOption,
-            }));
+          const questionStatuses = answers.map(answer => ({
+            questionId: answer.questionId,
+            isAnswered: !!answer.selectedOption,
+          }));
+          
 
           if (isMounted) {
-            console.log("Formatted Answers:", formattedAnswers);
-            console.log("Question Statuses:", questionStatuses);
-
             const response = await axios.post(
               'https://api.quizziebot.com/api/quizzes/submit',
               {
@@ -54,6 +48,7 @@ const QuizResultScreen = ({ route, navigation }) => {
                 quizId,
                 answers: formattedAnswers,
                 questionStatuses: questionStatuses,
+                
               },
               {
                 headers: {
@@ -80,7 +75,7 @@ const QuizResultScreen = ({ route, navigation }) => {
         }
       }
     };
-
+    
     submitQuizAndFetchResults();
 
     return () => {

@@ -1,36 +1,25 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
-import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView, ImageBackground, ActivityIndicator, TextInput, Modal, FlatList } from 'react-native';
+import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView, ImageBackground, ActivityIndicator, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import RNPickerSelect from 'react-native-picker-select';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
 
-const countries = [
-  'United States', 'Canada', 'United Kingdom', 'India', 'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola',
-  // Add more countries here...
-];
-
 const EditProfilePage = ({ navigation }) => {
   const [coins, setCoins] = useState(0);
   const [userData, setUserData] = useState({
-    username: 'John_Brown12',
-    firstName: 'John',
-    lastName: 'Brown',
-    email: 'john.brown@bu.edu',
-    dob: new Date('1995-12-27'),
-    country: 'United States',
+    userId: '', // Include userId in the state
+    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
   });
   const [loading, setLoading] = useState(true);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showCountryModal, setShowCountryModal] = useState(false);
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -46,12 +35,11 @@ const EditProfilePage = ({ navigation }) => {
 
         const data = response.data;
         setUserData({
+          userId: data.userId, // Store the userId
           username: data.username,
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          dob: new Date(data.dob),
-          country: data.country,
         });
         setCoins(data.coins != null ? data.coins : 0);
       } else {
@@ -80,7 +68,7 @@ const EditProfilePage = ({ navigation }) => {
       if (userSession) {
         const { token } = JSON.parse(userSession);
 
-        const response = await axios.post('https://api.quizziebot.com/api/update-profile', userData, {
+        const response = await axios.patch('https://api.quizziebot.com/api/profile/update', userData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -88,6 +76,8 @@ const EditProfilePage = ({ navigation }) => {
 
         if (response.status === 200) {
           alert('Profile updated successfully');
+          await AsyncStorage.removeItem('userSession');
+          navigation.navigate('SignInFirst');
         }
       }
     } catch (error) {
@@ -97,23 +87,6 @@ const EditProfilePage = ({ navigation }) => {
       }
     }
   };
-
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || userData.dob;
-    setShowDatePicker(false);
-    setUserData({ ...userData, dob: currentDate });
-  };
-
-  const renderCountryItem = ({ item }) => (
-    <TouchableOpacity onPress={() => {
-      setUserData({ ...userData, country: item });
-      setShowCountryModal(false);
-    }}>
-      <View style={styles.countryItem}>
-        <Text style={styles.countryText}>{item}</Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   if (loading) {
     return (
@@ -160,83 +133,14 @@ const EditProfilePage = ({ navigation }) => {
                 style={styles.infoTextInput}
                 value={userData[field]}
                 onChangeText={(text) => setUserData({ ...userData, [field]: text })}
+                autoCapitalize="none"
               />
             </View>
           ))}
-          <View style={styles.infoSection}>
-            <Text style={styles.infoLabel}>Date of Birth</Text>
-            <TouchableOpacity style={styles.inputWrapper} onPress={() => setShowDatePicker(true)}>
-              <Text style={[styles.infoTextInput, { color: userData.dob ? '#FFF' : '#999' }]}>
-                {userData.dob ? userData.dob.toDateString() : 'Enter your date of birth'}
-              </Text>
-              <Ionicons name="calendar" size={24} color="#FFF" style={styles.inlineIcon} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.infoSection}>
-            <Text style={styles.infoLabel}>Country</Text>
-            <TouchableOpacity style={styles.inputWrapper} onPress={() => setShowCountryModal(true)}>
-              <Text style={[styles.infoTextInput, userData.country ? styles.inputSelected : styles.inputPlaceholder]}>
-                {userData.country || 'Select Country'}
-              </Text>
-              <Ionicons name="chevron-down" size={24} color="#FFF" style={styles.inlineIcon} />
-            </TouchableOpacity>
-          </View>
           <TouchableOpacity style={styles.editProfileButton} onPress={handleSave}>
             <Text style={styles.editProfileButtonText}>Save</Text>
           </TouchableOpacity>
         </ScrollView>
-
-        <Modal
-          visible={showCountryModal}
-          onRequestClose={() => setShowCountryModal(false)}
-          transparent={true}
-          animationType="slide"
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>Select Your Country or Region</Text>
-                <TouchableOpacity onPress={() => setShowCountryModal(false)}>
-                  <Ionicons name="close" size={30} color="black" />
-                </TouchableOpacity>
-              </View>
-              <FlatList
-                data={countries}
-                renderItem={renderCountryItem}
-                keyExtractor={(item) => item}
-                contentContainerStyle={styles.countryList}
-              />
-            </View>
-          </View>
-        </Modal>
-
-        {showDatePicker && (
-          <Modal
-            visible={showDatePicker}
-            onRequestClose={() => setShowDatePicker(false)}
-            transparent={true}
-            animationType="slide"
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.datePickerContainer}>
-                <DateTimePicker
-                  value={userData.dob}
-                  mode="date"
-                  display="spinner"
-                  onChange={onChangeDate}
-                  maximumDate={new Date()}
-                  minimumDate={new Date(1900, 0, 1)}
-                />
-                <TouchableOpacity
-                  onPress={() => setShowDatePicker(false)}
-                  style={styles.closeButton}
-                >
-                  <Text style={styles.closeButtonText}>Done</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        )}
       </SafeAreaView>
     </ImageBackground>
   );
@@ -334,10 +238,7 @@ const styles = StyleSheet.create({
     marginTop: wp(2),
     fontWeight: 'bold',
     fontFamily: 'Nunito',
-  },
-  datePicker: {
-    width: '100%',
-    marginTop: wp(2),
+    autoCapitalize: 'none',
   },
   editProfileButton: {
     backgroundColor: '#FFFFFF',
@@ -355,72 +256,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingBottom: 50,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-  },
-  inlineIcon: {
-    position: 'absolute',
-    right: 10,
-  },
-  modalOverlay: {
-    flex: 1,
-    // backgroundColor: 'rgba(0,0,0)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 22,
-    borderTopLeftRadius: 17,
-    borderTopRightRadius: 17,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingVertical: 16,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  countryList: {
-    width: '100%',
-  },
-  countryItem: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#D3D3D3',
-  },
-  countryText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  datePickerContainer: {
-    backgroundColor: '#000',
-    padding: 30,
-    borderTopLeftRadius: 17,
-    borderTopRightRadius: 17,
-    justifyContent: 'center',
-  },
-  closeButton: {
-    backgroundColor: '#1877F2',
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  inputPlaceholder: {
-    color: '#999',
-  },
-  inputSelected: {
-    color: '#FFF',
   },
 });
 

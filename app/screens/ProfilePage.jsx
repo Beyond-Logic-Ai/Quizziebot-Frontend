@@ -50,11 +50,11 @@ const ProfilePage = ({ navigation }) => {
         setProfileData(profileData);
         console.log(profileData);
         const achievementsData = [
-          { id: 1, label: 'Classic Games', value: profileData.classicGamesPlayed, icon: images.logo1 },
-          { id: 2, label: 'Lifetime Point', value: profileData.totalPlays, icon: images.coins },
+          { id: 1, label: 'Average IQ', value: profileData.overallIq.toFixed(2), icon: images.logo1 },
+          { id: 2, label: 'Total Coins Collected', value: profileData.coins, icon: images.coins },
           { id: 3, label: 'Daily Streak', value: profileData.achievements.streak, icon: images.quizpassedimg },
-          { id: 4, label: 'Top 3 Positions', value: profileData.achievements.topPositions, icon: images.top3img },
-          { id: 5, label: 'Challenge Passed', value: profileData.achievements.challengePassed, icon: images.challengepassedimg },
+          { id: 4, label: 'Total XP', value: profileData.totalXp, icon: images.top3img },
+          { id: 5, label: 'Quiz Passed', value: profileData.achievements.quizPassed, icon: images.challengepassedimg },
           { id: 6, label: 'Total Time Spent(sec)', value: profileData.totalTimeSpent, icon: images.avgtime },
         ];
 

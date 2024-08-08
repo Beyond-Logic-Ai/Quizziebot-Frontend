@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -21,11 +21,14 @@ const CategoryButton = ({ name, colors, onPress }) => (
 );
 
 const ArcadeModes = ({ navigation, route }) => {
-  const { category } = route.params; // Get the category from params
+  const { category } = route.params;
 
   const handleCategoryPress = (difficulty) => {
-    navigation.navigate('ArcadeLoadingScreen', { category, difficulty }); // Pass category and difficulty
+    console.log('Selected difficulty:', difficulty);
+    navigation.navigate('ArcadeLoadingScreen', { category, difficulty });
   };
+
+  console.log('ArcadeModes mounted with category:', category);
 
   return (
     <View style={styles.container}>

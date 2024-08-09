@@ -1,15 +1,49 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { images } from '../../constants/images'; // Make sure this is the correct path to your image assets
+import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
 const OwnQuizWelcomePage = ({ navigation }) => {
+  const [sessionId, setSessionId] = useState(null);
+  
+  useEffect(() => {
+    const startSession = async () => {
+      try {
+        const userSession = await AsyncStorage.getItem('userSession');
+        const storedUserId = await AsyncStorage.getItem('userId');
+        
+        if (userSession && storedUserId) {
+          const { token } = JSON.parse(userSession);
+
+          const response = await axios.post(
+            `https://api.quizziebot.com/api/chat/startSession?userId=${storedUserId}`, 
+            {}, 
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          setSessionId(response.data.id);
+        } else {
+          navigation.navigate('SignInFirst');
+        }
+      } catch (error) {
+        console.error('Failed to start session:', error);
+      }
+    };
+
+    startSession();
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -38,7 +72,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
       
-      <Text style={styles.title}>Welcome to{'\n'}Quzzie Bot</Text>
+      <Text style={styles.title}>Welcome to{'\n'}Quizzie Bot</Text>
 
       <View style={styles.bottomContainer}>
         <Text style={styles.subtitle}>Ask anything, get your answer</Text>
@@ -49,7 +83,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
             placeholder="Type Here.."
             placeholderTextColor="#aaa"
           />
-          <TouchableOpacity style={styles.sendButton}onPress={() => navigation.navigate('OwnQuizChatPage')}>
+          <TouchableOpacity style={styles.sendButton} onPress={() => navigation.navigate('OwnQuizChatPage', { sessionId })}>
             <Icon name="send" size={20} color="#fff" />
           </TouchableOpacity>
         </View>

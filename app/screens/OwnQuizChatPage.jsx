@@ -1,22 +1,127 @@
-
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { images } from '../../constants/images'; // Ensure this is the correct path to your image assets
+import { images } from '../../constants/images';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OwnQuizChatPage = ({ navigation }) => {
   const [messages, setMessages] = useState([
-    { id: '1', type: 'bot', text: 'A neural network is a computational model inspired by the structure and functioning of the brain. Do you want a quiz for this content?' }
+    { id: '1', type: 'bot', text: 'Ask anything, get your answer' }
   ]);
   const [inputText, setInputText] = useState('');
+  const [sessionId, setSessionId] = useState(null);
 
-  const handleSend = () => {
-    if (inputText.trim()) {
-      setMessages([...messages, { id: (messages.length + 1).toString(), type: 'user', text: inputText }]);
+  useEffect(() => {
+    const startChatSession = async () => {
+      try {
+        const userSession = await AsyncStorage.getItem('userSession');
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (userSession && storedUserId) {
+          const { token } = JSON.parse(userSession);
+
+          const response = await axios.post(
+            `https://api.quizziebot.com/api/chat/startSession?userId=${storedUserId}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          setSessionId(response.data.id);
+        }
+      } catch (error) {
+        console.error('Error starting chat session:', error.message);
+      }
+    };
+
+    startChatSession();
+  }, []);
+
+  const handleSend = async () => {
+    if (inputText.trim() && sessionId) {
+      const userMessage = { id: (messages.length + 1).toString(), type: 'user', text: inputText };
+      setMessages([...messages, userMessage]);
+
+      try {
+        const userSession = await AsyncStorage.getItem('userSession');
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (userSession && storedUserId) {
+          const { token } = JSON.parse(userSession);
+
+          const response = await axios.post(
+            `https://api.quizziebot.com/api/chat/sendMessage?sessionId=${sessionId}&userId=${storedUserId}`,
+            inputText,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          const botMessage = { id: (messages.length + 2).toString(), type: 'bot', text: response.data.messages.slice(-1)[0].message };
+          setMessages((prevMessages) => [...prevMessages, botMessage]);
+
+          if (response.data.identifiedTopic) {
+            setTimeout(() => {
+              const quizPromptMessage = {
+                id: (messages.length + 3).toString(),
+                type: 'bot',
+                text: `Do you want a quiz on ${response.data.identifiedTopic}?`,
+              };
+              setMessages((prevMessages) => [...prevMessages, quizPromptMessage]);
+            }, 1000);
+          }
+        }
+      } catch (error) {
+        console.error('Error sending message:', error.message);
+      }
+
       setInputText(''); // Clear the input field after sending the message
+    }
+  };
+
+  const handleQuizDecision = async (decision) => {
+    if (decision && sessionId) {
+      const userSession = await AsyncStorage.getItem('userSession');
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (userSession && storedUserId) {
+        const { token } = JSON.parse(userSession);
+
+        try {
+          const response = await axios.post(
+            'https://api.quizziebot.com/api/quizzes/generate',
+            {
+              topic: messages.slice(-2)[0].text.split(' ')[5],
+              confirm: decision,
+              userId: storedUserId,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          if (response.data.questions) {
+            navigation.navigate('QuizQuestionScreen', {
+              questions: response.data.questions,
+              quizId: response.data.quizId,
+              userId: storedUserId,
+            });
+          }
+        } catch (error) {
+          console.error('Error generating quiz:', error.message);
+        }
+      }
+    } else {
+      navigation.navigate('HomePageScreen');
     }
   };
 
@@ -63,6 +168,22 @@ const OwnQuizChatPage = ({ navigation }) => {
             <Icon name="send" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
+        {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (
+          <View style={styles.decisionButtons}>
+            <TouchableOpacity
+              style={styles.decisionButton}
+              onPress={() => handleQuizDecision(true)}
+            >
+              <Text style={styles.decisionText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.decisionButton}
+              onPress={() => handleQuizDecision(false)}
+            >
+              <Text style={styles.decisionText}>No</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -128,7 +249,7 @@ const styles = StyleSheet.create({
     bottom: hp(4),
     width: wp(100),
     alignItems: 'center',
-    marginBottom:hp(2)
+    marginBottom: hp(2)
   },
   inputContainer: {
     flexDirection: 'row',
@@ -153,6 +274,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: wp(2),
+  },
+  decisionButtons: {
+    flexDirection: 'row',
+    marginTop: hp(1),
+  },
+  decisionButton: {
+    backgroundColor: '#0048BF',
+    padding: hp(1.5),
+    borderRadius: wp(2),
+    marginHorizontal: wp(2),
+  },
+  decisionText: {
+    color: '#fff',
+    fontSize: wp(4),
+    fontFamily: 'Nunito',
   },
 });
 

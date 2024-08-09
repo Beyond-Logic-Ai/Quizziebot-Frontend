@@ -33,6 +33,8 @@ import LeaderBoard from '../app/screens/LeaderBoard';
 import EditProfilePage from '../app/screens/EditProfilePage';
 import OwnQuizWelcomePage from '../app/screens/OwnQuizWelcomePage';
 import OwnQuizChatPage from '../app/screens/OwnQuizChatPage';
+import OwnQuizLoadingPage from '../app/screens/OwnQuizLoadingPage';
+import OwnQuizQuestionScreen from '../app/screens/OwnQuizQuestionScreen';
 const Stack = createNativeStackNavigator();
 
 function Navigation() {
@@ -112,6 +114,8 @@ function Navigation() {
         <Stack.Screen name="EditProfilePage" component={EditProfilePage} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="OwnQuizWelcomePage" component={OwnQuizWelcomePage} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="OwnQuizChatPage" component={OwnQuizChatPage} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="OwnQuizLoadingPage" component={OwnQuizLoadingPage} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="OwnQuizQuestionScreen" component={OwnQuizQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
       </Stack.Navigator>
       {routeNameRef.current !== 'Splash' && <BackgroundMusic />}
     </NavigationContainer>

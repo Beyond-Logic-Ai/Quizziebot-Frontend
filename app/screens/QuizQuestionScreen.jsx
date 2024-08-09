@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from 'react-native-circular-progress-indicator';
@@ -13,32 +13,32 @@ const QuizQuestionScreen = ({ route, navigation }) => {
   const [timer, setTimer] = useState(10);
   const [isCorrect, setIsCorrect] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const timerInterval = useRef(null);
 
   useEffect(() => {
-    if (timer > 0) {
-      const timerId = setTimeout(() => setTimer(timer - 1), 1000);
-      return () => clearTimeout(timerId);
-    } else {
-      handleAnswer(null);
-    }
-  }, [timer]);
+    startTimer();
 
-  useEffect(() => {
-    if (isCorrect !== null) {
-      const timerId = setTimeout(() => {
-        if (currentQuestionIndex + 1 < questions.length) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setTimer(10);
-          setIsCorrect(null);
-        } else {
-          navigation.navigate('QuizResultScreen', { userId, quizId, answers });
+    return () => {
+      clearInterval(timerInterval.current);
+    };
+  }, [currentQuestionIndex]);
+
+  const startTimer = () => {
+    setTimer(10);
+    timerInterval.current = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 1) {
+          clearInterval(timerInterval.current);
+          handleAnswer(null); // Handle when time runs out
+          return 10;
         }
-      }, 2000);
-      return () => clearTimeout(timerId);
-    }
-  }, [isCorrect]);
+        return prevTimer - 1;
+      });
+    }, 1000);
+  };
 
   const handleAnswer = (selectedAnswer) => {
+    clearInterval(timerInterval.current); // Stop the timer when the user answers
     const currentQuestion = questions[currentQuestionIndex];
     const isAnswerCorrect = selectedAnswer === currentQuestion.correctOption;
     setIsCorrect(isAnswerCorrect);
@@ -46,23 +46,31 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     const answerData = {
       questionId: currentQuestion.questionId,
       selectedOption: selectedAnswer,
-      timeTaken: 10 - timer,
+      timeTaken: 10 - timer, // Time taken before the answer
       answered: selectedAnswer !== null,
     };
-    setAnswers((prevAnswers) => [...prevAnswers, answerData]);
 
-    if (isCorrect !== null) {
-      const timerId = setTimeout(() => {
-        if (currentQuestionIndex + 1 < questions.length) {
+    // Update the answers array and then check if it's the last question
+    setAnswers((prevAnswers) => {
+      const updatedAnswers = [...prevAnswers, answerData];
+      if (currentQuestionIndex + 1 === questions.length) {
+        submitResults(updatedAnswers);
+      } else {
+        setTimeout(() => {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setTimer(10);
           setIsCorrect(null);
-        } else {
-          navigation.navigate('QuizResultScreen', { userId, quizId, answers });
-        }
-      }, 2000);
-      return () => clearTimeout(timerId);
-    }
+        }, 500); // Short delay before moving to the next question
+      }
+      return updatedAnswers;
+    });
+  };
+
+  const submitResults = (finalAnswers) => {
+    console.log("All questions answered, submitting results:", finalAnswers);
+    // API call logic here
+
+    // Navigate to results screen after API call is made
+    navigation.navigate('QuizResultScreen', { userId, quizId, answers: finalAnswers });
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -71,16 +79,20 @@ const QuizQuestionScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.questionCounter}>{`${currentQuestionIndex + 1}/${questions.length}`}</Text>
-        <CircularProgress
-          value={timer}
-          radius={25}
-          duration={10000}
-          textColor="#000"
-          maxValue={10}
-          initialValue={10}
-          showProgressValue={true}
-          activeStrokeColor="#0060FF"
-        />
+        <View style={styles.circularProgressContainer}>
+          <CircularProgress
+            value={timer}
+            radius={25}
+            duration={1000}
+            textColor="#000"
+            maxValue={10}
+            initialValue={10}
+            showProgressValue={true}
+            activeStrokeColor="#0060FF"
+            inActiveStrokeColor="#E5E5E5"
+            inActiveStrokeOpacity={0.2}
+          />
+        </View>
         <Ionicons name="close" size={24} color="#000" onPress={() => navigation.navigate('HomePageScreen')} />
       </View>
       <View style={styles.robotImageContainer}>
@@ -207,6 +219,10 @@ const styles = StyleSheet.create({
   incorrectFeedback: {
     fontSize: 18,
     color: 'red',
+  },
+  circularProgressContainer: {
+    width: 50,
+    height: 50,
   },
 });
 

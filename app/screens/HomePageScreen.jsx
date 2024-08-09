@@ -17,12 +17,28 @@ const { width, height } = Dimensions.get('window');
 import maleProfilePic from '../../assets/images/profile-male.png';
 import femaleProfilePic from '../../assets/images/profile-female.png';
 
+// Import your badge images
+import BronzeStar from '../../assets/images/BronzeStar.png';
+import SilverStar from '../../assets/images/SilverStar.png';
+import BronzeShield from '../../assets/images/BronzeShield.png';
+import GoldWings from '../../assets/images/GoldWings.png';
+import PlatinumWings from '../../assets/images/PlatinumWings.png';
+
 const HomePageScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
   const [deferredLoading, setDeferredLoading] = useState(false);
   const [profilePic, setProfilePic] = useState(maleProfilePic); // Default to male profile picture
+  const [badgeImage, setBadgeImage] = useState(BronzeStar); // Default badge image
+
+  const leagueToBadgeImage = {
+    BronzeStar: BronzeStar,
+    SilverStar: SilverStar,
+    BronzeShield: BronzeShield,
+    GoldWings: GoldWings,
+    PlatinumWings: PlatinumWings,
+  };
 
   const fetchUserData = useCallback(async () => {
     try {
@@ -39,12 +55,17 @@ const HomePageScreen = ({ navigation }) => {
         const data = response.data;
         setUsername(data.username);
         setCoins(data.coins != null ? data.coins : 0);
-        
-        // Assign profile picture based on gender
+
+        // Set the profile picture based on gender
         if (data.gender === 'Female') {
           setProfilePic(femaleProfilePic);
         } else {
           setProfilePic(maleProfilePic);
+        }
+
+        // Set the badge image based on the league
+        if (data.league && leagueToBadgeImage[data.league]) {
+          setBadgeImage(leagueToBadgeImage[data.league]);
         }
 
         await AsyncStorage.setItem('userId', data.userId);
@@ -95,7 +116,7 @@ const HomePageScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Image source={profilePic} style={styles.profileImage} />
-          <Text style={styles.username}>{username || 'Shiva Nagendra'}</Text>
+          <Text style={styles.username}>{username || 'User Not Found'}</Text>
           
           <View style={styles.coinContainer}>
             <Text style={styles.coinText}>{coins}</Text>
@@ -104,7 +125,7 @@ const HomePageScreen = ({ navigation }) => {
             </View>
           </View>
           
-          <Image source={images.badge} style={styles.badgeImage} />
+          <Image source={badgeImage} style={styles.badgeImage} />
           <TouchableOpacity  onPress={() => navigation.navigate('SettingsHomePageScreen')}>
             <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
           </TouchableOpacity>

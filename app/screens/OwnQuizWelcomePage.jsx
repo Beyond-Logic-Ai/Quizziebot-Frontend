@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { images } from '../../constants/images';
 
 const { width } = Dimensions.get('window');
 
 const OwnQuizWelcomePage = ({ navigation }) => {
   const [sessionId, setSessionId] = useState(null);
-  
+  const [messages, setMessages] = useState([
+    { id: '1', type: 'bot', text: 'Ask anything, get your answer' }
+  ]);
+  const [inputText, setInputText] = useState('');
+  const [identifiedTopic, setIdentifiedTopic] = useState(null);
+
   useEffect(() => {
     const startSession = async () => {
       try {
@@ -44,6 +49,88 @@ const OwnQuizWelcomePage = ({ navigation }) => {
     startSession();
   }, [navigation]);
 
+  const handleSend = async () => {
+    if (inputText.trim() && sessionId) {
+      const userMessage = { id: (messages.length + 1).toString(), type: 'user', text: inputText };
+      setMessages([...messages, userMessage]);
+
+      try {
+        const userSession = await AsyncStorage.getItem('userSession');
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (userSession && storedUserId) {
+          const { token } = JSON.parse(userSession);
+
+          const response = await axios.post(
+            `https://api.quizziebot.com/api/chat/sendMessage?sessionId=${sessionId}&userId=${storedUserId}`,
+            { message: inputText },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          const botMessage = { id: (messages.length + 2).toString(), type: 'bot', text: response.data.messages.slice(-1)[0].message };
+          setMessages((prevMessages) => [...prevMessages, botMessage]);
+
+          if (response.data.identifiedTopic) {
+            setIdentifiedTopic(response.data.identifiedTopic);
+            setTimeout(() => {
+              const quizPromptMessage = {
+                id: (messages.length + 3).toString(),
+                type: 'bot',
+                text: `Do you want a quiz on ${response.data.identifiedTopic}?`,
+              };
+              setMessages((prevMessages) => [...prevMessages, quizPromptMessage]);
+            }, 1000);
+          }
+        }
+      } catch (error) {
+        console.error('Error sending message:', error.message);
+      }
+
+      setInputText(''); // Clear the input field after sending the message
+    }
+  };
+
+  const handleQuizDecision = async (decision) => {
+    if (decision && sessionId && identifiedTopic) {
+      const userSession = await AsyncStorage.getItem('userSession');
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (userSession && storedUserId) {
+        const { token } = JSON.parse(userSession);
+
+        try {
+          // Navigate to loading screen and fetch questions in the loading page
+          navigation.navigate('OwnQuizLoadingPage', {
+            sessionId,
+            identifiedTopic,
+            userId: storedUserId,
+            token,
+          });
+        } catch (error) {
+          console.error('Error handling quiz decision:', error.message);
+        }
+      }
+    } else {
+      navigation.navigate('HomePageScreen');
+    }
+  };
+
+  const renderItem = ({ item }) => {
+    return item.type === 'user' ? (
+      <View style={styles.userMessageContainer}>
+        <Text style={styles.userMessageText}>{item.text}</Text>
+      </View>
+    ) : (
+      <View style={styles.botMessageContainer}>
+        <Image source={images.logo2} style={styles.botImage} />
+        <Text style={styles.botMessageText}>{item.text}</Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -52,7 +139,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.closeText}>Close</Text>
       </View>
-      
+
       <View style={styles.robotImageContainer}>
         <Svg height="75%" width="75%" viewBox="0 0 100 100" style={styles.gradient}>
           <Defs>
@@ -74,19 +161,43 @@ const OwnQuizWelcomePage = ({ navigation }) => {
       
       <Text style={styles.title}>Welcome to{'\n'}Quizzie Bot</Text>
 
+      <FlatList
+        data={messages}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        style={styles.chatContainer}
+        contentContainerStyle={{ paddingBottom: hp(10) }} // Add padding to avoid overlap with input field
+      />
+
       <View style={styles.bottomContainer}>
-        <Text style={styles.subtitle}>Ask anything, get your answer</Text>
-        
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Type Here.."
             placeholderTextColor="#aaa"
+            value={inputText}
+            onChangeText={setInputText}
           />
-          <TouchableOpacity style={styles.sendButton} onPress={() => navigation.navigate('OwnQuizChatPage', { sessionId })}>
+          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
             <Icon name="send" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
+        {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (
+          <View style={styles.decisionButtons}>
+            <TouchableOpacity
+              style={styles.decisionButton}
+              onPress={() => handleQuizDecision(true)}
+            >
+              <Text style={styles.decisionText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.decisionButton}
+              onPress={() => handleQuizDecision(false)}
+            >
+              <Text style={styles.decisionText}>No</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -138,16 +249,47 @@ const styles = StyleSheet.create({
     color: '#000',
     marginTop: wp(4),
   },
+  chatContainer: {
+    flex: 1,
+    paddingHorizontal: wp(5),
+    paddingTop: hp(2),
+  },
+  userMessageContainer: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#0048BF',
+    padding: hp(1.5),
+    borderRadius: wp(3),
+    marginBottom: hp(2),
+  },
+  userMessageText: {
+    color: '#fff',
+    fontSize: wp(4),
+    fontFamily: 'Nunito',
+  },
+  botMessageContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#f0f0f0',
+    padding: hp(2),
+    borderRadius: wp(3),
+    marginBottom: hp(2),
+  },
+  botImage: {
+    width: hp(5),
+    height: hp(5),
+    resizeMode: 'contain',
+    marginRight: wp(3),
+  },
+  botMessageText: {
+    color: '#000',
+    fontSize: wp(4),
+    fontFamily: 'Nunito',
+    flex: 1,
+    flexWrap: 'wrap',
+  },
   bottomContainer: {
-    position: 'absolute',
-    bottom: hp(4),
     width: wp(100),
     alignItems: 'center',
-  },
-  subtitle: {
-    fontSize: hp(2),
-    fontFamily: 'Nunito',
-    marginBottom: hp(3),
+    paddingBottom: hp(2),
   },
   inputContainer: {
     flexDirection: 'row',
@@ -157,14 +299,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: wp(1),
     paddingHorizontal: wp(2),
-    borderWidth: wp(.2),
+    borderWidth: wp(0.2),
     borderColor: '#ccc',
-    marginBottom:hp(2)
   },
   input: {
     flex: 1,
     fontSize: wp(4),
-    
   },
   sendButton: {
     backgroundColor: '#0048BF',
@@ -174,6 +314,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: wp(2),
+  },
+  decisionButtons: {
+    flexDirection: 'row',
+    marginTop: hp(1),
+  },
+  decisionButton: {
+    backgroundColor: '#0048BF',
+    padding: hp(1.5),
+    borderRadius: wp(2),
+    marginHorizontal: wp(2),
+  },
+  decisionText: {
+    color: '#fff',
+    fontSize: wp(4),
+    fontFamily: 'Nunito',
   },
 });
 

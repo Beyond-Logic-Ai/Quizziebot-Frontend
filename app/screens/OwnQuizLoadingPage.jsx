@@ -4,16 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 
 const { width, height } = Dimensions.get('window');
 
-const OwnQuizLoadingPage = () => {
+const OwnQuizLoadingPage = ({ route }) => {
   const navigation = useNavigation();
   const [progress, setProgress] = useState(new Animated.Value(0));
   const [error, setError] = useState(null);
+
+  const { sessionId, identifiedTopic, userId, token } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,39 +23,31 @@ const OwnQuizLoadingPage = () => {
 
     const loadQuestions = async () => {
       try {
-        const userSession = await AsyncStorage.getItem('userSession');
-        const storedUserId = await AsyncStorage.getItem('userId');
-
-        console.log('userSession:', userSession);
-        console.log('storedUserId:', storedUserId);
-
-        if (userSession && storedUserId) {
-          const { token } = JSON.parse(userSession);
-
-          // Check for token validity
-          if (!token) {
-            throw new Error('Token is missing');
-          }
-
-          const response = await axios.get(`https://api.quizziebot.com/api/quizzes/questions?userId=${storedUserId}&mode=classic`, {
+        const response = await axios.post(
+          'https://api.quizziebot.com/api/quizzes/generate',
+          {
+            topic: identifiedTopic,
+            confirm: true,
+            userId: userId,
+          },
+          {
             headers: {
               Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
             },
-          });
+          }
+        );
 
-          const questions = response.data.questions;
-          const quizId = response.data.quizId;
-          console.log(questions)
-          Animated.timing(progress, {
-            toValue: 1,
-            duration: 2000, // 2 seconds
-            useNativeDriver: false,
-          }).start(() => {
-            navigation.replace('OwnQuizQuestionScreen', { questions, quizId, userId: storedUserId });
-          });
-        } else {
-          navigation.navigate('SignInFirst');
-        }
+        const questions = response.data.questions;
+        const quizId = response.data.quizId;
+
+        Animated.timing(progress, {
+          toValue: 1,
+          duration: 2000, // 2 seconds
+          useNativeDriver: false,
+        }).start(() => {
+          navigation.replace('OwnQuizQuestionScreen', { questions, quizId, userId });
+        });
       } catch (error) {
         console.error('Failed to load questions:', error);
         setError(error.response ? error.response.data : error.message);

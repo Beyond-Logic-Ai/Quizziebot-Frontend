@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList,TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
@@ -22,7 +22,7 @@ const data = [
       '“How do I make an HTTP request in \n Javascript?”',
     ],
     iconSet: 'Feather',
-    iconName: 'sun', 
+    iconName: 'sun',
   },
   {
     id: '2',
@@ -33,7 +33,7 @@ const data = [
       'Trained to decline inappropriate \n requests',
     ],
     iconSet: 'MaterialCommunityIcons',
-    iconName: 'lightning-bolt-outline', 
+    iconName: 'lightning-bolt-outline',
   },
   {
     id: '3',
@@ -49,26 +49,22 @@ const data = [
 ];
 
 const CreatingOwnQuizPage = ({ navigation }) => {
+  const scrollViewRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const scroll = () => {
       setCurrentIndex((prevIndex) => {
         const nextIndex = (prevIndex + 1) % data.length;
-        flatListRef.current.scrollToIndex({ index: nextIndex });
+        scrollViewRef.current.scrollTo({ x: nextIndex * width, animated: true });
         return nextIndex;
       });
-    }, 3500);
+    };
+
+    const interval = setInterval(scroll, 2000); // Slow down the interval time
 
     return () => clearInterval(interval);
   }, []);
-
-  const onScrollEnd = (event) => {
-    const horizontalOffset = event.nativeEvent.contentOffset.x;
-    const index = Math.round(horizontalOffset / width);
-    setCurrentIndex(index);
-  };
 
   const renderIcon = (iconSet, iconName) => {
     switch (iconSet) {
@@ -86,8 +82,8 @@ const CreatingOwnQuizPage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={wp(6)} color="#FFF" />
-          </TouchableOpacity>
+        <Icon name="arrow-back" size={wp(6)} color="#FFF" />
+      </TouchableOpacity>
       <View style={styles.robotImageContainer}>
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
           <Defs>
@@ -112,14 +108,15 @@ const CreatingOwnQuizPage = ({ navigation }) => {
       <Text style={styles.title}>Welcome to {'\n'} Quizzie Bot</Text>
       <Text style={styles.subtitle}>Ask anything, get your answer</Text>
 
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
+      <ScrollView
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <View style={styles.slide}>
+        ref={scrollViewRef}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        {data.map((item, index) => (
+          <View key={item.id} style={[styles.slide, { width }]}>
             {renderIcon(item.iconSet, item.iconName)}
             <Text style={styles.sectionTitle}>{item.title}</Text>
             {item.content.map((text, index) => (
@@ -128,10 +125,8 @@ const CreatingOwnQuizPage = ({ navigation }) => {
               </View>
             ))}
           </View>
-        )}
-        onMomentumScrollEnd={onScrollEnd}
-        ref={flatListRef}
-      />
+        ))}
+      </ScrollView>
       <View style={styles.indicatorContainer}>
         {data.map((_, index) => (
           <View
@@ -157,14 +152,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#0048BF',
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   backButton: {
-    // marginRight: '4%',
-    top:hp(6),
-    marginTop:-hp(4),
-    left:-wp(40),
-  
+    top: hp(6),
+    marginTop: -hp(4),
+    left: -wp(40),
   },
   robotImageContainer: {
     width: hp(15),
@@ -173,15 +165,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp(3),
-    marginTop:hp(4),
-    
+    marginTop: hp(4),
   },
   robotImage: {
     position: 'absolute',
     width: hp(18),
     height: hp(18),
     resizeMode: 'contain',
-    
   },
   title: {
     bottom: hp(2),
@@ -191,7 +181,6 @@ const styles = StyleSheet.create({
     fontSize: hp(4),
     fontWeight: 'bold',
     color: '#fff',
-    
   },
   subtitle: {
     top: hp(1),
@@ -200,37 +189,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Nunito',
-    
   },
   slide: {
-    width: wp(100),
-    height: hp(80),
     alignItems: 'center',
-    marginTop:hp(4),
-
-    
-  
-  
+    marginTop: hp(4),
   },
   icon: {
-    marginTop:hp(.8),
-    marginBottom:hp(.8),
+    marginTop: hp(0.8),
+    marginBottom: hp(0.8),
   },
   sectionTitle: {
     fontSize: hp(2),
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom:hp(1)
-    
+    marginBottom: hp(1),
   },
   textContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
     borderRadius: hp(2),
     padding: hp(1.5),
-    marginVertical: hp(.4),
-    width:hp(40),
-    height:hp(9),
-   
+    marginVertical: hp(0.4),
+    width: hp(40),
+    height: hp(9),
   },
   text: {
     color: '#fff',
@@ -243,13 +223,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp(1),
-  
-   
   },
   indicator: {
     width: hp(5),
-    height: hp(.2),
-    borderRadius: wp(.5),
+    height: hp(0.2),
+    borderRadius: wp(0.5),
     backgroundColor: '#888',
     marginHorizontal: wp(1),
   },

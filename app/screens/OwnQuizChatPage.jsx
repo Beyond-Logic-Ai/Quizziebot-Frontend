@@ -166,7 +166,7 @@ const OwnQuizChatPage = ({ navigation }) => {
             onChangeText={setInputText}
           />
           <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-            <Ionicons name="close" size={20} color="#fff" />
+            <Icon name="send" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
         {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (

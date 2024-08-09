@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity,ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { images } from '../../constants/images';
@@ -7,8 +7,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-
-const ArcadeQuestionScreen = ({ route, navigation }) => {
+const OwnQuizQuestionScreen = ({ route, navigation }) => {
   const { questions, quizId, userId } = route.params;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timer, setTimer] = useState(10);
@@ -71,7 +70,7 @@ const ArcadeQuestionScreen = ({ route, navigation }) => {
     // API call logic here
 
     // Navigate to results screen after API call is made
-    navigation.navigate('ArcadeResult', { userId, quizId, answers: finalAnswers });
+    navigation.navigate('QuizResultScreen', { userId, quizId, answers: finalAnswers });
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -115,8 +114,7 @@ const ArcadeQuestionScreen = ({ route, navigation }) => {
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
       <Text style={styles.questionText}>{currentQuestion.questionText}</Text>
-      <ScrollView style={styles.answersContainer}>
-      <View style={styles.answersContainer1}>
+      <View style={styles.answersContainer}>
         {currentQuestion.options.map((option, index) => (
           <TouchableOpacity
             key={index}
@@ -131,7 +129,6 @@ const ArcadeQuestionScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-      </ScrollView>
       {isCorrect !== null && (
         <View style={styles.feedbackContainer}>
           <Text style={isCorrect ? styles.correctFeedback : styles.incorrectFeedback}>
@@ -191,10 +188,6 @@ const styles = StyleSheet.create({
     width: wp(80),
     alignSelf: 'center',
   },
-  answersContainer1: {
-    width: "100%",
-    alignSelf: 'center',
-  },
   answerButton: {
     padding: 15,
     borderRadius: wp(7),
@@ -216,9 +209,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F75555',
   },
   feedbackContainer: {
-    padding: wp(3),
+    padding: 15,
     alignItems: 'center',
-    marginBottom:hp(2)
   },
   correctFeedback: {
     fontSize: 18,
@@ -234,4 +226,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ArcadeQuestionScreen;
+export default OwnQuizQuestionScreen;

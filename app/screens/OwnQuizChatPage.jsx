@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { images } from '../../constants/images';
 import axios from 'axios';
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OwnQuizChatPage = ({ navigation }) => {
@@ -142,7 +143,7 @@ const OwnQuizChatPage = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={wp(6)} color="#000" />
+          <Ionicons name="close" size={wp(6)} color="#000" />
         </TouchableOpacity>
         <Text style={styles.closeText}>Close</Text>
       </View>
@@ -172,7 +173,8 @@ const OwnQuizChatPage = ({ navigation }) => {
           <View style={styles.decisionButtons}>
             <TouchableOpacity
               style={styles.decisionButton}
-              onPress={() => handleQuizDecision(true)}
+              onPress={() => navigation.navigate('OwnQuizLoadingPage')}
+              // onPress={() => handleQuizDecision(true)}
             >
               <Text style={styles.decisionText}>Yes</Text>
             </TouchableOpacity>

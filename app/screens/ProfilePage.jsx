@@ -397,14 +397,14 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   statisticValue: {
-    fontSize: 18,
+    fontSize: wp(4.5),
     fontWeight: 'bold',
     color: '#FFFFFF',
     fontFamily: 'Nunito',
     fontWeight: 'bold',
   },
   statisticLabel: {
-    fontSize: 18,
+    fontSize: wp(3.8),
     color: '#FFFFFF',
     fontFamily: 'Nunito',
     fontWeight: 'bold',

@@ -20,7 +20,6 @@ const MusicAndEffectsScreen = ({ navigation }) => {
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Music & Effects</Text>
-          <View style={{ width: 24 }} />
         </View>
         <View style={styles.body}>
           <View style={styles.optionRow}>
@@ -89,13 +88,14 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingTop: hp(2),
-    justifyContent: 'space-between',
+   
   },
   backButton: {
     padding: 8,
   },
   headerTitle: {
     fontSize: 24,
+    marginLeft:wp(10),
     fontWeight: 'bold',
     color: '#FFFFFF',
     fontFamily: 'Nunito',

@@ -146,7 +146,7 @@ const CreatingOwnQuizPage = ({ navigation }) => {
       </View>
       <LetsGobutton
         title="Let's Go"
-        screenName="HomePageScreen"
+        screenName="OwnQuizWelcomePage"
       />
     </SafeAreaView>
   );
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   
   },
   robotImageContainer: {
-    width: hp(20),
-    height: hp(20),
+    width: hp(15),
+    height: hp(15),
     borderRadius: hp(17.5),
     justifyContent: 'center',
     alignItems: 'center',
@@ -179,8 +179,8 @@ const styles = StyleSheet.create({
   },
   robotImage: {
     position: 'absolute',
-    width: hp(20),
-    height: hp(25),
+    width: hp(18),
+    height: hp(18),
     resizeMode: 'contain',
     
   },

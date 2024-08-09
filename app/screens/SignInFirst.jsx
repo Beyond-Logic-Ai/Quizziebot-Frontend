@@ -12,161 +12,163 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 const { width, height } = Dimensions.get('window');
 
 const SignInFirst = ({ navigation }) => {
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+    const [isPasswordVisible, setPasswordVisible] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const userSession = await AsyncStorage.getItem('userSession');
-      if (userSession) {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'HomePageScreen' }],
-        });
-      }
+    useEffect(() => {
+        const checkSession = async () => {
+            const userSession = await AsyncStorage.getItem('userSession');
+            if (userSession) {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'HomePageScreen' }],
+                });
+            }
+        };
+        checkSession();
+    }, [navigation]);
+
+    const validateEmail = (email) => {
+        const re = /\S+@\S+\.\S+/;
+        return re.test(email);
     };
-    checkSession();
-  }, [navigation]);
 
-  const validateEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
-  };
+    const validatePassword = (password) => {
+        return password.length >= 8;
+    };
 
-  const validatePassword = (password) => {
-    return password.length >= 8;
-  };
-
-  const handleSignIn = async () => {
-    let valid = true;
-    if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email address');
-      valid = false;
-    } else {
-      setEmailError('');
-    }
-
-    if (!validatePassword(password)) {
-      setPasswordError('Password must be at least 8 characters long');
-      valid = false;
-    } else {
-      setPasswordError('');
-    }
-
-    if (valid) {
-      try {
-        const response = await axios.post('https://api.quizziebot.com/api/auth/signin', { identifier: email, password });
-
-        if (response.status === 200) {
-          const userSession = {
-            token: response.data.token,
-            username: response.data.username,
-            coins: response.data.coins || 0,
-          };
-          await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomePageScreen', params: { user: userSession } }],
-          });
+    const handleSignIn = async () => {
+        let valid = true;
+        if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email address');
+            valid = false;
         } else {
-          Alert.alert('Error', 'Invalid credentials. Please try again.');
+            setEmailError('');
         }
-      } catch (error) {
-        console.error('Error during sign-in:', error);
-        Alert.alert('Error', 'Failed to sign in. Please try again.');
-      }
-    }
-  };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
-          <View style={styles.innerContainer}>
-            <Image source={images.logo3} style={styles.image} resizeMode="contain" />
+        if (!validatePassword(password)) {
+            setPasswordError('Password must be at least 8 characters long');
+            valid = false;
+        } else {
+            setPasswordError('');
+        }
 
-            <Text style={styles.signInText}>
-              <Text style={styles.signInTextBlack}>Sign in to </Text>
-              <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
-            </Text>
+        if (valid) {
+            try {
+                const response = await axios.post('https://api.quizziebot.com/api/auth/signin', { identifier: email, password });
 
-            <Text style={styles.label}>Email</Text>
-            <TextInput 
-              style={styles.inputLine}
-              placeholder="Enter your email"
-              placeholderTextColor="#999"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                if (response.status === 200) {
+                    const userSession = {
+                        token: response.data.token,
+                        username: response.data.username,
+                        coins: response.data.coins || 0,
+                    };
+                    await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'HomePageScreen', params: { user: userSession } }],
+                    });
+                } else {
+                    Alert.alert('Error', 'Invalid credentials. Please try again.');
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    Alert.alert('Invalid Credentials', 'The email or password you entered is incorrect. Please try again.');
+                } else {
+                    Alert.alert('Error', 'Failed to sign in. Please check your connection and try again.');
+                }
+            }
+        }
+    };
 
-            <Text style={styles.label}>Password</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput 
-                style={styles.inputLine}
-                placeholder="Enter your password"
-                placeholderTextColor="#999"
-                secureTextEntry={!isPasswordVisible}
-                value={password}
-                onChangeText={setPassword}
-                autoCapitalize="none"
-              />
-              <TouchableOpacity
-                style={styles.eyeIcon}
-                onPress={() => setPasswordVisible(!isPasswordVisible)}
-              >
-                <Ionicons name={isPasswordVisible ? "eye" : "eye-off"} size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+    return (
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                    <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                        <Ionicons name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+                    <View style={styles.innerContainer}>
+                        <Image source={images.logo3} style={styles.image} resizeMode="contain" />
 
-            <View style={styles.rememberMeContainer}>
-              <BouncyCheckbox
-                size={25}
-                fillColor="#1C58F2"
-                unfillColor="#FFFFFF"
-                text="Remember me"
-                iconStyle={{ borderColor: "#1C58F2" }}
-                innerIconStyle={{ borderWidth: 2 }}
-                isChecked={rememberMe}
-                onPress={() => setRememberMe(!rememberMe)}
-                textStyle={styles.rememberMeText}
-              />
-            </View>
+                        <Text style={styles.signInText}>
+                            <Text style={styles.signInTextBlack}>Sign in to </Text>
+                            <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
+                        </Text>
 
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
+                        <Text style={styles.label}>Email</Text>
+                        <TextInput 
+                            style={styles.inputLine}
+                            placeholder="Enter your email"
+                            placeholderTextColor="#999"
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
-            <Text style={styles.orText}>or</Text>
+                        <Text style={styles.label}>Password</Text>
+                        <View style={styles.passwordContainer}>
+                            <TextInput 
+                                style={styles.inputLine}
+                                placeholder="Enter your password"
+                                placeholderTextColor="#999"
+                                secureTextEntry={!isPasswordVisible}
+                                value={password}
+                                onChangeText={setPassword}
+                                autoCapitalize="none"
+                            />
+                            <TouchableOpacity
+                                style={styles.eyeIcon}
+                                onPress={() => setPasswordVisible(!isPasswordVisible)}
+                            >
+                                <Ionicons name={isPasswordVisible ? "eye" : "eye-off"} size={24} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
-            <View style={styles.socialLogosContainer}>
-              <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
-                <Image source={images.google} style={styles.socialLogo} />
-              </TouchableOpacity>
-             
-            </View>
+                        <View style={styles.rememberMeContainer}>
+                            <BouncyCheckbox
+                                size={25}
+                                fillColor="#1C58F2"
+                                unfillColor="#FFFFFF"
+                                text="Remember me"
+                                iconStyle={{ borderColor: "#1C58F2" }}
+                                innerIconStyle={{ borderWidth: 2 }}
+                                isChecked={rememberMe}
+                                onPress={() => setRememberMe(!rememberMe)}
+                                textStyle={styles.rememberMeText}
+                            />
+                        </View>
 
-            <View style={styles.buttonContainer}>
-              <CustomButton3
-                title="SIGN IN"
-                onPress={handleSignIn}
-              />
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
-  );
+                        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                        </TouchableOpacity>
+
+                        <Text style={styles.orText}>or</Text>
+
+                        <View style={styles.socialLogosContainer}>
+                            <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
+                                <Image source={images.google} style={styles.socialLogo} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.buttonContainer}>
+                            <CustomButton3
+                                title="SIGN IN"
+                                onPress={handleSignIn}
+                            />
+                        </View>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({

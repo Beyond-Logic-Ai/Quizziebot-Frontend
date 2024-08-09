@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList,TouchableOpacity, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,7 +22,7 @@ const data = [
       '“How do I make an HTTP request in \n Javascript?”',
     ],
     iconSet: 'Feather',
-    iconName: 'sun', // Feather icon name
+    iconName: 'sun', 
   },
   {
     id: '2',
@@ -34,7 +33,7 @@ const data = [
       'Trained to decline inappropriate \n requests',
     ],
     iconSet: 'MaterialCommunityIcons',
-    iconName: 'lightning-bolt-outline', // MaterialIcons icon name
+    iconName: 'lightning-bolt-outline', 
   },
   {
     id: '3',
@@ -110,7 +109,7 @@ const CreatingOwnQuizPage = ({ navigation }) => {
         </Svg>
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
-      <Text style={styles.title}>Welcome to {'\n'} Quzzie Bot</Text>
+      <Text style={styles.title}>Welcome to {'\n'} Quizzie Bot</Text>
       <Text style={styles.subtitle}>Ask anything, get your answer</Text>
 
       <FlatList

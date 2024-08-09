@@ -50,18 +50,18 @@ const ProfilePage = ({ navigation }) => {
         setProfileData(profileData);
         console.log(profileData);
         const achievementsData = [
-          { id: 1, label: 'Average IQ', value: profileData.overallIq.toFixed(2), icon: images.logo1 },
-          { id: 2, label: 'Total Coins Collected', value: profileData.coins, icon: images.coins },
-          { id: 3, label: 'Daily Streak', value: profileData.achievements.streak, icon: images.quizpassedimg },
-          { id: 4, label: 'Total XP', value: profileData.totalXp, icon: images.top3img },
-          { id: 5, label: 'Quiz Passed', value: profileData.achievements.quizPassed, icon: images.challengepassedimg },
-          { id: 6, label: 'Total Time Spent(sec)', value: profileData.totalTimeSpent, icon: images.avgtime },
+          { id: 1, label: 'Average IQ', value: profileData.overallIq?.toFixed(2) || 'N/A', icon: images.logo1 },
+          { id: 2, label: 'Total Coins Collected', value: profileData.coins || 0, icon: images.coins },
+          { id: 3, label: 'Daily Streak', value: profileData.achievements?.streak || 0, icon: images.quizpassedimg },
+          { id: 4, label: 'Total XP', value: profileData.totalXp || 0, icon: images.top3img },
+          { id: 5, label: 'Quiz Passed', value: profileData.achievements?.quizPassed || 0, icon: images.challengepassedimg },
+          { id: 6, label: 'Total Time Spent(sec)', value: profileData.totalTimeSpent || 0, icon: images.avgtime },
         ];
 
         setAchievements(achievementsData);
 
-        const iqGraphData = profileData.iqGraph.map(item => item.iq);
-        const iqGraphLabels = profileData.iqGraph.map((item, index) => `${index + 1}`);
+        const iqGraphData = profileData.iqGraph?.map(item => item.iq) || [];
+        const iqGraphLabels = profileData.iqGraph?.map((item, index) => `${index + 1}`) || [];
 
         setIqData({
           labels: iqGraphLabels,
@@ -164,36 +164,40 @@ const ProfilePage = ({ navigation }) => {
           <View style={styles.chartContainer}>
             <Text style={styles.chartTitle}>Your IQ Progress</Text>
             <View style={styles.chart}>
-              <LineChart
-                data={iqData}
-                width={width * 0.9} // from react-native
-                height={220}
-                yAxisLabel=""
-                yAxisSuffix=""
-                yAxisInterval={1} // optional, defaults to 1
-                chartConfig={{
-                  backgroundColor: '#0000ff',
-                  backgroundGradientFrom: '#0000ff',
-                  backgroundGradientTo: '#87CEFA',
-                  decimalPlaces: 0, // optional, defaults to 2dp
-                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                  style: {
+              {iqData.datasets[0].data.length > 0 ? (
+                <LineChart
+                  data={iqData}
+                  width={width * 0.9} // from react-native
+                  height={220}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={1} // optional, defaults to 1
+                  chartConfig={{
+                    backgroundColor: '#0000ff',
+                    backgroundGradientFrom: '#0000ff',
+                    backgroundGradientTo: '#87CEFA',
+                    decimalPlaces: 0, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    style: {
+                      borderRadius: 16,
+                    },
+                    propsForDots: {
+                      r: '6',
+                      strokeWidth: '2',
+                      stroke: '#87CEFA',
+                    },
+                  }}
+                  bezier
+                  style={{
+                    marginVertical: 8,
                     borderRadius: 16,
-                  },
-                  propsForDots: {
-                    r: '6',
-                    strokeWidth: '2',
-                    stroke: '#87CEFA',
-                  },
-                }}
-                bezier
-                style={{
-                  marginVertical: 8,
-                  borderRadius: 16,
-                }}
-                formatXLabel={(label) => `${label}`}
-              />
+                  }}
+                  formatXLabel={(label) => `${label}`}
+                />
+              ) : (
+                <Text style={styles.noDataText}>No data available</Text>
+              )}
               <Text style={styles.axisLabelX}>No.of Games</Text>
               <Text style={styles.axisLabelY}>IQ</Text>
             </View>
@@ -439,6 +443,12 @@ const styles = StyleSheet.create({
     top: '50%',
     left: 0,
     transform: [{ rotate: '-90deg' }],
+  },
+  noDataText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontSize: 18,
+    marginTop: 20,
   },
   achievementsSection: {
     marginTop: hp(2),

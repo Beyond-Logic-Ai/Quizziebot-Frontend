@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, FlatList } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -17,6 +17,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
   ]);
   const [inputText, setInputText] = useState('');
   const [identifiedTopic, setIdentifiedTopic] = useState(null);
+  const flatListRef = useRef(null); // Reference for FlatList
 
   useEffect(() => {
     const startSession = async () => {
@@ -133,72 +134,80 @@ const OwnQuizWelcomePage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={wp(6)} color="#000" />
-        </TouchableOpacity>
-        <Text style={styles.closeText}>Close</Text>
-      </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+      >
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={wp(6)} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.closeText}>Close</Text>
+        </View>
 
-      <View style={styles.robotImageContainer}>
-        <Svg height="75%" width="75%" viewBox="0 0 100 100" style={styles.gradient}>
-          <Defs>
-            <RadialGradient
-              id="grad"
-              cx="47%"
-              cy="50%"
-              r="50%"
-              gradientUnits="userSpaceOnUse"
-            >
-              <Stop offset="40%" stopColor="#6F98DB" stopOpacity="1" />
-              <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
-            </RadialGradient>
-          </Defs>
-          <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
-        </Svg>
-        <Image source={images.logo2} style={styles.robotImage} />
-      </View>
-      
-      <Text style={styles.title}>Welcome to{'\n'}Quizzie Bot</Text>
+        <View style={styles.robotImageContainer}>
+          <Svg height="75%" width="75%" viewBox="0 0 100 100" style={styles.gradient}>
+            <Defs>
+              <RadialGradient
+                id="grad"
+                cx="47%"
+                cy="50%"
+                r="50%"
+                gradientUnits="userSpaceOnUse"
+              >
+                <Stop offset="40%" stopColor="#6F98DB" stopOpacity="1" />
+                <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+              </RadialGradient>
+            </Defs>
+            <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
+          </Svg>
+          <Image source={images.logo2} style={styles.robotImage} />
+        </View>
+        
+        <Text style={styles.title}>Welcome to{'\n'}Quizzie Bot</Text>
 
-      <FlatList
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.chatContainer}
-        contentContainerStyle={{ paddingBottom: hp(10) }} // Add padding to avoid overlap with input field
-      />
+        <FlatList
+          ref={flatListRef} // Assign the ref to FlatList
+          data={messages}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={styles.chatContainer}
+          contentContainerStyle={{ paddingBottom: hp(10) }} // Add padding to avoid overlap with input field
+          onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })} // Scroll when content size changes
+        />
 
-      <View style={styles.bottomContainer}>
-        {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (
-          <View style={styles.decisionButtons}>
-            <TouchableOpacity
-              style={styles.decisionButton}
-              onPress={() => handleQuizDecision(true)}
-            >
-              <Text style={styles.decisionText}>Yes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.decisionButton}
-              onPress={() => handleQuizDecision(false)}
-            >
-              <Text style={styles.decisionText}>No</Text>
+        <View style={styles.bottomContainer}>
+          {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (
+            <View style={styles.decisionButtons}>
+              <TouchableOpacity
+                style={styles.decisionButton}
+                onPress={() => handleQuizDecision(true)}
+              >
+                <Text style={styles.decisionText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.decisionButton}
+                onPress={() => handleQuizDecision(false)}
+              >
+                <Text style={styles.decisionText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type Here.."
+              placeholderTextColor="#aaa"
+              value={inputText}
+              onChangeText={setInputText}
+            />
+            <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+              <Icon name="send" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
-        )}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Type Here.."
-            placeholderTextColor="#aaa"
-            value={inputText}
-            onChangeText={setInputText}
-          />
-          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-            <Icon name="send" size={20} color="#fff" />
-          </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

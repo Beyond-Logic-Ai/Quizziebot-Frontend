@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/logo.jpeg",
     "userInterfaceStyle": "light",
+    "scheme": "quizziebot", 
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -13,7 +14,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.quizziebot"
+      "bundleIdentifier": "com.beyondlogic.quizziebot",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "608340923812-dctjjsforifedvf0fp2817vekig17hsn.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {

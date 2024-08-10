@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, FlatList, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -92,6 +92,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
       }
 
       setInputText(''); // Clear the input field after sending the message
+      Keyboard.dismiss(); // Dismiss the keyboard when the message is sent
     }
   };
 
@@ -201,6 +202,8 @@ const OwnQuizWelcomePage = ({ navigation }) => {
               placeholderTextColor="#aaa"
               value={inputText}
               onChangeText={setInputText}
+              onSubmitEditing={handleSend} // Send message and dismiss keyboard when Enter is pressed
+              returnKeyType="send" // Customize the return key to display "Send"
             />
             <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
               <Icon name="send" size={20} color="#fff" />

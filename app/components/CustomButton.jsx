@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Dimensions, Vibration } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av';
-
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 const { width } = Dimensions.get('window');
 
 const CustomButton = ({ title, screenName }) => {
@@ -40,8 +40,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#1C58F2',
-    fontSize: 16,
+    fontSize: wp(4),
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
   },
 });
 

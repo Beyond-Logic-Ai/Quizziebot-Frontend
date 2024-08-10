@@ -105,7 +105,7 @@ const CreatingOwnQuizPage = ({ navigation }) => {
         </Svg>
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
-      <Text style={styles.title}>Welcome to {'\n'} Quizzie Bot</Text>
+      <Text style={styles.title}>Welcome to {'\n'}Quizzie Bot</Text>
       <Text style={styles.subtitle}>Ask anything, get your answer</Text>
 
       <ScrollView
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp(3),
-    marginTop: hp(4),
+    marginTop: hp(7),
   },
   robotImage: {
     position: 'absolute',
@@ -178,13 +178,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Nunito',
-    fontSize: hp(4),
+    fontSize: hp(3.5),
     fontWeight: 'bold',
     color: '#fff',
   },
   subtitle: {
     top: hp(1),
-    fontSize: hp(2.5),
+    fontSize: hp(2.3),
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: hp(2),
+    borderRadius: hp(1),
     padding: hp(1.5),
-    marginVertical: hp(0.4),
-    width: hp(40),
-    height: hp(9),
+    marginVertical: hp(0.6),
+    width: hp(35),
+    height: hp(8),
   },
   text: {
     color: '#fff',
@@ -222,10 +222,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: hp(1),
+    marginBottom: hp(4.5),
   },
   indicator: {
-    width: hp(5),
+    width: hp(4),
     height: hp(0.2),
     borderRadius: wp(0.5),
     backgroundColor: '#888',

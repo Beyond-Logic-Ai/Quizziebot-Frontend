@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     fontSize: wp(3.8),
     color: '#FFFFFF',
     fontFamily: 'Nunito',
-    fontWeight: 'bold',
+    marginHorizontal:wp(.6)
   },
   chartContainer: {
     marginTop: hp(2),

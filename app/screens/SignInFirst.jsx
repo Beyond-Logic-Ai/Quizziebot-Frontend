@@ -234,6 +234,7 @@ const styles = StyleSheet.create({
     width: '80%',
     height: height * 0.15,
     marginVertical: 10,
+    borderWidth:2
   },
   signInText: {
     flexDirection: 'row',
@@ -277,6 +278,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
     marginVertical: 10,
+    borderWidth:2
   },
   rememberMeText: {
     marginLeft: 10,

@@ -57,10 +57,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   image: {
+    right:-wp(3),
     width: '80%',
     height:hp(37),
     marginTop:hp(7),
-    marginBottom:hp(-5)
+    marginBottom:hp(-5),
+    // borderWidth:2
     
   },
   swiperContainer: {
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
     fontSize: height > 800 ? 20 : 16, // Larger text for larger screens
     color: '#FBFCF6',
     textAlign: 'center',
+    fontStyle:"Nunito",
     fontWeight: 'bold',
     paddingHorizontal: width * 0.05,
     marginBottom: height * 0.01, // Reduce the gap between text and swiper

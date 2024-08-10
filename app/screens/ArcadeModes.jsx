@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const categories = [
   { name: 'Easy', colors: ['#AEFF6E', '#1ABD00'] },
   { name: 'Medium', colors: ['#FFD540', '#FFA800'] },
-  { name: 'Hard', colors: ['#CA163C', '#63182F'] },
+  { name: 'Hard', colors: ['#CA163C', '#F75555'] },
 ];
 
 const CategoryButton = ({ name, colors, onPress }) => (
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginVertical: 10,
     marginBottom: hp(4),
+    bottom: hp(4),
   },
   robotImageContainer: {
     width: wp(35),
@@ -93,12 +94,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 18,
-    bottom: 20,
+    bottom: hp(6.5),
   },
   robotImage: {
     position: 'absolute',
     width: '100%',
     height: '100%',
+
     resizeMode: 'contain',
   },
   subtitle: {
@@ -112,9 +114,9 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     width: wp(78),
-    height: hp(40),
+    height: hp(36),
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 15,
   },
   buttonWrapper: {
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '80%',
-    marginVertical: 7,
+    marginVertical: hp(.3),
     borderRadius: 25,
     overflow: 'hidden',
   },

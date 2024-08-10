@@ -139,28 +139,6 @@ const OwnQuizWelcomePage = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.closeText}>Close</Text>
       </View>
-
-      <View style={styles.robotImageContainer}>
-        <Svg height="75%" width="75%" viewBox="0 0 100 100" style={styles.gradient}>
-          <Defs>
-            <RadialGradient
-              id="grad"
-              cx="47%"
-              cy="50%"
-              r="50%"
-              gradientUnits="userSpaceOnUse"
-            >
-              <Stop offset="40%" stopColor="#6F98DB" stopOpacity="1" />
-              <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
-            </RadialGradient>
-          </Defs>
-          <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
-        </Svg>
-        <Image source={images.logo2} style={styles.robotImage} />
-      </View>
-      
-      <Text style={styles.title}>Welcome to{'\n'}Quizzie Bot</Text>
-
       <FlatList
         data={messages}
         renderItem={renderItem}
@@ -213,14 +191,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: hp(2),
     paddingBottom: hp(1),
+    
   },
   closeText: {
-    marginLeft: wp(8),
+    top:-wp(.4),
+    marginLeft: wp(3),
     fontSize: wp(5),
     color: '#000',
     fontWeight: 'bold',
     fontFamily: 'Nunito',
   },
+
   robotImageContainer: {
     width: hp(20),
     height: hp(22),

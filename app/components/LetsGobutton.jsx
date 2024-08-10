@@ -31,8 +31,8 @@ const LetsGobutton = ({ title, screenName }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: wp(60),
-    height: hp(5),
+    width: width * 0.9,
+    height: 64,
     backgroundColor: '#FBFCF6',
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     marginBottom: hp(1),
   },
   buttonText: {
-    color: '#1C58F2',
+    color: '#0048BF',
     fontSize: hp(2.5),
     fontWeight: 'bold',
   },

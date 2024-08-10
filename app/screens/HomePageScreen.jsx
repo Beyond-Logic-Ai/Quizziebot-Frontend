@@ -112,7 +112,7 @@ const HomePageScreen = ({ navigation }) => {
   }
 
   return (
-    <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover">
+    <ImageBackground source={images.homescreenbg11} style={styles.backgroundImage} resizeMode="cover">
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Image source={profilePic} style={styles.profileImage} />
@@ -132,10 +132,10 @@ const HomePageScreen = ({ navigation }) => {
         </View>
 
         {deferredLoading && (
-          <ImageBackground source={images.homepagecoins} style={styles.overlayImage} resizeMode="cover">
+          
             <View style={styles.body}>
               <View style={styles.textBox}>
-                <Text style={styles.subtitle}>Unleash the power of AI! Discover quizzes made just for you</Text>
+                <Text style={styles.subtitle}>Unleash the power of AI! Discover {'\n'}quizzes made just for you</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
                   <LinearGradient
                     colors={['#9DFF4F', '#1ABD00']}
@@ -153,7 +153,7 @@ const HomePageScreen = ({ navigation }) => {
                 />
               </View>
             </View>
-          </ImageBackground>
+         
         )}
       </SafeAreaView>
       {deferredLoading && <Footer navigation={navigation} />}
@@ -202,12 +202,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: hp(1.5),
-    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    backgroundColor: 'rgba(0, 0, 0, 0.0)',
   },
   profileImage: {
     width: 43,
     height: 43,
     borderRadius: 22,
+    borderWidth:.5,
+    borderColor:"#FFF"
   },
   username: {
     flex: 0.95,
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
   },
   coinborder: {
     right: -2,
-    backgroundColor: 'blue',
+    backgroundColor: '#1C58F2',
     width: 27,
     height: 27,
     borderRadius: 15,
@@ -272,14 +274,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   textBox: {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.07)',
     borderRadius: 18,
     padding: 20,
     alignItems: 'center',
     marginBottom: 0,
   },
   subtitle: {
-    fontSize: wp(4.8),
+    fontSize: wp(4),
     textAlign: 'center',
     marginBottom: 20,
     color: '#FFFFFF',

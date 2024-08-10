@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold',
     fontFamily: 'Nunito',
+    borderWidth:2
   },
   chatContainer: {
     flex: 1,

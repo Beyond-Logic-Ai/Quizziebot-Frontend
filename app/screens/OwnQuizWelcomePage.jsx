@@ -170,18 +170,6 @@ const OwnQuizWelcomePage = ({ navigation }) => {
       />
 
       <View style={styles.bottomContainer}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Type Here.."
-            placeholderTextColor="#aaa"
-            value={inputText}
-            onChangeText={setInputText}
-          />
-          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-            <Icon name="send" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
         {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (
           <View style={styles.decisionButtons}>
             <TouchableOpacity
@@ -198,6 +186,18 @@ const OwnQuizWelcomePage = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         )}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Type Here.."
+            placeholderTextColor="#aaa"
+            value={inputText}
+            onChangeText={setInputText}
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+            <Icon name="send" size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   decisionButtons: {
     flexDirection: 'row',
-    marginTop: hp(1),
+    marginBottom: hp(1),
   },
   decisionButton: {
     backgroundColor: '#0048BF',

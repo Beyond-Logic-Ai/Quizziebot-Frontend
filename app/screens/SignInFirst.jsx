@@ -8,8 +8,13 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
 const { width, height } = Dimensions.get('window');
+
+// Ensure that WebBrowser is properly configured for Google Sign-In
+WebBrowser.maybeCompleteAuthSession();
 
 const SignInFirst = ({ navigation }) => {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -18,6 +23,11 @@ const SignInFirst = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+
+    // Google Sign-In configuration
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+        clientId: 'com.googleusercontent.apps.608340923812-dctjjsforifedvf0fp2817vekig17hsn', // Replace with your iOS client ID
+    });
 
     useEffect(() => {
         const checkSession = async () => {
@@ -30,7 +40,35 @@ const SignInFirst = ({ navigation }) => {
             }
         };
         checkSession();
-    }, [navigation]);
+
+        if (response?.type === 'success') {
+            const { id_token } = response.params;
+            handleGoogleSignIn(id_token);
+        }
+    }, [navigation, response]);
+
+    const handleGoogleSignIn = async (idToken) => {
+        try {
+            const response = await axios.post('https://api.quizziebot.com/api/auth/google', { idToken });
+
+            if (response.status === 200) {
+                const userSession = {
+                    token: response.data.token,
+                    username: response.data.username,
+                    coins: response.data.coins || 0,
+                };
+                await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'HomePageScreen', params: { user: userSession } }],
+                });
+            } else {
+                Alert.alert('Error', 'Failed to sign in with Google. Please try again.');
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Failed to sign in. Please check your connection and try again.');
+        }
+    };
 
     const validateEmail = (email) => {
         const re = /\S+@\S+\.\S+/;
@@ -153,7 +191,7 @@ const SignInFirst = ({ navigation }) => {
                         <Text style={styles.orText}>or</Text>
 
                         <View style={styles.socialLogosContainer}>
-                            <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
+                            <TouchableOpacity onPress={() => promptAsync()}>
                                 <Image source={images.google} style={styles.socialLogo} />
                             </TouchableOpacity>
                         </View>

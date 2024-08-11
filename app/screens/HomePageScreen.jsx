@@ -29,8 +29,11 @@ const HomePageScreen = ({ navigation }) => {
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(true);
   const [deferredLoading, setDeferredLoading] = useState(false);
-  const [profilePic, setProfilePic] = useState(maleProfilePic); // Default to male profile picture
-  const [badgeImage, setBadgeImage] = useState(BronzeStar); // Default badge image
+  const [profilePic, setProfilePic] = useState(maleProfilePic); 
+  const [badgeImage, setBadgeImage] = useState(BronzeStar); 
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [token, setToken] = useState('');
 
   const leagueToBadgeImage = {
     BronzeStar: BronzeStar,
@@ -40,38 +43,69 @@ const HomePageScreen = ({ navigation }) => {
     PlatinumWings: PlatinumWings,
   };
 
+  const updateNotificationCount = (change) => {
+    setUnreadCount((prevCount) => prevCount + change);
+  };
+
   const fetchUserData = useCallback(async () => {
     try {
+      console.log('Fetching user data...');
       const userSession = await AsyncStorage.getItem('userSession');
-      if (userSession) {
-        const { token } = JSON.parse(userSession);
+      let parsedSession = userSession ? JSON.parse(userSession) : {};
 
-        const response = await axios.get('https://api.quizziebot.com/api/home', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const token = parsedSession.token;
 
-        const data = response.data;
-        setUsername(data.username);
-        setCoins(data.coins != null ? data.coins : 0);
-
-        // Set the profile picture based on gender
-        if (data.gender === 'Female') {
-          setProfilePic(femaleProfilePic);
-        } else {
-          setProfilePic(maleProfilePic);
-        }
-
-        // Set the badge image based on the league
-        if (data.league && leagueToBadgeImage[data.league]) {
-          setBadgeImage(leagueToBadgeImage[data.league]);
-        }
-
-        await AsyncStorage.setItem('userId', data.userId);
-      } else {
+      if (!token) {
+        console.warn('No token found in session, navigating to SignInFirst');
         navigation.navigate('SignInFirst');
+        return;
       }
+
+      setToken(token);
+
+      const response = await axios.get('https://api.quizziebot.com/api/home', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = response.data;
+      console.log('User data received:', data);
+
+      const userId = data.userId;
+
+      if (!parsedSession.userId || parsedSession.userId !== userId) {
+        parsedSession = {
+          ...parsedSession,
+          userId: userId,
+          username: data.username,
+        };
+        await AsyncStorage.setItem('userSession', JSON.stringify(parsedSession));
+        console.log('User ID updated in session data:', parsedSession);
+      }
+
+      setUsername(data.username);
+      setCoins(data.coins != null ? data.coins : 0);
+      console.log('User coins:', data.coins);
+
+      if (data.profilePictureUrl) {
+        setProfilePic({ uri: data.profilePictureUrl });
+      } else if (data.gender === 'Female') {
+        setProfilePic(femaleProfilePic);
+      } else {
+        setProfilePic(maleProfilePic);
+      }
+      console.log('Profile picture set based on gender or provided URL.');
+
+      if (data.league && leagueToBadgeImage[data.league]) {
+        setBadgeImage(leagueToBadgeImage[data.league]);
+        console.log('Badge image set for league:', data.league);
+      } else {
+        console.log('No league or invalid league data.');
+      }
+
+      fetchNotifications(token, userId);
+
     } catch (error) {
       console.error('Error fetching user data:', error.message);
       if (error.response) {
@@ -81,6 +115,29 @@ const HomePageScreen = ({ navigation }) => {
       setLoading(false);
     }
   }, [navigation]);
+
+  const fetchNotifications = async (token, userId) => {
+    if (!userId) {
+      console.error('User ID is missing, cannot fetch notifications');
+      return;
+    }
+    try {
+      console.log('Fetching notifications for user:', userId);
+      const response = await axios.get(`https://api.quizziebot.com/api/notifications/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Notifications response:', response.data);
+      const notifications = response.data;
+      setNotifications(notifications);
+      const unread = notifications.filter((notification) => !notification.read).length;
+      setUnreadCount(unread);
+      console.log('Unread notifications count:', unread);
+    } catch (error) {
+      console.error('Error fetching notifications:', error.message);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -96,10 +153,10 @@ const HomePageScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (!loading) {
-      // Defer loading of additional content
+      console.log('Defer loading additional content...');
       setTimeout(() => {
         setDeferredLoading(true);
-      }, 500); // Adjust this delay as needed
+      }, 500); 
     }
   }, [loading]);
 
@@ -107,6 +164,7 @@ const HomePageScreen = ({ navigation }) => {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#366EFF" />
+        <Text>Loading user data...</Text>
       </View>
     );
   }
@@ -126,8 +184,18 @@ const HomePageScreen = ({ navigation }) => {
           </View>
           
           <Image source={badgeImage} style={styles.badgeImage} />
-          <TouchableOpacity  onPress={() => navigation.navigate('SettingsHomePageScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('NotificationsScreen', { 
+            notifications, 
+            token, 
+            unreadCount,
+            setUnreadCount 
+          })}>
             <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
+            {unreadCount > 0 && (
+              <View style={styles.notificationBadge}>
+                <Text style={styles.badgeText}>{unreadCount}</Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
 
@@ -261,6 +329,21 @@ const styles = StyleSheet.create({
     fontSize: 29,
     color: '#FFFFFF',
   },
+  notificationBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: 'red',
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   overlayImage: {
     flex: 1,
     textAlign: 'center',
@@ -278,7 +361,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.07)',
     borderRadius: wp(4),
     width:wp(82),
-    // paddingHorizontal: wp(1),
     paddingVertical:wp(3),
     alignItems: 'center',
     marginBottom: -wp(3)

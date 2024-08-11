@@ -14,7 +14,7 @@ const HomeScreen = () => {
       <View style={styles.innerContainer}>
         <Image source={images.title} style={styles.titleImage} resizeMode="contain" />
         <View style={styles.botImageContainer}>
-          <Svg height="100%" width="100%" viewBox="0 0 100 100" style={styles.gradient}>
+          <Svg height="80%" width="80%" viewBox="0 0 100 100" style={styles.gradient}>
             <Defs>
               <RadialGradient
                 id="grad"
@@ -23,7 +23,7 @@ const HomeScreen = () => {
                 r="50%"
                 gradientUnits="userSpaceOnUse"
               >
-                <Stop offset="0%" stopColor="#FBFCF6" stopOpacity="1" />
+                <Stop offset="0%" stopColor="#FBFCF6" stopOpacity=".6" />
                 <Stop offset="100%" stopColor="#1C58F2" stopOpacity="1" />
               </RadialGradient>
             </Defs>
@@ -58,37 +58,49 @@ const styles = StyleSheet.create({
   },
   titleImage: {
     width: '80%',
-    height: height * 0.15,
-    marginTop: height * 0.05,
+    height: height * 0.17,
+    marginTop: height * 0.04,
+    top:-hp(1)
+   
+    
   },
   botImageContainer: {
-    width: wp(70), // Ensure square dimensions for perfect circle
-    height: wp(70), // Use widthPercentageToDP for responsive sizing
+    width: wp(80), // Ensure square dimensions for perfect circle
+    height: wp(80), // Use widthPercentageToDP for responsive sizing
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: height * 0.05,
     position: 'relative',
     overflow: 'hidden',
+    top:-hp(2),
+    // borderWidth:2
+    
+
   },
   gradient: {
+    width:"100%",
+    height:"100%",
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    top:hp(6)
+    
   },
   botImage: {
-    width: '100%', // Adjust this to fit the image within the circle
-    height: '100%',
+    width: wp(80), // Adjust this to fit the image within the circle
+    height: wp(80),
     resizeMode: 'contain',
+    
   },
   bottomContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: height * 0.05,
+    marginTop:hp(2),
+    marginBottom: hp(1)
   },
   text: {
     color: '#FBFCF6',
     fontWeight: 'bold',
-    marginTop: 20,
+    marginTop: hp(2),
+    fontFamily: 'Nunito',
   },
 });
 

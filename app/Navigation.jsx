@@ -35,6 +35,8 @@ import OwnQuizWelcomePage from '../app/screens/OwnQuizWelcomePage';
 import OwnQuizChatPage from '../app/screens/OwnQuizChatPage';
 import OwnQuizLoadingPage from '../app/screens/OwnQuizLoadingPage';
 import OwnQuizQuestionScreen from '../app/screens/OwnQuizQuestionScreen';
+import OtpVerificationScreen from './screens/OtpVerificationScreen';
+import SuccessScreen from './screens/SuccessScreen';
 const Stack = createNativeStackNavigator();
 
 function Navigation() {
@@ -92,7 +94,7 @@ function Navigation() {
         <Stack.Screen name="Second" component={SecondScreen} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="SignInFirst" component={SignInFirst} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false, animation: 'fade' }} />
-        <Stack.Screen name="CreateNewPassword" component={CreateNewPasswordScreen} options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="CreateNewPasswordScreen" component={CreateNewPasswordScreen} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="CreateAnAccountScreen1" component={CreateAnAccountScreen1} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="CreateAnAccountScreen2" component={CreateAnAccountScreen2} options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="AfterSignedScreen" component={AfterSignedScreen} options={{ headerShown: false, animation: 'fade' }} />
@@ -116,6 +118,8 @@ function Navigation() {
         <Stack.Screen name="OwnQuizChatPage" component={OwnQuizChatPage} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="OwnQuizLoadingPage" component={OwnQuizLoadingPage} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="OwnQuizQuestionScreen" component={OwnQuizQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="OtpVerificationScreen" component={OtpVerificationScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{headerShown: false , animation: 'fade'}}/>
       </Stack.Navigator>
       {routeNameRef.current !== 'Splash' && <BackgroundMusic />}
     </NavigationContainer>

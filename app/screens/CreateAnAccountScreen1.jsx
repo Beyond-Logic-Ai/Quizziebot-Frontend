@@ -314,9 +314,7 @@ const styles = StyleSheet.create({
     paddingTop: hp(2),
     
   },
-  backButton: {
-    marginRight: 16,
-  },
+ 
   progressBarContainer: {
     flex: .65,
     height: 12,
@@ -424,6 +422,7 @@ const styles = StyleSheet.create({
     color: '#000',
     marginLeft:-wp(1),
     textDecorationLine: 'none',
+    
   },
   // orText: {
   //   marginVertical: 10,

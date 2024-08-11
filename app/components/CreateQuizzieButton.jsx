@@ -47,12 +47,13 @@ const styles = StyleSheet.create({
   },
   btn: {
     
-    width: 250,
+    width: wp(75),
     height: hp(8.5),
    
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius:wp(3)
     // borderColor: 'black',
     // borderWidth: 2,
     

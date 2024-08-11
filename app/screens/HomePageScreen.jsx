@@ -209,13 +209,14 @@ const styles = StyleSheet.create({
     height: 43,
     borderRadius: 22,
     borderWidth:.5,
-    borderColor:"#FFF"
+    borderColor:"#FFF",
+    marginLeft:wp(2)
   },
   username: {
     flex: 0.95,
     marginLeft: 5,
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: wp(4.5),
     fontWeight: 'bold',
     fontFamily: 'Nunito',
   },
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 16,
+    borderRadius: wp(3.5),
     paddingHorizontal: 5,
     paddingVertical: 3,
   },
@@ -275,10 +276,12 @@ const styles = StyleSheet.create({
   },
   textBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.07)',
-    borderRadius: 18,
-    padding: 20,
+    borderRadius: wp(4),
+    width:wp(82),
+    // paddingHorizontal: wp(1),
+    paddingVertical:wp(3),
     alignItems: 'center',
-    marginBottom: 0,
+    marginBottom: -wp(3)
   },
   subtitle: {
     fontSize: wp(4),
@@ -290,9 +293,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#366EFF',
-    width: 250,
+    width: wp(75),
     height: 50,
-    borderRadius: 20,
+    borderRadius:wp(3)
   },
   play: {
     shadowColor: '#000',
@@ -324,6 +327,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerText: {
+    top:4,
     fontSize: wp(3),
     color: '#000',
     fontFamily: 'Nunito',

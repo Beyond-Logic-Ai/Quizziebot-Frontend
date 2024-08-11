@@ -3,8 +3,8 @@ export const images = {
     logo1: require('../assets/images/logo1.png'), // Update with the correct path
     logo2: require('../assets/images/logo2.png'),
     logo3: require('../assets/images/logo3.png'),
-    logo4: require('../assets/images/grouplogo.png'),
-    logo5: require('../assets/images/logo4.png'),
+    logo4: require('../assets/images/logo4.png'),
+    // logo5: require('../assets/images/logo4.png'),
     google: require('../assets/images/Google.png'),
     apple: require('../assets/images/Apple.png'),
     facebook: require('../assets/images/Facebook.png'),

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: wp(62),
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: hp(2),
+    marginBottom: hp(1),
     // marginTop: hp(1),
     // iOS shadow properties
     shadowColor: '#000',
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
     width: wp(62),
     height:hp(7),
     paddingHorizontal:hp(8.5),
-    borderRadius: wp(10),
+    borderRadius: wp(4),
     alignItems: 'center',
     justifyContent: 'center',
   },
   button: {
     width: '100%',
-    borderRadius: wp(10),
+    borderRadius: wp(4),
     overflow: 'hidden',
     
   },

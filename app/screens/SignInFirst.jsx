@@ -10,6 +10,7 @@ import axios from 'axios';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
+import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
 
@@ -126,18 +127,45 @@ const SignInFirst = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                    <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <Ionicons name="arrow-back" size={24} color="black" />
+                
+                <View style={styles.headerContainer}>
+                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                     <Ionicons name="arrow-back" size={24} color="black" />
                     </TouchableOpacity>
-                    <View style={styles.innerContainer}>
-                        <Image source={images.logo3} style={styles.image} resizeMode="contain" />
+                 </View>
+            <View style={styles.robotImageContainer}>
+            <Svg height="100%" width="100%" viewBox="0 0 100 100">
+            <Defs>
+             <RadialGradient
+              id="grad"
+              cx="50%"
+              cy="50%"
+              rx="50%"
+              ry="50%"
+              fx="50%"
+              fy="50%"
+              gradientUnits="userSpaceOnUse"
+            >
+              <Stop offset="0%" stopColor="#1C58F2" stopOpacity="1" />
+              <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+            </RadialGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
+        </Svg>
+                <Image source={images.logo3} style={styles.robotImage} resizeMode="contain" />
+                    </View>
+                        
 
+                        
+
+                        
+                        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                        <View style={styles.innerContainer}>
                         <Text style={styles.signInText}>
                             <Text style={styles.signInTextBlack}>Sign in to </Text>
                             <Text style={styles.signInTextBlue}>Quizzie Bot</Text>
                         </Text>
-
+                        
                         <Text style={styles.label}>Email</Text>
                         <TextInput 
                             style={styles.inputLine}
@@ -188,22 +216,17 @@ const SignInFirst = ({ navigation }) => {
                             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
                         </TouchableOpacity>
 
-                        <Text style={styles.orText}>or</Text>
-
-                        <View style={styles.socialLogosContainer}>
-                            <TouchableOpacity onPress={() => promptAsync()}>
-                                <Image source={images.google} style={styles.socialLogo} />
-                            </TouchableOpacity>
+                        
                         </View>
-
+                        </ScrollView>
                         <View style={styles.buttonContainer}>
                             <CustomButton3
                                 title="SIGN IN"
                                 onPress={handleSignIn}
                             />
                         </View>
-                    </View>
-                </ScrollView>
+                    
+                
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
@@ -220,26 +243,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    margin: 16,
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingTop: hp(2),
+   
   },
+  robotImageContainer: {
+    width: hp(16),
+    height: hp(16),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: hp(1),
+    alignSelf:"center",
+  },
+  robotImage: {
+    position: 'absolute',
+    width: hp(20),
+    height: hp(20),
+    resizeMode: 'contain',
+  },
+//   backButton: {
+//     alignSelf: 'flex-start',
+//     margin: 16,
+//   },
   innerContainer: {
     width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+
+    marginBottom:hp(6)
+    
   },
-  image: {
-    width: '80%',
-    height: height * 0.15,
-    marginVertical: 10,
-    borderWidth:2
-  },
+  
   signInText: {
     flexDirection: 'row',
-    fontSize: 24,
-    marginVertical: 10,
+    fontSize: wp(7),
+    fontWeight:"bold",
+    fontFamily: 'Nunito',
+    top:-hp(6)
   },
   signInTextBlack: {
     color: 'black',
@@ -255,6 +300,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     fontSize: 16,
+    fontFamily: 'Nunito',
   },
   inputLine: {
     width: '100%',
@@ -263,6 +309,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 10,
     marginVertical: 10,
+    fontFamily: 'Nunito',
+    fontWeight:"bold"
   },
   passwordContainer: {
     width: '100%',
@@ -277,19 +325,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    marginVertical: 10,
-    borderWidth:2
+    marginVertical: wp(2),
+    
   },
   rememberMeText: {
-    marginLeft: 10,
+    fontFamily: 'Nunito',
     fontSize: 16,
+    fontWeight:"bold",
     color: '#000',
+    marginLeft:-wp(1),
+    textDecorationLine: 'none',
+    
   },
   forgotPasswordText: {
     color: '#1C58F2',
+    fontSize:wp(4),
     alignSelf: 'flex-end',
-    marginVertical: 10,
+    marginTop:hp(5),
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
   },
   orText: {
     color: '#999999',
@@ -318,7 +372,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginVertical: 20,
+    marginBottom:wp(4)
   },
 });
 

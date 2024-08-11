@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Image, View, Text, StyleSheet, ImageBackground, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import ClassicButton from '../components/ClassicButton';
 import ArcadeButton from '../components/ArcadeButton';
 import CreateQuizzieButton from '../components/CreateQuizzieButton';
@@ -31,10 +32,11 @@ const ArcadePage = ({ navigation }) => {
     <ImageBackground source={images.homescreenbg1} style={styles.backgroundImage} blurRadius={15}>
       <SafeAreaView style={styles.container}>
         {/* Header */}
-        
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('HomePageScreen')}>
-            <Icon name="arrow-back" size={wp(6)} color="#FFF" />
-          </TouchableOpacity>
+        <View style={styles.headerContainer}>
+                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                     <Ionicons name="arrow-back" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                 </View>
       
 
         {/* Main Content */}
@@ -44,7 +46,7 @@ const ArcadePage = ({ navigation }) => {
 
         <View style={styles.mainContent}>
           <Text style={styles.title}>Pick your path: Creator, Classic, or Arcade. Dive in!</Text>
-          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          
             <ClassicButton
               title="Classic"
               screenName="LoadingScreen"
@@ -59,7 +61,7 @@ const ArcadePage = ({ navigation }) => {
               navigation={navigation}
             />
             
-          </ScrollView>
+         
         </View>
       </SafeAreaView>
     </ImageBackground>
@@ -83,9 +85,13 @@ const styles = StyleSheet.create({
     
   //   borderWidth:2
   // },
-  backButton: {
-    marginTop:hp(3.5),
-    left:-wp(40)
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingTop: hp(2),
+   
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -94,31 +100,33 @@ const styles = StyleSheet.create({
   },
   robotContainer: {
     alignItems: 'center',
-    marginBottom: '-5%',
+    
+    marginBottom:wp(12)
   },
   robotImage: {
-    width: wp(30),
-    height: hp(30),
+    width: wp(60),
+    height: wp(60),
     aspectRatio: 1,
-    marginTop: '2%',
+    
   },
   mainContent: {
-    flex: 1,
+    height:wp(70),
+    width:wp(80),
     justifyContent: 'center',
-    // alignItems: 'center',
+    alignItems: 'center',
     paddingHorizontal: '5%',
+    paddingVertical:wp(3),
     borderRadius: wp(5),
     marginHorizontal: wp(6),
-    marginTop: hp(0),
     marginBottom: hp(8),
-    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    backgroundColor: 'rgba(255, 255, 255, 0.07)',
   },
   title: {
-    fontSize: wp(5),
+    fontSize: wp(4),
     textAlign: 'center',
     color: '#FFF',
-    marginTop: hp(2),
-    marginBottom: hp(-1),
+    marginTop: -hp(2),
+    marginBottom:hp(3),
     fontWeight: 'bold',
     fontFamily: 'Nunito',
   },
@@ -142,6 +150,7 @@ const styles = StyleSheet.create({
     height: wp(6),
   },
   footerText: {
+    
     fontSize: wp(3),
     color: '#000',
   },

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import CustomButton3 from '../components/CustomButton3';
+import { Ionicons } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
+import CustomButton3 from '../components/CustomButton3'; // Ensure correct import
+import { images } from '../../constants/images'; // Ensure the path is correct
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
+import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -46,12 +49,35 @@ const ForgotPasswordScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
+        
+        <View style={styles.headerContainer}>
+                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                     <Ionicons name="arrow-back" size={24} color="black" />
+                    </TouchableOpacity>
+        </View>
+        <View style={styles.robotImageContainer}>
+            <Svg height="100%" width="100%" viewBox="0 0 100 100">
+            <Defs>
+             <RadialGradient
+              id="grad"
+              cx="50%"
+              cy="50%"
+              rx="50%"
+              ry="50%"
+              fx="50%"
+              fy="50%"
+              gradientUnits="userSpaceOnUse"
+            >
+              <Stop offset="0%" stopColor="#1C58F2" stopOpacity="1" />
+              <Stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+            </RadialGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
+        </Svg>
+                <Image source={images.logo4} style={styles.robotImage} resizeMode="contain" />
+                    </View>
+          <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <View style={styles.innerContainer}>
-            <Image source={{uri: 'your-logo-url'}} style={styles.image} resizeMode="contain" />
             <Text style={styles.title}>
               <Text style={styles.titleBlack}>Forgot </Text>
               <Text style={styles.titleBlue}>Password</Text>
@@ -96,9 +122,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 20,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    margin: 16,
+  // backButton: {
+  //   alignSelf: 'flex-start',
+  //   margin: 16,
+  // },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingTop: hp(2),
+   
+  },
+  robotImageContainer: {
+    width: hp(16),
+    height: hp(16),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: hp(1),
+    alignSelf:"center",
+  },
+  robotImage: {
+    position: 'absolute',
+    width: hp(20),
+    height: hp(20),
+    resizeMode: 'contain',
   },
   innerContainer: {
     width: '100%',
@@ -114,22 +162,25 @@ const styles = StyleSheet.create({
   },
   title: {
     flexDirection: 'row',
-    fontSize: 24,
+    fontSize: wp(6),
     marginVertical: 10,
   },
   titleBlack: {
     color: 'black',
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
   },
   titleBlue: {
     color: '#1C58F2',
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
   },
   description: {
     textAlign: 'center',
     color: '#999',
     marginVertical: 10,
     paddingHorizontal: 20,
+    fontFamily: 'Nunito',
   },
   label: {
     alignSelf: 'flex-start',
@@ -137,6 +188,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     fontSize: 16,
+    fontFamily: 'Nunito',
   },
   inputLine: {
     width: '100%',
@@ -145,17 +197,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 10,
     marginVertical: 10,
+    fontFamily: 'Nunito',
   },
   errorText: {
     color: 'red',
     alignSelf: 'flex-start',
     marginTop: -10,
     marginBottom: 10,
+    fontFamily: 'Nunito',
   },
   bottomContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 40, // Add space from the bottom
+    marginBottom:wp(4) // Add space from the bottom
   },
 });
 

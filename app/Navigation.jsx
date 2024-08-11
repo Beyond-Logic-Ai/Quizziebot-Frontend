@@ -37,6 +37,8 @@ import OwnQuizLoadingPage from '../app/screens/OwnQuizLoadingPage';
 import OwnQuizQuestionScreen from '../app/screens/OwnQuizQuestionScreen';
 import OtpVerificationScreen from './screens/OtpVerificationScreen';
 import SuccessScreen from './screens/SuccessScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
+import NotificationDetailScreen from './screens/NotificationDetailScreen';
 const Stack = createNativeStackNavigator();
 
 function Navigation() {
@@ -120,6 +122,8 @@ function Navigation() {
         <Stack.Screen name="OwnQuizQuestionScreen" component={OwnQuizQuestionScreen} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="OtpVerificationScreen" component={OtpVerificationScreen} options={{headerShown: false , animation: 'fade'}}/>
         <Stack.Screen name="SuccessScreen" component={SuccessScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} options={{headerShown: false , animation: 'fade'}}/>
+        <Stack.Screen name="NotificationDetailScreen" component={NotificationDetailScreen} options={{headerShown: false , animation: 'fade'}}/>
       </Stack.Navigator>
       {routeNameRef.current !== 'Splash' && <BackgroundMusic />}
     </NavigationContainer>

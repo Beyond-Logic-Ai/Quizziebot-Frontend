@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
 import CustomButton3 from '../components/CustomButton3'; // Ensure correct import
 import { images } from '../../constants/images'; // Ensure the path is correct
-import CreateNewPasswordScreen from './CreateNewPasswordScreen';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import axios from 'axios';
+
 const { width, height } = Dimensions.get('window');
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
@@ -13,17 +14,35 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
+  // Improved email validation regex
   const validateEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.toLowerCase());
   };
 
-  const handleContinue = () => {
-    if (!validateEmail(email)) {
+  const handleContinue = async () => {
+    const normalizedEmail = email.trim().toLowerCase(); // Trim and convert email to lowercase
+    if (!validateEmail(normalizedEmail)) {
       setEmailError('Please enter a valid email address');
     } else {
       setEmailError('');
-      // Continue to the next step
+      try {
+        // API call to send OTP to user's email
+        const response = await axios.post('https://api.quizziebot.com/api/auth/forgot-password', { email: normalizedEmail });
+
+        if (response.status === 200) {
+          // Navigate to OTP verification screen after successfully sending OTP
+          navigation.navigate('OtpVerificationScreen', { email: normalizedEmail });
+        } else {
+          Alert.alert('Error', 'Failed to send OTP. Please try again.');
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          Alert.alert('Error', error.response.data.message || 'Failed to send OTP.');
+        } else {
+          Alert.alert('Error', 'Failed to send OTP. Please check your connection and try again.');
+        }
+      }
     }
   };
 
@@ -74,6 +93,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              autoCapitalize="none"  // Disable automatic capitalization
+              autoCorrect={false}    // Disable autocorrect for email input
+              textContentType="emailAddress"  // Specify that this is an email field
             />
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
           </View>
@@ -81,7 +103,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <View style={styles.bottomContainer}>
           <CustomButton3
             title="CONTINUE"
-            onPress="CreateNewPassword"
+            onPress={handleContinue}  // Corrected onPress prop to call handleContinue function
           />
         </View>
       </KeyboardAvoidingView>

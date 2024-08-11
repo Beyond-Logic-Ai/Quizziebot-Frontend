@@ -1,28 +1,30 @@
-// components/BackgroundMusic.js
-import React, { useEffect } from 'react';
-import { Audio } from 'expo-av';
-import { sounds } from '../../constants/sounds';
+import React, { useEffect, useContext, useRef } from 'react';
+import { BackgroundMusicContext } from '../context/BackgroundMusicContext';
+import backgroundMusicManager from '../managers/BackgroundMusicManager';
 
 const BackgroundMusic = () => {
+  const { isPlaying } = useContext(BackgroundMusicContext);
+  const isMusicPlaying = useRef(false);
+
   useEffect(() => {
-    let soundObject = new Audio.Sound();
-
-    const playMusic = async () => {
-      try {
-        await soundObject.loadAsync(sounds.gamebgm);
-        await soundObject.setIsLoopingAsync(true);
-        await soundObject.playAsync();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    playMusic();
+    if (isPlaying && !isMusicPlaying.current) {
+      console.log("Starting background music");
+      backgroundMusicManager.play();
+      isMusicPlaying.current = true;
+    } else if (!isPlaying && isMusicPlaying.current) {
+      console.log("Pausing background music");
+      backgroundMusicManager.pause();
+      isMusicPlaying.current = false;
+    }
 
     return () => {
-      soundObject.unloadAsync();
+      if (isMusicPlaying.current) {
+        console.log("Stopping background music");
+        backgroundMusicManager.stop();
+        isMusicPlaying.current = false;
+      }
     };
-  }, []);
+  }, [isPlaying]);
 
   return null;
 };

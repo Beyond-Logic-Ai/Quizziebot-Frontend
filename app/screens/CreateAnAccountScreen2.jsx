@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import debounce from 'lodash.debounce';
+import * as Notifications from 'expo-notifications';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
@@ -41,10 +42,51 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
   const [isSignUpSuccessVisible, setIsSignUpSuccessVisible] = useState(false);
   const [isUsernameValid, setIsUsernameValid] = useState(null);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [fcmToken, setFcmToken] = useState(null);
 
   useEffect(() => {
     setUsername(generateRandomUsername(firstname, lastname));
+    registerForPushNotificationsAsync();
   }, [firstname, lastname]);
+
+  // Function to register for push notifications and get the fcmToken
+  const registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+      Alert.alert('Failed to get push token for push notification!');
+      return;
+    }
+
+    try {
+      const token = (await Notifications.getExpoPushTokenAsync({
+        projectId: '94b07c5a-a102-4d27-b5eb-4c6eb9659a2e', // Replace with your actual project ID
+      })).data;
+      
+      // Remove the "ExponentPushToken[" prefix and "]" suffix
+      const cleanedToken = token.replace(/^ExponentPushToken\[(.*)\]$/, '$1');
+      console.log('Cleaned FCM Token:', cleanedToken);
+      setFcmToken(cleanedToken); // Save the cleaned fcmToken in the state
+    } catch (error) {
+      console.error('Error getting FCM token:', error);
+      Alert.alert('Error', 'Unable to retrieve FCM Token. Please try again.');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  };
 
   const checkUsernameExists = async (username) => {
     if (username.length < 3 || username.length > 14) {
@@ -68,10 +110,10 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
     const lowerCaseText = text.toLowerCase();
     if (lowerCaseText.length <= 14) {
       setUsername(lowerCaseText);
-      if (lowerCaseText.length >= 3) { // Minimum length for username to check
+      if (lowerCaseText.length >= 3) {
         debouncedCheckUsernameExists(lowerCaseText);
       } else {
-        setIsUsernameValid(null); // Reset if less than minimum length
+        setIsUsernameValid(null);
       }
     }
   };
@@ -107,6 +149,11 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
       setGenderError('');
     }
 
+    if (!fcmToken) {
+      Alert.alert('Error', 'Unable to retrieve FCM Token. Please try again.');
+      valid = false;
+    }
+
     if (valid) {
       try {
         const requestBody = {
@@ -122,7 +169,8 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
           loginType,
           accountType,
           age: new Date().getFullYear() - dob.getFullYear(),
-          rememberMe
+          rememberMe,
+          fcmToken // Include the cleaned fcmToken in the request body
         };
 
         console.log('Sending request to backend with body:', requestBody);
@@ -132,31 +180,29 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
         console.log('Response from backend:', response);
 
         if (response.status === 201 || response.status === 200) {
-          // Log in the user to get the token
           try {
             const loginRequestBody = {
               identifier: email,
               password,
             };
+
             console.log('Sending login request to backend with body:', loginRequestBody);
 
             const loginResponse = await axios.post('https://api.quizziebot.com/api/auth/signin', loginRequestBody);
 
-            console.log('Login response from backend:', loginResponse);
+            console.log('Login response from backend:', loginResponse.data);
 
-            if (loginResponse.status === 200) {
-              const userSession = {
-                token: loginResponse.data.token,
-                userId: loginResponse.data.userId,
-                username: requestBody.username,
-                coins: 0, // Initialize coins to 0 after signup
-              };
-              console.log('Saving user session:', userSession);
-              await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
-              navigation.navigate('SignUpSuccessScreen'); // Navigate to the success screen
-            } else {
-              Alert.alert('Error', 'Login failed. Please try again.');
-            }
+            const userSession = {
+              token: loginResponse.data.token,
+              userId: loginResponse.data.userId || loginResponse.data.user?.id, // Adjust if necessary
+              username: requestBody.username,
+              coins: 0,
+              fcmToken: fcmToken, // Add the cleaned fcmToken here
+            };
+
+            console.log('Saving user session:', userSession);
+            await AsyncStorage.setItem('userSession', JSON.stringify(userSession));
+            navigation.navigate('SignUpSuccessScreen');
           } catch (loginError) {
             console.error('Error during login:', loginError);
             Alert.alert('Error', `Failed to login user: ${loginError.response ? loginError.response.data.message : loginError.message}`);
@@ -191,27 +237,23 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-        
-          <View style={styles.headerContainer}>
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-              <Ionicons name="arrow-back" size={24} color="black" />
-            </TouchableOpacity>
-            <View style={styles.progressBarContainer}>
-              <View style={[styles.progressBar, { width: '40%' }]}></View>
-            </View>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <View style={styles.progressBarContainer}>
+            <View style={[styles.progressBar, { width: '40%' }]}></View>
           </View>
-          
-          
-            <Text style={styles.title}>
-              <Text style={styles.titleBlack}>Create an </Text>
-              <Text style={styles.titleBlue}>account</Text>
-            </Text>
-
-            <Text style={styles.infoText}>
-              Please Complete your profile. {'\n'}Don't worry, your data will remain private and {'\n'}only you can see it.
-            </Text>
-            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-            <View style={styles.innerContainer}>
+        </View>
+        <Text style={styles.title}>
+          <Text style={styles.titleBlack}>Create an </Text>
+          <Text style={styles.titleBlue}>account</Text>
+        </Text>
+        <Text style={styles.infoText}>
+          Please Complete your profile. {'\n'}Don't worry, your data will remain private and {'\n'}only you can see it.
+        </Text>
+        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+          <View style={styles.innerContainer}>
             <Text style={styles.label}>Username</Text>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -269,16 +311,14 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
               <Ionicons name="chevron-down" size={24} color="#1877F2" style={styles.inlineIcon} />
             </View>
             {genderError ? <Text style={styles.errorText}>{genderError}</Text> : null}
-            </View>
-            </ScrollView>
-            <View style={styles.buttonContainer}>
-              <CustomButton3
-                title="SIGN UP"
-                onPress={handleFinalSignUp}
-              />
-            </View>
-          
-        
+          </View>
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <CustomButton3
+            title="SIGN UP"
+            onPress={handleFinalSignUp}
+          />
+        </View>
 
         <Modal
           visible={showCountryModal}
@@ -346,11 +386,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollViewContainer: {
-    flexGrow: .7,
+    flexGrow: 0.7,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
-    
   },
   headerContainer: {
     flexDirection: 'row',
@@ -358,17 +397,16 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingTop: hp(2),
-    
   },
   backButton: {
     marginRight: 16,
   },
   progressBarContainer: {
-    flex: .65,
+    flex: 0.65,
     height: 10,
     backgroundColor: '#EEEEEE',
     borderRadius: wp(3),
-    marginLeft:wp(14.5),
+    marginLeft: wp(14.5),
   },
   progressBar: {
     height: '100%',
@@ -379,15 +417,14 @@ const styles = StyleSheet.create({
     width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:-wp(3),
-    
+    marginTop: -wp(3),
   },
   title: {
-    alignSelf:"center",
+    alignSelf: "center",
     fontSize: wp(6.5),
     fontFamily: 'Nunito',
     marginBottom: hp(1.5),
-    marginTop:hp(3)
+    marginTop: hp(3)
   },
   titleBlack: {
     color: 'black',
@@ -399,8 +436,8 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: 'center',
-    marginTop:hp(.5),
-    marginBottom:hp(2),
+    marginTop: hp(0.5),
+    marginBottom: hp(2),
     color: '#212121',
     fontSize: wp(3.8),
     fontFamily: 'Nunito',
@@ -418,15 +455,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    
-    
   },
   inputWrapper1: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom:hp(3)
-    
+    marginBottom: hp(3)
   },
   inputLine: {
     flex: 1,
@@ -457,7 +491,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom:wp(4)
+    marginBottom: wp(4)
   },
   modalOverlay: {
     flex: 1,

@@ -1,16 +1,58 @@
-
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Switch, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import backgroundMusicManager from '../managers/BackgroundMusicManager'; // Assuming this is the correct path
 
 const MusicAndEffectsScreen = ({ navigation }) => {
   const [isMusicEnabled, setMusicEnabled] = useState(true);
   const [isSoundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
   const [isVibrationsEnabled, setVibrationsEnabled] = useState(true);
+
+  // Use a ref to track the initial load of the music preference
+  const initialLoad = useRef(true);
+
+  useEffect(() => {
+    // Load the music preference when the component mounts
+    const loadMusicPreference = async () => {
+      try {
+        const musicPreference = await AsyncStorage.getItem('isMusicEnabled');
+        if (musicPreference !== null) {
+          setMusicEnabled(JSON.parse(musicPreference));
+        }
+      } catch (error) {
+        console.error('Failed to load music preference:', error);
+      }
+    };
+
+    loadMusicPreference();
+  }, []);
+
+  useEffect(() => {
+    // Only run this effect if it's not the initial load
+    if (initialLoad.current) {
+      initialLoad.current = false;
+      return;
+    }
+
+    const saveMusicPreference = async () => {
+      try {
+        await AsyncStorage.setItem('isMusicEnabled', JSON.stringify(isMusicEnabled));
+        if (isMusicEnabled) {
+          backgroundMusicManager.play();
+        } else {
+          backgroundMusicManager.pause();
+        }
+      } catch (error) {
+        console.error('Failed to save music preference:', error);
+      }
+    };
+
+    saveMusicPreference();
+  }, [isMusicEnabled]);
 
   return (
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={22}>
@@ -51,24 +93,6 @@ const MusicAndEffectsScreen = ({ navigation }) => {
           </View>
         </View>
       </SafeAreaView>
-      {/* <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('HomePageScreen')}>
-          <SimpleLineIcons name="home" style={styles.footerIcon} />
-          <Text style={styles.footerText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Ionicons name="person-outline" style={styles.footerIcon} />
-          <Text style={styles.footerText}>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Ionicons name="trophy-outline" style={styles.footerIcon} />
-          <Text style={styles.footerText}>Leaderboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Ionicons name="options" style={styles.footerIcon} />
-          <Text style={styles.footerText}>Settings</Text>
-        </TouchableOpacity>
-      </View> */}
     </ImageBackground>
   );
 };
@@ -88,14 +112,13 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingTop: hp(2),
-   
   },
   backButton: {
     padding: 8,
   },
   headerTitle: {
     fontSize: 24,
-    marginLeft:wp(10),
+    marginLeft: wp(10),
     fontWeight: 'bold',
     color: '#FFFFFF',
     fontFamily: 'Nunito',
@@ -111,7 +134,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    // backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 10,
     marginVertical: 10,
   },
@@ -120,29 +142,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontFamily: 'Nunito',
     fontWeight: 'bold',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: '4%',
-    backgroundColor: '#FFF',
-    borderTopLeftRadius: wp(4),
-    borderTopRightRadius: wp(4),
-    borderTopWidth: 1,
-    borderTopColor: '#F5F5F5',
-    paddingBottom: hp(4),
-    paddingHorizontal: '5%',
-  },
-  footerIcon: {
-    fontSize:32,
-   },
-  footerButton: {
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: wp(3),
-    color: '#000',
-    fontFamily: 'Nunito',
   },
 });
 

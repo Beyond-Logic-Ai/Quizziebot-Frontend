@@ -141,7 +141,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        
           <View style={styles.headerContainer}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="black" />
@@ -151,7 +151,8 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
             </View>
           </View>
           
-          <View style={styles.innerContainer}>
+          
+         
             <Text style={styles.title}>
               <Text style={styles.titleBlack}>Create an </Text>
               <Text style={styles.titleBlue}>account</Text>
@@ -160,13 +161,16 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
             <Text style={styles.infoText}>
               Please Complete your profile. {'\n'}Don't worry, your data will remain private and {'\n'}only you can see it.
             </Text>
-
+            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+            <View style={styles.innerContainer}>
+          <View style={styles.row1}>
             <View style={styles.row}>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>First Name</Text>
                 <TextInput 
                   style={styles.inputLine}
                   placeholder="First Name"
+                  fontFamily= 'Nunito'
                   placeholderTextColor="#999"
                   value={firstName}
                   onChangeText={setFirstName}
@@ -179,6 +183,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 <TextInput 
                   style={styles.inputLine}
                   placeholder="Last Name"
+                  fontFamily= 'Nunito'
                   placeholderTextColor="#999"
                   value={lastName}
                   onChangeText={setLastName}
@@ -194,6 +199,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 style={styles.inputLine}
                 placeholder="Enter your email"
                 placeholderTextColor="#999"
+                fontFamily= 'Nunito'
                 value={email}
                 onChangeText={handleEmailChange}
                 keyboardType="email-address"
@@ -217,6 +223,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 style={styles.inputLine}
                 placeholder="Enter your phone number"
                 placeholderTextColor="#999"
+                fontFamily= 'Nunito'
                 value={phoneNumber}
                 onChangeText={handlePhoneNumberChange}
                 keyboardType="phone-pad"
@@ -241,6 +248,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 style={styles.inputLine}
                 placeholder="Enter your password"
                 placeholderTextColor="#999"
+                fontFamily= 'Nunito'
                 secureTextEntry={!isPasswordVisible}
                 value={password}
                 onChangeText={setPassword}
@@ -267,24 +275,18 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
                 onPress={() => setRememberMe(!rememberMe)}
                 textStyle={{ ...styles.rememberMeText, textDecorationLine: 'none' }}
               />
+            </View>          
             </View>
-
-            <Text style={styles.orText}>or</Text>
-
-            <View style={styles.socialLogosContainer}>
-              <TouchableOpacity onPress={() => { /* handle Google sign-up */ }}>
-                <Image source={images.google} style={styles.socialLogo} />
-              </TouchableOpacity>
             </View>
-
+            </ScrollView>
             <View style={styles.buttonContainer}>
               <CustomButton3
                 title="CONTINUE"
                 onPress={handleSignUp}
               />
             </View>
-          </View>
-        </ScrollView>
+          
+        
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -295,8 +297,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  row1:{
+    
+  },
   scrollViewContainer: {
-    flexGrow: 1,
+    flexGrow: .7,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
@@ -306,34 +311,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: 16,
-    marginTop: 16,
+    paddingTop: hp(2),
+    
   },
   backButton: {
     marginRight: 16,
   },
   progressBarContainer: {
-    flex: 1,
-    height: 10,
-    backgroundColor: '#D3D3D3',
-    borderRadius: 5,
+    flex: .65,
+    height: 12,
+    backgroundColor: '#EEEEEE',
+    borderRadius: wp(3),
+    marginLeft:wp(14.5),
+    
   },
   progressBar: {
-    width: '20%', // Adjust this value based on progress
+    width: '25%', // Adjust this value based on progress
     height: '100%',
     backgroundColor: '#1C58F2',
-    borderRadius: 5,
+    borderRadius: wp(3),
   },
   innerContainer: {
-    width: '90%',
+    
+    width: wp(85),
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
+    
+    marginTop:-wp(3)
+    // marginBottom:wp(4),
+    
   },
   title: {
-    flexDirection: 'row',
-    fontSize: 24,
-    marginTop: 20,
-    marginBottom: 10,
+    alignSelf:"center",
+    fontSize: wp(6.5),
+    fontFamily: 'Nunito',
+    marginBottom: hp(1.5),
+    marginTop:hp(3)
+    
   },
   titleBlack: {
     color: 'black',
@@ -345,14 +359,19 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: 'center',
-    marginVertical: 10,
-    color: '#666',
+    marginTop:hp(.5),
+    marginBottom:hp(2),
+    color: '#212121',
+    fontSize: wp(3.8),
+    fontFamily: 'Nunito',
     lineHeight: 22,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    
+   
   },
   inputContainer: {
     width: '48%',
@@ -361,8 +380,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     color: 'black',
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginVertical: 5,
     fontSize: 16,
+    fontFamily: 'Nunito',    
+   
+    
   },
   inputLine: {
     width: '100%',
@@ -371,6 +393,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 10,
     marginVertical: 10,
+    
+    
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -390,25 +414,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    marginVertical: 10,
+    marginVertical: wp(2),
+    
   },
   rememberMeText: {
-    marginLeft: 10,
+    fontFamily: 'Nunito',
     fontSize: 16,
+    fontWeight:"bold",
     color: '#000',
+    marginLeft:-wp(1),
     textDecorationLine: 'none',
   },
-  orText: {
-    marginVertical: 10,
-    color: '#999999',
-  },
-  socialLogosContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: hp(1),
-    backgroundColor: '#FFF',
-    marginHorizontal: wp(2)
-  },
+  // orText: {
+  //   marginVertical: 10,
+  //   color: '#999999',
+  //   borderWidth:2
+  // },
+  // socialLogosContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around',
+  //   paddingVertical: hp(1),
+  //   backgroundColor: '#FFF',
+  //   marginHorizontal: wp(2)
+  // },
   socialLogo: {
     width: hp(4),
     height: hp(4),
@@ -427,7 +455,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginVertical: 20,
+    marginBottom:wp(4)
+    
   },
 });
 

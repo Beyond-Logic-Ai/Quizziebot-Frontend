@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import debounce from 'lodash.debounce';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
 
@@ -190,7 +191,7 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        
           <View style={styles.headerContainer}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="black" />
@@ -199,8 +200,8 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
               <View style={[styles.progressBar, { width: '40%' }]}></View>
             </View>
           </View>
-
-          <View style={styles.innerContainer}>
+          
+          
             <Text style={styles.title}>
               <Text style={styles.titleBlack}>Create an </Text>
               <Text style={styles.titleBlue}>account</Text>
@@ -209,7 +210,8 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
             <Text style={styles.infoText}>
               Please Complete your profile. {'\n'}Don't worry, your data will remain private and {'\n'}only you can see it.
             </Text>
-
+            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+            <View style={styles.innerContainer}>
             <Text style={styles.label}>Username</Text>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -252,7 +254,7 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
             {countryError ? <Text style={styles.errorText}>{countryError}</Text> : null}
 
             <Text style={styles.label}>Gender</Text>
-            <View style={styles.inputWrapper}>
+            <View style={styles.inputWrapper1}>
               <RNPickerSelect
                 onValueChange={(value) => setGender(value)}
                 items={[
@@ -267,15 +269,16 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
               <Ionicons name="chevron-down" size={24} color="#1877F2" style={styles.inlineIcon} />
             </View>
             {genderError ? <Text style={styles.errorText}>{genderError}</Text> : null}
-
+            </View>
+            </ScrollView>
             <View style={styles.buttonContainer}>
               <CustomButton3
                 title="SIGN UP"
                 onPress={handleFinalSignUp}
               />
             </View>
-          </View>
-        </ScrollView>
+          
+        
 
         <Modal
           visible={showCountryModal}
@@ -343,43 +346,48 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollViewContainer: {
-    flexGrow: 1,
+    flexGrow: .7,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
+    
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: 16,
-    marginTop: 16,
+    paddingTop: hp(2),
+    
   },
   backButton: {
     marginRight: 16,
   },
   progressBarContainer: {
-    flex: 1,
+    flex: .65,
     height: 10,
-    backgroundColor: '#D3D3D3',
-    borderRadius: 5,
+    backgroundColor: '#EEEEEE',
+    borderRadius: wp(3),
+    marginLeft:wp(14.5),
   },
   progressBar: {
     height: '100%',
     backgroundColor: '#1C58F2',
-    borderRadius: 5,
+    borderRadius: wp(3),
   },
   innerContainer: {
     width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
+    marginTop:-wp(3),
+    
   },
   title: {
-    flexDirection: 'row',
-    fontSize: 24,
-    marginTop: 20,
-    marginBottom: 10,
+    alignSelf:"center",
+    fontSize: wp(6.5),
+    fontFamily: 'Nunito',
+    marginBottom: hp(1.5),
+    marginTop:hp(3)
   },
   titleBlack: {
     color: 'black',
@@ -391,21 +399,34 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: 'center',
-    marginVertical: 10,
-    color: '#666',
+    marginTop:hp(.5),
+    marginBottom:hp(2),
+    color: '#212121',
+    fontSize: wp(3.8),
+    fontFamily: 'Nunito',
     lineHeight: 22,
   },
   label: {
     alignSelf: 'flex-start',
     color: 'black',
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginVertical: 5,
     fontSize: 16,
+    fontFamily: 'Nunito',
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+    
+    
+  },
+  inputWrapper1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom:hp(3)
+    
   },
   inputLine: {
     flex: 1,
@@ -413,8 +434,9 @@ const styles = StyleSheet.create({
     borderColor: '#1C58F2',
     borderBottomWidth: 1,
     paddingHorizontal: 10,
-    marginVertical: 10,
+    marginVertical: wp(3),
     color: 'black',
+    fontFamily: 'Nunito',
   },
   inputPlaceholder: {
     color: '#999',
@@ -435,7 +457,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
-    marginVertical: 20,
+    marginBottom:wp(4)
   },
   modalOverlay: {
     flex: 1,

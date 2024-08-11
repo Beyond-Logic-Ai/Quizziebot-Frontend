@@ -30,20 +30,22 @@ const CustomButton = ({ title, screenName }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: width * 0.9,
-    height: 64,
+    width: wp(90),
+    height: wp(15),
     backgroundColor: '#FBFCF6',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 29,
-    marginVertical: 15,
+    borderRadius: wp(15),
+    marginVertical: wp(.5),
   },
   buttonText: {
     color: '#1C58F2',
-    fontSize: wp(4),
-    fontWeight: 'bold',
+    fontSize: wp(4.5),
+    fontWeight: "900",
     fontFamily: 'Nunito',
+    letterSpacing:.5
   },
+  
 });
 
 export default CustomButton;

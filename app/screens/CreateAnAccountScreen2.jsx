@@ -13,13 +13,12 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 const { width, height } = Dimensions.get('window');
 
-const generateRandomUsername = (firstName, lastName) => {
-  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_-';
-  let randomUsername = `${firstName}.${lastName}`.toLowerCase();
-  for (let i = randomUsername.length; i < 8; i++) {
-    randomUsername += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return randomUsername;
+// Function to generate a username like (firstname) + (_ or -) + (numbers)
+const generateRandomUsername = (firstName) => {
+  const randomNumber = Math.floor(Math.random() * 10000); // Generates a random number between 0 and 9999
+  const separator = Math.random() < 0.5 ? '_' : '-'; // Randomly choose between '_' and '-'
+  const username = `${firstName}${separator}${randomNumber}`;
+  return username.toLowerCase();
 };
 
 const countries = [
@@ -29,7 +28,7 @@ const countries = [
 
 const CreateAnAccountScreen2 = ({ route, navigation }) => {
   const { firstname, lastname, email, phoneNumber, password, rememberMe, loginType, accountType } = route.params;
-  const [username, setUsername] = useState(generateRandomUsername(firstname, lastname));
+  const [username, setUsername] = useState(generateRandomUsername(firstname));
   const [dob, setDob] = useState(new Date());
   const [country, setCountry] = useState('');
   const [gender, setGender] = useState('');
@@ -45,7 +44,7 @@ const CreateAnAccountScreen2 = ({ route, navigation }) => {
   const [fcmToken, setFcmToken] = useState(null);
 
   useEffect(() => {
-    setUsername(generateRandomUsername(firstname, lastname));
+    setUsername(generateRandomUsername(firstname));
     registerForPushNotificationsAsync();
   }, [firstname, lastname]);
 

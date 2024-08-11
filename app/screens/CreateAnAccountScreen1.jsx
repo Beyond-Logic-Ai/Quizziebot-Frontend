@@ -39,6 +39,11 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
     return re.test(phoneNumber);
   };
 
+  const validatePassword = (password) => {
+    const regexp = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
+    return regexp.test(password);
+  };
+
   const checkIdentifier = async (identifier, type) => {
     try {
       const response = await axios.get(`https://api.quizziebot.com/api/auth/check-identifier?identifier=${identifier}&identifierType=${type}`);
@@ -82,10 +87,6 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
     debouncedCheckPhoneNumber(formattedText);
   };
 
-  const validatePassword = (password) => {
-    return password.length >= 6;
-  };
-
   const handleSignUp = () => {
     let valid = true;
 
@@ -118,7 +119,7 @@ const CreateAnAccountScreen1 = ({ navigation }) => {
     }
 
     if (!validatePassword(password)) {
-      setPasswordError('Password must be at least 6 characters long');
+      setPasswordError('Password must be at least 8 characters long, contain at least one digit, one lower case letter, one upper case letter, and one special character.');
       valid = false;
     } else {
       setPasswordError('');
@@ -425,18 +426,6 @@ const styles = StyleSheet.create({
     marginLeft:-wp(1),
     textDecorationLine: 'none',
   },
-  // orText: {
-  //   marginVertical: 10,
-  //   color: '#999999',
-  //   borderWidth:2
-  // },
-  // socialLogosContainer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around',
-  //   paddingVertical: hp(1),
-  //   backgroundColor: '#FFF',
-  //   marginHorizontal: wp(2)
-  // },
   socialLogo: {
     width: hp(4),
     height: hp(4),

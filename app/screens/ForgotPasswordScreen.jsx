@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+import { Image, ScrollView, Text, View, StyleSheet, TextInput, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
-import CustomButton3 from '../components/CustomButton3'; // Ensure correct import
-import { images } from '../../constants/images'; // Ensure the path is correct
-import CreateNewPasswordScreen from './CreateNewPasswordScreen';
+import { Ionicons } from '@expo/vector-icons';
+import CustomButton3 from '../components/CustomButton3';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,17 +11,35 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
+  // Improved email validation regex
   const validateEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.toLowerCase());
   };
 
-  const handleContinue = () => {
-    if (!validateEmail(email)) {
+  const handleContinue = async () => {
+    const normalizedEmail = email.trim().toLowerCase(); // Trim and convert email to lowercase
+    if (!validateEmail(normalizedEmail)) {
       setEmailError('Please enter a valid email address');
     } else {
       setEmailError('');
-      // Continue to the next step
+      try {
+        // API call to send OTP to user's email
+        const response = await axios.post('https://api.quizziebot.com/api/auth/forgot-password', { email: normalizedEmail });
+
+        if (response.status === 200) {
+          // Navigate to OTP verification screen after successfully sending OTP
+          navigation.navigate('OtpVerificationScreen', { email: normalizedEmail });
+        } else {
+          Alert.alert('Error', 'Failed to send OTP. Please try again.');
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          Alert.alert('Error', error.response.data.message || 'Failed to send OTP.');
+        } else {
+          Alert.alert('Error', 'Failed to send OTP. Please check your connection and try again.');
+        }
+      }
     }
   };
 
@@ -34,7 +51,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
           <View style={styles.innerContainer}>
-            <Image source={images.logo3} style={styles.image} resizeMode="contain" />
+            <Image source={{uri: 'your-logo-url'}} style={styles.image} resizeMode="contain" />
             <Text style={styles.title}>
               <Text style={styles.titleBlack}>Forgot </Text>
               <Text style={styles.titleBlue}>Password</Text>
@@ -50,6 +67,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
+              autoCapitalize="none"  // Disable automatic capitalization
+              autoCorrect={false}    // Disable autocorrect for email input
+              textContentType="emailAddress"  // Specify that this is an email field
             />
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
           </View>
@@ -57,7 +77,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <View style={styles.bottomContainer}>
           <CustomButton3
             title="CONTINUE"
-            onPress="CreateNewPassword"
+            onPress={handleContinue}  // Corrected onPress prop to call handleContinue function
           />
         </View>
       </KeyboardAvoidingView>
@@ -140,113 +160,3 @@ const styles = StyleSheet.create({
 });
 
 export default ForgotPasswordScreen;
-
-// for AfterSignedScreen.jsx
-
-// import React from 'react';
-// import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-
-// const AccountTypeScreen = () => {
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.progressBar}>
-//         <View style={styles.progress} />
-//       </View>
-//       <Text style={styles.title}>
-//         What type of account do you like to <Text style={styles.createText}>create</Text> ? 🤓
-//       </Text>
-//       <Text style={styles.subtitle}>You can skip it if you're not sure.</Text>
-
-//       <TouchableOpacity style={[styles.optionButton, styles.personal]}>
-//         <Text style={styles.optionText}>Personal</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={[styles.optionButton, styles.teacher]}>
-//         <Text style={styles.optionText}>Teacher</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={[styles.optionButton, styles.student]}>
-//         <Text style={styles.optionText}>Student</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={[styles.optionButton, styles.professional]}>
-//         <Text style={styles.optionText}>Professional</Text>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity style={styles.skipButton}>
-//         <Text style={styles.skipButtonText}>SKIP</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//     backgroundColor: '#fff',
-//   },
-//   progressBar: {
-//     height: 4,
-//     backgroundColor: '#eee',
-//     borderRadius: 2,
-//     marginVertical: 20,
-//     overflow: 'hidden',
-//   },
-//   progress: {
-//     width: '50%',
-//     height: '100%',
-//     backgroundColor: '#3b82f6',
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     textAlign: 'center',
-//     marginBottom: 10,
-//   },
-//   createText: {
-//     color: '#3b82f6',
-//   },
-//   subtitle: {
-//     fontSize: 14,
-//     textAlign: 'center',
-//     color: '#666',
-//     marginBottom: 20,
-//   },
-//   optionButton: {
-//     height: 60,
-//     borderRadius: 10,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     marginVertical: 5,
-//     flexDirection: 'row',
-//     paddingHorizontal: 15,
-//   },
-//   optionText: {
-//     fontSize: 18,
-//     color: '#fff',
-//   },
-//   personal: {
-//     backgroundColor: '#3b82f6',
-//   },
-//   teacher: {
-//     backgroundColor: '#f59e0b',
-//   },
-//   student: {
-//     backgroundColor: '#10b981',
-//   },
-//   professional: {
-//     backgroundColor: '#ef4444',
-//   },
-//   skipButton: {
-//     marginTop: 20,
-//     height: 50,
-//     borderRadius: 25,
-//     backgroundColor: '#3b82f6',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   skipButtonText: {
-//     fontSize: 18,
-//     color: '#fff',
-//   },
-// });
-
-// export default AccountTypeScreen;

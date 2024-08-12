@@ -202,7 +202,7 @@ const LeaderBoard = ({ navigation }) => {
 const Footer = ({ navigation }) => (
   <View style={styles.footer}>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('HomePageScreen')}>
-      <SimpleLineIcons name="home" style={styles.footerIcon}color={"#9E9E9E"} />
+      <Ionicons name="home-outline" style={styles.footerIcon}color={"#9E9E9E"} />
       <Text style={styles.footerText}>Home</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('ProfilePage')}>

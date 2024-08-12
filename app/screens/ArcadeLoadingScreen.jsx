@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
-
+import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 const { width, height } = Dimensions.get('window');
 
 const LoadingScreen = ({ route }) => {
@@ -83,7 +83,28 @@ const LoadingScreen = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Arcade</Text>
-        <Image source={images.logo1} style={styles.robotImage} />
+        <View style={styles.robotImageContainer}>
+            <Svg height="100%" width="100%" viewBox="0 0 100 100">
+            <Defs>
+             <RadialGradient
+              id="grad"
+              cx="50%"
+              cy="50%"
+              rx="50%"
+              ry="50%"
+              fx="50%"
+              fy="50%"
+              gradientUnits="userSpaceOnUse"
+            >
+              <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+              <Stop offset="100%" stopColor="#1C58F2" stopOpacity="1" />
+            </RadialGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100" height="100" fill="url(#grad)" />
+        </Svg>
+          <Image source={images.logo1} style={styles.robotImage} resizeMode="contain" />
+              </View>
+
         <Text style={styles.description}>
           Our AI-curated quizzes adapt to your learning style, making every session fun. Discover something new every day.
         </Text>
@@ -107,27 +128,46 @@ const styles = StyleSheet.create({
     backgroundColor: '#0057FF',
   },
   contentContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: wp('5%'),
+    
   },
   title: {
-    fontSize: 30,
+    fontSize: 50,
     color: '#FFFFFF',
     fontWeight: 'bold',
     marginBottom: hp('5%'),
+    fontFamily: 'Nunito',
+    marginTop:wp(18)
+  },
+  robotImageContainer: {
+    width: hp(25),
+    height: hp(25),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: hp(1),
+    alignSelf:"center",
   },
   robotImage: {
-    width: wp('50%'),
-    height: hp('30%'),
+    position: 'absolute',
+    width: hp(30),
+    height: hp(30),
     resizeMode: 'contain',
-    marginBottom: hp('5%'),
   },
+  // robotImage: {
+  //   width: wp('50%'),
+  //   height: hp('30%'),
+  //   resizeMode: 'contain',
+  //   marginBottom: hp('5%'),
+  // },
   description: {
-    fontSize: 16,
+    fontSize: wp(4.5),
     color: '#FFFFFF',
     textAlign: 'center',
+    marginTop:hp(4),
+    fontWeight:"bold",
+    fontFamily: 'Nunito',
     marginBottom: hp('2%'),
     paddingHorizontal: wp('5%'),
   },
@@ -136,6 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp('2%'),
+    marginTop:hp(2)
   },
   dot: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -152,15 +193,19 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   loadingText: {
-    fontSize: 18,
+    marginTop:hp(2),
+    fontSize: wp(5),
     color: '#FFFFFF',
     marginBottom: hp('2%'),
+    fontWeight:"bold",
+    fontFamily: 'Nunito',
   },
   progressBarContainer: {
     width: wp('80%'),
     height: 10,
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
+    marginTop:hp(2),
     overflow: 'hidden',
   },
   progressBar: {

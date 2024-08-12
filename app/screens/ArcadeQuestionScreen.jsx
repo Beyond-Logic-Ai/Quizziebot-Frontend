@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   robotImageContainer: {
-    width: wp(35),
-    height: wp(35),
+    width: hp(20),
+    height: hp(20),
     borderRadius: wp(17.5),
     justifyContent: 'center',
     alignItems: 'center',
@@ -183,8 +183,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   robotImage: {
-    width: '100%',
-    height: '100%',
+    width: hp(19),
+    height: hp(19),
     resizeMode: 'contain',
   },
   answersContainer: {
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   circularProgressContainer: {
     width: 50,
-    left:-wp(2),
+    left:-wp(1.8),
     height: 50,
   },
 });

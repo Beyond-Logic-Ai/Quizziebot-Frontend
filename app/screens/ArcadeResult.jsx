@@ -190,14 +190,14 @@ const ArcadeResultScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
-            <Image source={images.rank} style={styles.achievementIcon} />
+            <Image source={images.wrong} style={styles.achievementIcon} />
             <Text style={styles.achievementValue}>{result.wrongAnswers}</Text>
           </View>
           <Text style={styles.achievementText}>Wrong Questions</Text>
         </View>
         <View style={styles.achievementItem}>
           <View style={styles.iconAndValue}>
-            <Image source={images.rank} style={styles.achievementIcon} />
+            <Image source={images.total} style={styles.achievementIcon} />
             <Text style={styles.achievementValue}>{result.totalQuestions}</Text>
           </View>
           <Text style={styles.achievementText}>Total Questions</Text>

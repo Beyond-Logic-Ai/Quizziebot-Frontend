@@ -115,8 +115,8 @@ const ArcadeQuestionScreen = ({ route, navigation }) => {
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
       <Text style={styles.questionText}>{currentQuestion.questionText}</Text>
-      <ScrollView style={styles.answersContainer}>
-      <View style={styles.answersContainer1}>
+      <ScrollView style={styles.answersContainer1}>
+      <View style={styles.answersContainer}>
         {currentQuestion.options.map((option, index) => (
           <TouchableOpacity
             key={index}
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   answersContainer1: {
-    width: "100%",
+    width: wp(80),
     alignSelf: 'center',
   },
   answerButton: {
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   },
   circularProgressContainer: {
     width: 50,
+    left:-wp(2),
     height: 50,
   },
 });

@@ -171,10 +171,10 @@ const LeaderBoard = ({ navigation }) => {
               <Image source={images.coin} style={styles.coinImage} />
             </View>
           </View>
-          <Image source={images.badge} style={styles.badgeImage} />
+          {/* <Image source={images.badge} style={styles.badgeImage} />
           <TouchableOpacity onPress={() => navigation.navigate('SettingsHomePageScreen')}>
             <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.leaderboardHeader}>
           <TouchableOpacity style={[styles.tab, activeTab === 'Global' && styles.activeTab]} onPress={() => setActiveTab('Global')}>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
   },
   coinContainer: {
-    left: 5,
+    right:wp(3),
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   coinborder: {
     right: -2,
-    backgroundColor: 'blue',
+    backgroundColor: '#0048BF',
     width: 27,
     height: 27,
     borderRadius: 15,
@@ -380,11 +380,11 @@ const styles = StyleSheet.create({
     bottom:-hp(2)
   },
   crownImage: {
-    width: wp(8),
-    height: wp(8),
+    width: wp(9),
+    height: wp(7),
     bottom:-wp(3.5),
     marginTop:-wp(11),
-    top: -wp(4)
+    top: -wp(5)
   },
   topThreeName: {
     fontSize: wp(3),
@@ -443,11 +443,12 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderColor:"#0048BF",
-    borderBottomWidth:hp(0.5)
+    borderBottomWidth:hp(0.4),
+    
   },
   tabText: {
     alignSelf: "center",
-    fontSize: wp(3.5),
+    fontSize: wp(4.5),
     top: hp(.7),
     fontWeight: "bold",
     fontFamily: 'Nunito',
@@ -468,7 +469,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: hp(1),
+    paddingVertical: hp(1.5),
     paddingHorizontal: wp(2),
     borderRadius: wp(2),
     marginBottom: wp(1),
@@ -523,6 +524,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: wp(3),
+    top:4,
     color: '#000',
     fontFamily: 'Nunito',
   },

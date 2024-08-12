@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet,ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { images } from '../../constants/images';
@@ -114,6 +114,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
       <Text style={styles.questionText}>{currentQuestion.questionText}</Text>
+      <ScrollView style={styles.answersContainer1}>
       <View style={styles.answersContainer}>
         {currentQuestion.options.map((option, index) => (
           <TouchableOpacity
@@ -129,6 +130,7 @@ const QuizQuestionScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
+      </ScrollView>
       {isCorrect !== null && (
         <View style={styles.feedbackContainer}>
           <Text style={isCorrect ? styles.correctFeedback : styles.incorrectFeedback}>
@@ -165,8 +167,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   robotImageContainer: {
-    width: wp(35),
-    height: wp(35),
+    width: hp(20),
+    height: hp(20),
     borderRadius: wp(17.5),
     justifyContent: 'center',
     alignItems: 'center',
@@ -176,17 +178,24 @@ const styles = StyleSheet.create({
   },
   gradient: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   robotImage: {
-    width: '100%',
-    height: '100%',
+    width:hp(19),
+    height:hp(19),
+    
     resizeMode: 'contain',
   },
   answersContainer: {
     width: wp(80),
     alignSelf: 'center',
+  },
+  answersContainer1: {
+    width: wp(80),
+
+    alignSelf: 'center',
+    
   },
   answerButton: {
     padding: 15,
@@ -223,6 +232,7 @@ const styles = StyleSheet.create({
   circularProgressContainer: {
     width: 50,
     height: 50,
+    left:-wp(2),
   },
 });
 

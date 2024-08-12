@@ -5,6 +5,7 @@ import { images } from '../../constants/images';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 const categories = [
   { name: 'Easy', colors: ['#AEFF6E', '#1ABD00'] },
@@ -32,9 +33,11 @@ const ArcadeModes = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back" size={wp(6)} color="#FFF" />
-      </TouchableOpacity>
+       <View style={styles.headerContainer}>
+       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
+          </View>
       <Text style={styles.title}>Arcade</Text>
       <View style={styles.robotImageContainer}>
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
@@ -48,6 +51,7 @@ const ArcadeModes = ({ navigation, route }) => {
         </Svg>
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
+      <View style={styles.mainContent1}>
       <View style={styles.mainContent}>
         <Text style={styles.subtitle}>Choose your level!</Text>
         <View style={styles.buttonWrapper}>
@@ -61,6 +65,7 @@ const ArcadeModes = ({ navigation, route }) => {
           ))}
         </View>
       </View>
+      </View>
     </View>
   );
 };
@@ -68,15 +73,19 @@ const ArcadeModes = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent:"center",
     alignItems: 'center',
-    padding: 20,
     backgroundColor: '#0048BF',
   },
-  backButton: {
-    top: -hp(3.8),
-    marginTop: -hp(1),
-    left: -wp(40)
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    
+    
+    
+   
   },
   title: {
     fontSize: wp(9),
@@ -84,8 +93,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
     color: '#fff',
     marginVertical: 10,
-    marginBottom: hp(4),
-    bottom: hp(4),
+    marginBottom: hp(5),
   },
   robotImageContainer: {
     width: wp(35),
@@ -93,8 +101,8 @@ const styles = StyleSheet.create({
     borderRadius: wp(17.5),
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 18,
-    bottom: hp(6.5),
+    marginBottom: wp(4.5),
+    bottom: wp(6),
   },
   robotImage: {
     position: 'absolute',
@@ -113,11 +121,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
   },
   mainContent: {
+    
     width: wp(78),
     height: hp(36),
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: 'rgba(0, 0, 0, 0.07)',
     borderRadius: 15,
+  },
+  mainContent1: {
+    
+    width: wp(78),
+    height: hp(50.5),
+    justifyContent: 'center',
+    
+    borderRadius: 15,
+    
   },
   buttonWrapper: {
     width: '100%',

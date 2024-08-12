@@ -67,7 +67,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
               <Icon name="chevron-forward-outline" size={28} color="#FFFFFF" />
             </TouchableOpacity>
 
-            <View style={styles.optionRow}>
+            {/* <View style={styles.optionRow}>
               <View style={styles.iconContainer}>
                 <View style={styles.iconBackground}>
                   <Icon name="language-outline" size={28} color="#00FF00" />
@@ -75,12 +75,12 @@ const SettingsHomePageScreen = ({ navigation }) => {
               </View>
               <Text style={styles.optionText}>Language</Text>
               <Text style={styles.languageText}>English</Text>
-            </View>
+            </View> */}
 
             <TouchableOpacity style={styles.optionRow}>
               <View style={styles.iconContainer}>
                 <View style={styles.iconBackground}>
-                  <Icon name="information-circle-outline" size={28} color="#00FFFF" />
+                  <Icon name="information-circle-outline" size={28} left={1} color="#0048BF" />
                 </View>
               </View>
               <Text style={styles.optionText}>About Quizzie Bot</Text>
@@ -89,7 +89,7 @@ const SettingsHomePageScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.optionRow} onPress={handleLogout}>
               <View style={styles.iconContainer}>
                 <View style={styles.iconBackground}>
-                  <Icon name="log-out-outline" size={28} color="#FF4500" />
+                  <Icon name="log-out-outline" size={28} left={2} color="#FF4500" />
                 </View>
               </View>
               <Text style={styles.optionText}>Logout</Text>
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: hp(2),
     
+    
   },
   backButton: {
    
@@ -168,6 +169,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: hp(10),
     paddingBottom: hp(10),
+    
   },
   optionRow: {
     flexDirection: 'row',
@@ -177,7 +179,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     // backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderRadius: 10,
+    top:-hp(5),
     marginVertical: hp(1),
+   
   },
   iconContainer: {
     width: 40,
@@ -217,7 +221,7 @@ const styles = StyleSheet.create({
     
     color: '#FFFFFF',
     textAlign: 'center',
-    marginVertical: 50,
+    marginTop: hp(20),
     fontFamily: 'Nunito',
   },
   footer: {
@@ -241,6 +245,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: wp(3),
     color: '#000',
+    top:4,
     fontFamily: 'Nunito',
   },
   activeFooterItem: {

@@ -81,9 +81,11 @@ const CreatingOwnQuizPage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back" size={wp(6)} color="#FFF" />
-      </TouchableOpacity>
+       <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={wp(6)} color="#FFF" />
+          </TouchableOpacity>
+        </View>
       <View style={styles.robotImageContainer}>
         <Svg height="100%" width="100%" viewBox="0 0 100 100">
           <Defs>
@@ -153,10 +155,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backButton: {
-    top: hp(6),
-    marginTop: -hp(4),
-    left: -wp(40),
+  header: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingTop: hp(2),
+    paddingBottom: hp(1),
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 16,
+    
   },
   robotImageContainer: {
     width: hp(15),
@@ -165,7 +173,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp(3),
-    marginTop: hp(7),
   },
   robotImage: {
     position: 'absolute',

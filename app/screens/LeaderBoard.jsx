@@ -202,19 +202,19 @@ const LeaderBoard = ({ navigation }) => {
 const Footer = ({ navigation }) => (
   <View style={styles.footer}>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('HomePageScreen')}>
-      <SimpleLineIcons name="home" size={32} color="#000" />
+      <SimpleLineIcons name="home" style={styles.footerIcon}color={"#9E9E9E"} />
       <Text style={styles.footerText}>Home</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('ProfilePage')}>
-      <Ionicons name="person-outline" size={32} color="#000" />
+      <Ionicons name="person-outline" style={styles.footerIcon} color={"#9E9E9E"}/>
       <Text style={styles.footerText}>Profile</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('LeaderBoard')}>
-      <Ionicons name="trophy" style={styles.footerIcon} />
-      <Text style={styles.footerText}>Leaderboard</Text>
+      <Ionicons name="trophy" style={styles.footerIcon}color={"#000"}/>
+      <Text style={[styles.footerText, { color: '#000' }]}>Leaderboard</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-      <Ionicons name="options-outline" style={styles.footerIcon} />
+      <Ionicons name="options-outline" style={styles.footerIcon}color={"#9E9E9E"} />
       <Text style={styles.footerText}>Settings</Text>
     </TouchableOpacity>
   </View>
@@ -525,11 +525,12 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: wp(3),
     top:4,
-    color: '#000',
+    color:"#9E9E9E",
     fontFamily: 'Nunito',
   },
   footerIcon: {
     fontSize: 32,
+    
   },
 });
 

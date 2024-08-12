@@ -99,7 +99,7 @@ const EditProfilePage = ({ navigation }) => {
   return (
     <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={22}>
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
+      <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
@@ -111,10 +111,10 @@ const EditProfilePage = ({ navigation }) => {
                 <Image source={images.coin} style={styles.coinImage} />
               </View>
             </View>
-            <Image source={images.badge} style={styles.badgeImage} />
+            {/* <Image source={images.badge} style={styles.badgeImage} />
             <TouchableOpacity onPress={() => navigation.navigate('SettingsHomePageScreen')}>
               <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
@@ -166,15 +166,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 20,
+    paddingTop: hp(2),
+    paddingBottom: hp(1),
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
+    right: wp(20),
+    fontFamily: 'Nunito',
   },
   coinContainer: {
+    right:wp(2.5),
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -182,12 +186,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 3,
   },
+  coinborder: {
+    right: -2,
+    backgroundColor: '#0048BF',
+    width: 27,
+    height: 27,
+    borderRadius: 15,
+    alignItems: 'center',
+  },
   coinText: {
+    left: -4,
+    marginLeft: 4,
     fontSize: 16,
     color: '#000',
     fontWeight: 'bold',
+    fontFamily: 'Nunito',
   },
   coinImage: {
+    top: 2,
+    alignSelf: 'center',
     width: 22,
     height: 22,
   },

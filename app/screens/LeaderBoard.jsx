@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
   },
   crownImage: {
     width: wp(9),
-    height: wp(7),
+    height: wp(7.2),
     bottom:-wp(3.5),
     marginTop:-wp(11),
     top: -wp(5)
@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F0F0",
     borderRadius: wp(4),
     marginBottom:-wp(10),
-    marginHorizontal:wp(2.5)
+    marginHorizontal:wp(1)
   },
   leaderboardItem: {
     flexDirection: 'row',

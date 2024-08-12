@@ -70,7 +70,7 @@ const OwnQuizQuestionScreen = ({ route, navigation }) => {
     // API call logic here, if needed
 
     // Navigate back to the chat page
-    navigation.navigate('OwnQuizChatPage', { userId, quizId, answers: finalAnswers });
+    navigation.navigate('HomePageScreen', { userId, quizId, answers: finalAnswers });
   };
 
   const currentQuestion = questions[currentQuestionIndex];

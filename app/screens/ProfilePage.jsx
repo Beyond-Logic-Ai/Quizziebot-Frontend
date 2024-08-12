@@ -147,7 +147,7 @@ const ProfilePage = ({ navigation }) => {
             <View style={styles.statisticsRow}>
               <View style={styles.statisticBox1}>
                 <Text style={styles.statisticValue}>{profileData.classicGamesPlayed}</Text>
-                <Text style={styles.statisticLabel}>Classic Games</Text>
+                <Text style={styles.statisticLabel} right={wp(1.5)}>Classic Games</Text>
               </View>
               <View style={styles.statisticBox2}>
                 <Text style={styles.statisticValue}>{profileData.totalPlays}</Text>
@@ -229,19 +229,19 @@ const ProfilePage = ({ navigation }) => {
 const Footer = ({ navigation }) => (
   <View style={styles.footer}>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('HomePageScreen')}>
-      <SimpleLineIcons name="home" size={32} color="#000" />
+      <Ionicons name="home-outline" style={styles.footerIcon}color={"#9E9E9E"} />
       <Text style={styles.footerText}>Home</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('ProfilePage')}>
-      <Ionicons name="person" size={32} color="#000" />
-      <Text style={styles.footerText}>Profile</Text>
+      <Ionicons name="person" style={styles.footerIcon} color={"black"} />
+      <Text style={[styles.footerText, { color: '#000' }]}>Profile</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('LeaderBoard')}>
-      <Ionicons name="trophy-outline" size={32} color="#000" />
+      <Ionicons name="trophy-outline" style={styles.footerIcon} color={"#9E9E9E"}/>
       <Text style={styles.footerText}>Leaderboard</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('SettingsHomePageScreen')}>
-      <Ionicons name="options-outline" size={32} color="#000" />
+      <Ionicons name="options-outline" style={styles.footerIcon}color={"#9E9E9E"} />
       <Text style={styles.footerText}>Settings</Text>
     </TouchableOpacity>
   </View>
@@ -399,6 +399,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     borderColor: "#FFFFFF",
+    left:wp(3)
   },
   statisticBox1: {
     alignItems: 'center',
@@ -424,6 +425,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontFamily: 'Nunito',
     marginHorizontal:wp(.6)
+
   },
   chartContainer: {
     marginTop: hp(2),
@@ -537,11 +539,12 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: wp(3),
-    color: '#000',
+    color:"#9E9E9E",
     top:4,
     fontFamily: 'Nunito',
   },
   footerIcon: {
+   
     fontSize: 32,
   },
 });

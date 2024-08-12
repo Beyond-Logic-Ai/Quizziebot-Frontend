@@ -14,7 +14,7 @@ import CreateQuizzieButton from '../components/CreateQuizzieButton';
 const { width, height } = Dimensions.get('window');
 
 // Import your profile images
-import maleProfilePic from '../../assets/images/profile-male.png';
+import maleProfilePic from '../../assets/images/profile4.png';
 import femaleProfilePic from '../../assets/images/profile-female.png';
 
 // Import your badge images

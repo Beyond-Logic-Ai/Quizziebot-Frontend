@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image,
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images } from '../../constants/images';
+
 const { width } = Dimensions.get('window');
+
 const OwnQuizWelcomePage = ({ navigation }) => {
   const [sessionId, setSessionId] = useState(null);
   const [messages, setMessages] = useState([
@@ -16,6 +17,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
   const [inputText, setInputText] = useState('');
   const [identifiedTopic, setIdentifiedTopic] = useState(null);
   const flatListRef = useRef(null); // Reference for FlatList
+
   useEffect(() => {
     const startSession = async () => {
       try {
@@ -37,11 +39,12 @@ const OwnQuizWelcomePage = ({ navigation }) => {
           navigation.navigate('SignInFirst');
         }
       } catch (error) {
-        console.error('Failed to start session:', error);
+        console.error('Failed to start session:', error.response ? error.response.data : error.message);
       }
     };
     startSession();
   }, [navigation]);
+
   const handleSend = async () => {
     if (inputText.trim() && sessionId) {
       const userMessage = { id: (messages.length + 1).toString(), type: 'user', text: inputText };
@@ -76,12 +79,13 @@ const OwnQuizWelcomePage = ({ navigation }) => {
           }
         }
       } catch (error) {
-        console.error('Error sending message:', error.message);
+        console.error('Error sending message:', error.response ? error.response.data : error.message);
       }
       setInputText(''); // Clear the input field after sending the message
       Keyboard.dismiss(); // Dismiss the keyboard when the message is sent
     }
   };
+
   const handleQuizDecision = async (decision) => {
     if (decision && sessionId && identifiedTopic) {
       const userSession = await AsyncStorage.getItem('userSession');
@@ -97,13 +101,14 @@ const OwnQuizWelcomePage = ({ navigation }) => {
             token,
           });
         } catch (error) {
-          console.error('Error handling quiz decision:', error.message);
+          console.error('Error handling quiz decision:', error.response ? error.response.data : error.message);
         }
       }
     } else {
       navigation.navigate('HomePageScreen');
     }
   };
+
   const renderItem = ({ item }) => {
     return item.type === 'user' ? (
       <View style={styles.userMessageContainer}>
@@ -116,6 +121,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
       </View>
     );
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -129,8 +135,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
           </TouchableOpacity>
           <Text style={styles.closeText}>Close</Text>
         </View>
-        
-       
+
         <FlatList
           ref={flatListRef} // Assign the ref to FlatList
           data={messages}
@@ -140,6 +145,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
           contentContainerStyle={{ paddingBottom: hp(10) }} // Add padding to avoid overlap with input field
           onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })} // Scroll when content size changes
         />
+
         <View style={styles.bottomContainer}>
           {messages.slice(-1)[0].text.includes('Do you want a quiz on') && (
             <View style={styles.decisionButtons}>
@@ -176,6 +182,7 @@ const OwnQuizWelcomePage = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -193,34 +200,6 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold',
     fontFamily: 'Nunito',
-  },
-  robotImageContainer: {
-    width: hp(20),
-    height: hp(22),
-    borderRadius: wp(17.5),
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: wp(7),
-    overflow: 'hidden',
-  },
-  gradient: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
-  robotImage: {
-    width: hp(20),
-    height: hp(20),
-    resizeMode: 'contain',
-  },
-  title: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: 'Nunito',
-    fontSize: hp(4),
-    color: '#000',
-    marginTop: wp(4),
   },
   chatContainer: {
     flex: 1,
@@ -304,4 +283,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito',
   },
 });
+
 export default OwnQuizWelcomePage;

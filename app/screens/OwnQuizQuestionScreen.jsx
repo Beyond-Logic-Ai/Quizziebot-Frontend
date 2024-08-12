@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { images } from '../../constants/images';
@@ -67,10 +67,10 @@ const OwnQuizQuestionScreen = ({ route, navigation }) => {
 
   const submitResults = (finalAnswers) => {
     console.log("All questions answered, submitting results:", finalAnswers);
-    // API call logic here
+    // API call logic here, if needed
 
-    // Navigate to results screen after API call is made
-    navigation.navigate('QuizResultScreen', { userId, quizId, answers: finalAnswers });
+    // Navigate back to the chat page
+    navigation.navigate('OwnQuizChatPage', { userId, quizId, answers: finalAnswers });
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -115,21 +115,21 @@ const OwnQuizQuestionScreen = ({ route, navigation }) => {
       </View>
       <Text style={styles.questionText}>{currentQuestion.questionText}</Text>
       <ScrollView style={styles.answersContainer1}>
-      <View style={styles.answersContainer}>
-        {currentQuestion.options.map((option, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.answerButton,
-              isCorrect !== null && (option === currentQuestion.correctOption ? styles.correct : styles.incorrect),
-            ]}
-            onPress={() => handleAnswer(option)}
-            disabled={isCorrect !== null}
-          >
-            <Text style={styles.answerText}>{option}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+        <View style={styles.answersContainer}>
+          {currentQuestion.options.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.answerButton,
+                isCorrect !== null && (option === currentQuestion.correctOption ? styles.correct : styles.incorrect),
+              ]}
+              onPress={() => handleAnswer(option)}
+              disabled={isCorrect !== null}
+            >
+              <Text style={styles.answerText}>{option}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
       {isCorrect !== null && (
         <View style={styles.feedbackContainer}>

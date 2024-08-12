@@ -109,8 +109,9 @@ const ProfilePage = ({ navigation }) => {
   }
 
   return (
-    <ImageBackground source={images.homescreenbg} style={styles.backgroundImage} resizeMode="cover" blurRadius={22}>
-      <SafeAreaView style={styles.container}>
+    
+    <View style={styles.container}>
+      <SafeAreaView style={styles.container1}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
@@ -123,10 +124,10 @@ const ProfilePage = ({ navigation }) => {
                 <Image source={images.coin} style={styles.coinImage} />
               </View>
             </View>
-            <Image source={images.badge} style={styles.badgeImage} />
+            {/* <Image source={images.badge} style={styles.badgeImage} />
             <TouchableOpacity onPress={() => navigation.navigate('SettingsHomePageScreen')}>
               <Ionicons name="notifications-outline" size={24} color="#FFFFFF" style={styles.notificationIcon} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
@@ -173,9 +174,9 @@ const ProfilePage = ({ navigation }) => {
                   yAxisSuffix=""
                   yAxisInterval={1} // optional, defaults to 1
                   chartConfig={{
-                    backgroundColor: '#0000ff',
-                    backgroundGradientFrom: '#0000ff',
-                    backgroundGradientTo: '#87CEFA',
+                    backgroundColor: '#0060FF',
+                    backgroundGradientFrom: '#0060FF',
+                    backgroundGradientTo:'#0060FF',
                     decimalPlaces: 0, // optional, defaults to 2dp
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -220,7 +221,8 @@ const ProfilePage = ({ navigation }) => {
         </ScrollView>
       </SafeAreaView>
       <Footer navigation={navigation} />
-    </ImageBackground>
+    
+    </View>
   );
 };
 
@@ -248,12 +250,21 @@ const Footer = ({ navigation }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: hp(-3.2),
+    backgroundColor: '#0048BF',
+    // marginBottom: hp(-3.2),
+    width: '100%',
+    height: '100%',
+  },
+  container1: {
+    flex: 1,
+    
+    marginBottom: hp(-3.55),
+    width: '100%',
+    height: '100%',
   },
   backgroundImage: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    
   },
   loaderContainer: {
     flex: 1,
@@ -273,11 +284,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    right: wp(10),
+    right: wp(20),
     fontFamily: 'Nunito',
   },
   coinContainer: {
-    left: 5,
+    right:wp(2.5),
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -287,7 +298,7 @@ const styles = StyleSheet.create({
   },
   coinborder: {
     right: -2,
-    backgroundColor: 'blue',
+    backgroundColor: '#0048BF',
     width: 27,
     height: 27,
     borderRadius: 15,
@@ -371,12 +382,13 @@ const styles = StyleSheet.create({
   },
   statisticsTitle: {
     marginTop: 30,
+    alignSelf:"center",
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: hp(1),
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontFamily: 'Nunito',
-    marginLeft: 14,
   },
   statisticsRow: {
     flexDirection: 'row',
@@ -416,32 +428,39 @@ const styles = StyleSheet.create({
   chartContainer: {
     marginTop: hp(2),
     paddingHorizontal: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 10,
+    backgroundColor: "#0060FF",
+    borderRadius:wp(6),
+    marginHorizontal:wp(3),
     paddingVertical: 20,
   },
   chartTitle: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: hp(1),
+    marginVertical: hp(1.5),
     textAlign: 'center',
+    fontFamily: 'Nunito',
+    
   },
   chart: {
     alignItems: 'center',
+    
   },
   axisLabelX: {
     fontSize: 16,
     color: '#FFFFFF',
-    marginTop: 8,
+    // marginTop: 8,
+    fontFamily: 'Nunito',
     textAlign: 'center',
   },
   axisLabelY: {
-    fontSize: 16,
+    fontSize: 15,
+    fontFamily: 'Nunito',
     color: '#FFFFFF',
     position: 'absolute',
-    top: '50%',
-    left: 0,
+    marginHorizontal:3,
+    top:hp(11),
+    left: 8,
     transform: [{ rotate: '-90deg' }],
   },
   noDataText: {
@@ -460,6 +479,8 @@ const styles = StyleSheet.create({
     marginBottom: hp(1),
     fontWeight: 'bold',
     fontFamily: 'Nunito',
+    alignSelf:"center",
+    marginTop:wp(3)
   },
   achievementGrid: {
     flexDirection: 'row',
@@ -473,7 +494,6 @@ const styles = StyleSheet.create({
     width: '45%',
     marginVertical: 6,
     borderColor: '#887272',
-    borderWidth: 1,
     borderRadius: 20,
     padding: 10,
     backgroundColor: "#FFFFFF",
@@ -518,6 +538,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: wp(3),
     color: '#000',
+    top:4,
     fontFamily: 'Nunito',
   },
   footerIcon: {

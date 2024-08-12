@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     // iOS shadow properties
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     
     borderRadius: wp(10),
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     shadowColor: '#000',
     shadowOffset: { width: 2, height: 5 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.01,
     shadowRadius: 3.84,
   },
   buttonImage: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     marginLeft: -wp(7),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.01,
     shadowRadius: 5, // Adjust the spacing as needed
   },
 });

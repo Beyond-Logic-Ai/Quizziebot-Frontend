@@ -12,6 +12,8 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     'Nunito-Regular': require('./assets/fonts/Nunito-Regular.ttf'),
     'Nunito-Bold': require('./assets/fonts/Nunito-Bold.ttf'),
+    'NegritaProOblique':require('./assets/fonts/NegritaProOblique.ttf'),
+    'NegritaPro':require('./assets/fonts/NegritaPro.ttf')
   });
 
   const [isMusicLoaded, setIsMusicLoaded] = useState(false);

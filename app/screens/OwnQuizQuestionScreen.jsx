@@ -114,6 +114,7 @@ const OwnQuizQuestionScreen = ({ route, navigation }) => {
         <Image source={images.logo2} style={styles.robotImage} />
       </View>
       <Text style={styles.questionText}>{currentQuestion.questionText}</Text>
+      <ScrollView style={styles.answersContainer1}>
       <View style={styles.answersContainer}>
         {currentQuestion.options.map((option, index) => (
           <TouchableOpacity
@@ -129,6 +130,7 @@ const OwnQuizQuestionScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
+      </ScrollView>
       {isCorrect !== null && (
         <View style={styles.feedbackContainer}>
           <Text style={isCorrect ? styles.correctFeedback : styles.incorrectFeedback}>
@@ -185,6 +187,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   answersContainer: {
+    width: wp(80),
+    alignSelf: 'center',
+  },
+  answersContainer1: {
     width: wp(80),
     alignSelf: 'center',
   },

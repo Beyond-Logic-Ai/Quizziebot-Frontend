@@ -207,15 +207,14 @@ const HomePageScreen = ({ navigation }) => {
                 <TouchableOpacity onPress={() => navigation.navigate('ArcadePage')} style={styles.play}>
                   <LinearGradient
                     colors={['#9DFF4F', '#1ABD00']}
-                    start={{ x: 0.5, y: 0.15 }}
-                    end={{ x: 0.5, y: 0.6 }}
+                    
                     style={styles.button}
                   >
                     <Text style={styles.buttonText}>Play Now</Text>
                   </LinearGradient>                  
                 </TouchableOpacity>
                 <CreateQuizzieButton
-                  title="Create your own quiz by QUIZZIE BOT"
+                  // title="Create your own quiz by QUIZZIE BOT"
                   screenName="CreatingOwnQuizPage"
                   navigation={navigation}
                 />
@@ -276,13 +275,11 @@ const styles = StyleSheet.create({
     width: 43,
     height: 43,
     borderRadius: 22,
-    borderWidth:.5,
-    borderColor:"#FFF",
     marginLeft:wp(2)
   },
   username: {
     flex: 0.95,
-    marginLeft: 5,
+    marginLeft: 7,
     color: '#FFFFFF',
     fontSize: wp(4.5),
     fontWeight: 'bold',
@@ -321,13 +318,15 @@ const styles = StyleSheet.create({
   },
   badgeImage: {
     marginLeft: 7,
+    left:5,
     width: 37,
     height: 37,
   },
   notificationIcon: {
     marginLeft: 7,
-    fontSize: 29,
+    fontSize: 27,
     color: '#FFFFFF',
+    
   },
   notificationBadge: {
     position: 'absolute',
@@ -359,7 +358,7 @@ const styles = StyleSheet.create({
   },
   textBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.07)',
-    borderRadius: wp(4),
+    borderRadius: wp(6),
     width:wp(82),
     paddingVertical:wp(3),
     alignItems: 'center',
@@ -375,23 +374,26 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#366EFF',
-    width: wp(75),
-    height: 50,
-    borderRadius:wp(3)
+    width: wp(72),
+    alignItems:"center",
+    height: wp(14),
+    borderRadius:wp(4),
+    
   },
   play: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
   },
   buttonText: {
     textAlign: 'center',
     color: '#FFF',
-    fontSize: 27,
+    fontSize: wp(6.5),
     fontWeight: 'bold',
-    marginTop: 6,
     fontFamily: 'Nunito',
+    marginTop:wp(2.9)
+    
   },
   footer: {
     flexDirection: 'row',

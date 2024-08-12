@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingTop: hp(2),
+    
    
   },
   scrollViewContent: {
@@ -100,14 +101,13 @@ const styles = StyleSheet.create({
   },
   robotContainer: {
     alignItems: 'center',
-    
+    top:hp(3),
     marginBottom:wp(12)
   },
   robotImage: {
-    width: wp(60),
-    height: wp(60),
+    width: wp(75),
+    height: wp(75),
     aspectRatio: 1,
-    
   },
   mainContent: {
     height:wp(70),

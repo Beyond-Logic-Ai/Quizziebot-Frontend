@@ -112,13 +112,12 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingTop: hp(2),
+    
   },
-  backButton: {
-    padding: 8,
-  },
+
   headerTitle: {
     fontSize: 24,
-    marginLeft: wp(10),
+    marginLeft:wp(10),
     fontWeight: 'bold',
     color: '#FFFFFF',
     fontFamily: 'Nunito',
@@ -135,7 +134,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 10,
-    marginVertical: 10,
+    marginVertical: hp(1.2),
+    
   },
   optionText: {
     fontSize: 20,

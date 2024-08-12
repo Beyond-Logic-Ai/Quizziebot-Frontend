@@ -29,7 +29,7 @@ const ArcadeButton = ({ title, screenName, image }) => {
 
 const styles = StyleSheet.create({
   shadowContainer: {
-    width:wp(62),
+    width: wp(62),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: hp(1),
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     // iOS shadow properties
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     
     borderRadius: wp(10),
@@ -64,26 +64,25 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFF',
     fontSize: wp(5),
-    
     textAlign: 'center',
     fontFamily: 'Nunito', // Ensure you have the Nunito font properly linked in your project
-    
     fontWeight: 'bold',
     lineHeight: wp(8),
     letterSpacing: 1.2,
     shadowColor: '#000',
     shadowOffset: { width: 2, height: 5 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.01,
+    left:wp(2),
     shadowRadius: 3.84,
   },
   buttonImage: {
     marginTop: 10,
-    width: wp(15),
-    height: hp(8),
+    width: wp(11),
+    height: hp(6.5),
     marginLeft: -wp(7),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.01,
     shadowRadius: 4, // Adjust the spacing as needed
   },
 });

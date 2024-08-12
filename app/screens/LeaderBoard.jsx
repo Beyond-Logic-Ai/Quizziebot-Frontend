@@ -63,7 +63,7 @@ const LeaderBoard = ({ navigation }) => {
           id: item.userId,
           name: item.username,
           points: item.score,
-          avatar: images.profilepic,
+          avatar: images.profile2,
         }));
 
         const userRankData = userRankResponse.data;
@@ -71,7 +71,7 @@ const LeaderBoard = ({ navigation }) => {
           id: userRankData.userId,
           name: userRankData.username,
           points: userRankData.score,
-          avatar: images.profilepic,
+          avatar: images.profile4,
         };
 
         // Ensure the user's rank is included only once in the leaderboard
@@ -111,7 +111,7 @@ const LeaderBoard = ({ navigation }) => {
       <View style={styles.topThreeContainer}>
         <View style={styles.topThreeContainercurve}>
           <View style={styles.topThreeItem2}>
-            <Image source={images.profilepic} style={styles.topThreeAvatar2} />
+            <Image source={images.profile7} style={styles.topThreeAvatar2} />
             <View style={styles.topnum2}>
               <Text style={{ marginTop: wp(.5), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>2</Text>
             </View>
@@ -121,7 +121,7 @@ const LeaderBoard = ({ navigation }) => {
           </View>
           <View style={styles.topThreeItemFirst}>
             <Image source={images.crown} style={styles.crownImage} />
-            <Image source={images.profilepic} style={styles.topThreeAvatar} />
+            <Image source={images.profile9} style={styles.topThreeAvatar} />
             <View style={styles.topnum1}>
               <Text style={{ marginTop: wp(1), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>1</Text>
             </View>
@@ -130,7 +130,7 @@ const LeaderBoard = ({ navigation }) => {
             <Text style={styles.userid}>@{topThree[0].name}</Text>
           </View>
           <View style={styles.topThreeItem3}>
-            <Image source={images.profilepic} style={styles.topThreeAvatar3} />
+            <Image source={images.profile3} style={styles.topThreeAvatar3} />
             <View style={styles.topnum3}>
               <Text style={{ marginTop: wp(.5), color: "#FFFFFF", fontWeight: "bold", fontSize: wp(3) }}>3</Text>
             </View>

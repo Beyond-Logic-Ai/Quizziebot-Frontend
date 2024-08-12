@@ -132,7 +132,7 @@ const ProfilePage = ({ navigation }) => {
         </View>
 
         <View style={styles.profileSection}>
-          <Image source={images.profilepic} style={styles.profileImage} />
+          <Image source={images.profile4} style={styles.profileImage} />
           <View style={styles.usernameContainer}>
             <Text style={styles.username}>{profileData.firstname} {profileData.lastname}</Text>
             <Text style={styles.userHandle}>@{profileData.username}</Text>
